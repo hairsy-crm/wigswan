@@ -1,0 +1,992 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>图片 PDF 压缩工具</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #172026;
+      --muted: #62707a;
+      --line: #d9e0e5;
+      --panel: #f7f9fa;
+      --accent: #0f766e;
+      --accent-strong: #0b5f59;
+      --warn: #a15c00;
+      --danger: #b42318;
+      --white: #ffffff;
+      --shadow: 0 18px 42px rgba(30, 41, 48, 0.12);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      background:
+        linear-gradient(180deg, rgba(15, 118, 110, 0.09), transparent 360px),
+        #eef3f4;
+    }
+
+    button,
+    input,
+    select {
+      font: inherit;
+    }
+
+    button {
+      border: 0;
+      cursor: pointer;
+    }
+
+    .shell {
+      width: min(1180px, calc(100vw - 32px));
+      margin: 0 auto;
+      padding: 30px 0 42px;
+    }
+
+    header {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: end;
+      gap: 22px;
+      margin-bottom: 22px;
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: clamp(30px, 4vw, 52px);
+      line-height: 1.05;
+      letter-spacing: 0;
+    }
+
+    .subtitle {
+      margin: 0;
+      max-width: 760px;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.7;
+    }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      min-height: 36px;
+      padding: 0 12px;
+      border: 1px solid rgba(15, 118, 110, 0.28);
+      border-radius: 6px;
+      color: var(--accent-strong);
+      background: rgba(255, 255, 255, 0.66);
+      white-space: nowrap;
+    }
+
+    .app {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 340px;
+      gap: 18px;
+      align-items: start;
+    }
+
+    .workspace,
+    .controls,
+    .results {
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+    }
+
+    .workspace {
+      min-height: 620px;
+      overflow: hidden;
+    }
+
+    .dropzone {
+      min-height: 250px;
+      display: grid;
+      place-items: center;
+      padding: 28px;
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(135deg, #ffffff, #f0f6f6);
+      transition: background 0.15s ease, border-color 0.15s ease;
+    }
+
+    .dropzone.dragging {
+      background: #e2f2ef;
+    }
+
+    .drop-inner {
+      width: min(560px, 100%);
+      text-align: center;
+    }
+
+    .upload-mark {
+      width: 58px;
+      height: 58px;
+      margin: 0 auto 16px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      color: var(--accent);
+      background: #dff1ee;
+    }
+
+    .upload-mark svg {
+      width: 30px;
+      height: 30px;
+    }
+
+    .drop-title {
+      margin: 0 0 8px;
+      font-size: 22px;
+      font-weight: 750;
+    }
+
+    .drop-copy {
+      margin: 0 0 18px;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    .file-input {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+    }
+
+    .primary,
+    .secondary,
+    .icon-button {
+      min-height: 40px;
+      border-radius: 6px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: transform 0.12s ease, background 0.12s ease, opacity 0.12s ease;
+    }
+
+    .primary {
+      padding: 0 16px;
+      color: var(--white);
+      background: var(--accent);
+      font-weight: 700;
+    }
+
+    .primary:hover {
+      background: var(--accent-strong);
+    }
+
+    .primary:active,
+    .secondary:active,
+    .icon-button:active {
+      transform: translateY(1px);
+    }
+
+    .primary:disabled,
+    .secondary:disabled {
+      cursor: not-allowed;
+      opacity: 0.48;
+    }
+
+    .secondary,
+    .icon-button {
+      border: 1px solid var(--line);
+      color: var(--ink);
+      background: var(--white);
+    }
+
+    .secondary {
+      padding: 0 14px;
+      font-weight: 650;
+    }
+
+    .icon-button {
+      width: 40px;
+      flex: 0 0 40px;
+    }
+
+    .file-list {
+      padding: 16px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .empty {
+      min-height: 250px;
+      display: grid;
+      place-items: center;
+      color: var(--muted);
+      text-align: center;
+      line-height: 1.6;
+      border: 1px dashed var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+    }
+
+    .file-row {
+      display: grid;
+      grid-template-columns: 58px minmax(0, 1fr) auto;
+      gap: 12px;
+      align-items: center;
+      padding: 10px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fbfcfc;
+    }
+
+    .thumb {
+      width: 58px;
+      height: 58px;
+      border-radius: 6px;
+      overflow: hidden;
+      display: grid;
+      place-items: center;
+      color: var(--accent-strong);
+      background: #e8f3f1;
+      border: 1px solid #d6e6e3;
+    }
+
+    .thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .file-name {
+      margin: 0 0 5px;
+      font-weight: 700;
+      overflow-wrap: anywhere;
+    }
+
+    .file-meta {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .side {
+      display: grid;
+      gap: 18px;
+    }
+
+    .controls,
+    .results {
+      padding: 16px;
+    }
+
+    .panel-title {
+      margin: 0 0 14px;
+      font-size: 17px;
+      letter-spacing: 0;
+    }
+
+    .field {
+      display: grid;
+      gap: 8px;
+      margin-bottom: 15px;
+    }
+
+    label,
+    .label {
+      color: #293941;
+      font-weight: 700;
+      font-size: 13px;
+    }
+
+    select,
+    input[type="number"] {
+      width: 100%;
+      min-height: 40px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 0 10px;
+      background: #fff;
+      color: var(--ink);
+    }
+
+    input[type="range"] {
+      width: 100%;
+      accent-color: var(--accent);
+    }
+
+    .range-line,
+    .dual {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .value {
+      min-width: 52px;
+      text-align: right;
+      color: var(--muted);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .dual {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .note {
+      margin: 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.55;
+    }
+
+    .warning {
+      padding: 10px 11px;
+      border-radius: 6px;
+      border: 1px solid #f1cf9a;
+      color: #6f4200;
+      background: #fff7e8;
+      font-size: 12px;
+      line-height: 1.55;
+      margin-bottom: 14px;
+    }
+
+    .actions {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .progress {
+      height: 8px;
+      border-radius: 999px;
+      overflow: hidden;
+      background: #e8eef0;
+      margin-top: 12px;
+    }
+
+    .bar {
+      height: 100%;
+      width: 0%;
+      background: var(--accent);
+      transition: width 0.18s ease;
+    }
+
+    .result-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .result-item {
+      display: grid;
+      gap: 8px;
+      padding: 10px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fbfcfc;
+    }
+
+    .result-head {
+      display: flex;
+      gap: 8px;
+      justify-content: space-between;
+      align-items: start;
+    }
+
+    .result-name {
+      margin: 0;
+      font-weight: 750;
+      overflow-wrap: anywhere;
+    }
+
+    .saving {
+      color: var(--accent-strong);
+      font-weight: 750;
+    }
+
+    .loss {
+      color: var(--danger);
+      font-weight: 750;
+    }
+
+    .download {
+      min-height: 34px;
+      padding: 0 10px;
+      border-radius: 6px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--white);
+      background: var(--accent);
+      text-decoration: none;
+      font-weight: 700;
+    }
+
+    .toast {
+      min-height: 24px;
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .toast.error {
+      color: var(--danger);
+      font-weight: 650;
+    }
+
+    @media (max-width: 900px) {
+      .shell {
+        width: min(100vw - 22px, 720px);
+        padding-top: 20px;
+      }
+
+      header,
+      .app {
+        grid-template-columns: 1fr;
+      }
+
+      .status-pill {
+        justify-self: start;
+      }
+
+      .workspace {
+        min-height: auto;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .dropzone {
+        min-height: 230px;
+        padding: 22px 14px;
+      }
+
+      .file-row {
+        grid-template-columns: 48px minmax(0, 1fr) 40px;
+      }
+
+      .thumb {
+        width: 48px;
+        height: 48px;
+      }
+
+      .dual,
+      .actions {
+        grid-template-columns: 1fr;
+      }
+
+      .icon-button {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header>
+      <div>
+        <h1>图片 PDF 压缩工具</h1>
+        <p class="subtitle">在浏览器本地处理图片和 PDF。图片可输出为 JPEG、WEBP、PNG 或合并 PDF；PDF 可按页面重采样后输出更小的 PDF，也可导出为图片压缩包。</p>
+      </div>
+      <div class="status-pill" id="statusPill">等待文件</div>
+    </header>
+
+    <section class="app" aria-label="压缩工具">
+      <div class="workspace">
+        <div class="dropzone" id="dropzone">
+          <div class="drop-inner">
+            <div class="upload-mark" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 16V4"></path>
+                <path d="m7 9 5-5 5 5"></path>
+                <path d="M20 16.5V19a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-2.5"></path>
+              </svg>
+            </div>
+            <p class="drop-title">拖入文件</p>
+            <p class="drop-copy">支持 JPG、PNG、WEBP、GIF、BMP、PDF。所有压缩都在当前浏览器里完成。</p>
+            <input class="file-input" id="fileInput" type="file" accept="image/*,application/pdf" multiple>
+            <button class="primary" id="pickButton" type="button">选择文件</button>
+          </div>
+        </div>
+        <div class="file-list" id="fileList">
+          <div class="empty">还没有文件。添加图片或 PDF 后，这里会显示待处理队列。</div>
+        </div>
+      </div>
+
+      <aside class="side">
+        <section class="controls" aria-label="压缩设置">
+          <h2 class="panel-title">设置</h2>
+          <div class="field">
+            <label for="outputMode">输出</label>
+            <select id="outputMode">
+              <option value="auto">自动：图片输出图片，PDF 输出 PDF</option>
+              <option value="image">输出图片</option>
+              <option value="pdf">输出 PDF</option>
+            </select>
+          </div>
+          <div class="field" id="imageFormatField">
+            <label for="imageFormat">图片格式</label>
+            <select id="imageFormat">
+              <option value="image/jpeg">JPEG</option>
+              <option value="image/webp">WEBP</option>
+              <option value="image/png">PNG</option>
+            </select>
+          </div>
+          <div class="field">
+            <div class="range-line">
+              <label for="quality">质量</label>
+              <span class="value" id="qualityValue">72%</span>
+            </div>
+            <input id="quality" type="range" min="20" max="95" value="72">
+          </div>
+          <div class="field">
+            <div class="range-line">
+              <label for="pdfScale">PDF 清晰度</label>
+              <span class="value" id="pdfScaleValue">1.35x</span>
+            </div>
+            <input id="pdfScale" type="range" min="0.7" max="2.4" value="1.35" step="0.05">
+            <p class="note">值越小，PDF 越小；值越大，文字和图像越清楚。</p>
+          </div>
+          <div class="field">
+            <span class="label">最大尺寸</span>
+            <div class="dual">
+              <input id="maxWidth" type="number" min="100" max="12000" value="1920" aria-label="最大宽度">
+              <input id="maxHeight" type="number" min="100" max="12000" value="1920" aria-label="最大高度">
+            </div>
+          </div>
+          <div class="warning">PDF 压缩会把页面栅格化后重新生成 PDF，文件通常会变小，但原 PDF 中可复制文字、书签、表单会被扁平化。</div>
+          <div class="actions">
+            <button class="primary" id="compressButton" type="button" disabled>开始压缩</button>
+            <button class="secondary" id="clearButton" type="button" disabled>清空</button>
+          </div>
+          <div class="progress" aria-hidden="true"><div class="bar" id="bar"></div></div>
+          <div class="toast" id="toast"></div>
+        </section>
+
+        <section class="results" aria-label="输出结果">
+          <h2 class="panel-title">结果</h2>
+          <div class="result-list" id="resultList">
+            <div class="empty">压缩完成后，可在这里下载输出文件。</div>
+          </div>
+        </section>
+      </aside>
+    </section>
+  </main>
+
+  <script type="module">
+    import * as pdfjsLib from "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.10.38/pdf.min.mjs";
+    pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.10.38/pdf.worker.min.mjs";
+
+    const files = [];
+    const results = [];
+    const els = {
+      dropzone: document.querySelector("#dropzone"),
+      fileInput: document.querySelector("#fileInput"),
+      pickButton: document.querySelector("#pickButton"),
+      fileList: document.querySelector("#fileList"),
+      resultList: document.querySelector("#resultList"),
+      outputMode: document.querySelector("#outputMode"),
+      imageFormat: document.querySelector("#imageFormat"),
+      imageFormatField: document.querySelector("#imageFormatField"),
+      quality: document.querySelector("#quality"),
+      qualityValue: document.querySelector("#qualityValue"),
+      pdfScale: document.querySelector("#pdfScale"),
+      pdfScaleValue: document.querySelector("#pdfScaleValue"),
+      maxWidth: document.querySelector("#maxWidth"),
+      maxHeight: document.querySelector("#maxHeight"),
+      compressButton: document.querySelector("#compressButton"),
+      clearButton: document.querySelector("#clearButton"),
+      bar: document.querySelector("#bar"),
+      toast: document.querySelector("#toast"),
+      statusPill: document.querySelector("#statusPill")
+    };
+
+    function getJsPDF() {
+      const PDFClass = window.jspdf?.jsPDF;
+      if (!PDFClass) {
+        throw new Error("PDF 生成库没有加载成功。请确认网络可访问 cdnjs，或用本地服务打开页面。");
+      }
+      return PDFClass;
+    }
+
+    function getJSZip() {
+      if (!window.JSZip) {
+        throw new Error("ZIP 生成库没有加载成功。请确认网络可访问 cdnjs，或用本地服务打开页面。");
+      }
+      return window.JSZip;
+    }
+
+    const formatBytes = (bytes) => {
+      if (!Number.isFinite(bytes) || bytes === 0) return "0 B";
+      const units = ["B", "KB", "MB", "GB"];
+      const index = Math.min(Math.floor(Math.log(bytes) / Math.log(1024)), units.length - 1);
+      return `${(bytes / 1024 ** index).toFixed(index ? 1 : 0)} ${units[index]}`;
+    };
+
+    const basename = (name) => name.replace(/\.[^.]+$/, "");
+    const extForMime = (mime) => ({ "image/jpeg": "jpg", "image/webp": "webp", "image/png": "png" }[mime] || "bin");
+    const isPdf = (file) => file.type === "application/pdf" || /\.pdf$/i.test(file.name);
+    const isImage = (file) => file.type.startsWith("image/");
+
+    function setToast(message, isError = false) {
+      els.toast.textContent = message;
+      els.toast.classList.toggle("error", isError);
+    }
+
+    function setProgress(done, total) {
+      const percent = total ? Math.round((done / total) * 100) : 0;
+      els.bar.style.width = `${percent}%`;
+      els.statusPill.textContent = total ? `${percent}%` : "等待文件";
+    }
+
+    function readAsDataURL(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+    }
+
+    function readAsArrayBuffer(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = reject;
+        reader.readAsArrayBuffer(file);
+      });
+    }
+
+    function blobFromCanvas(canvas, type, quality) {
+      return new Promise((resolve) => canvas.toBlob(resolve, type, quality));
+    }
+
+    async function loadImage(file) {
+      const url = URL.createObjectURL(file);
+      try {
+        const image = new Image();
+        image.decoding = "async";
+        image.src = url;
+        await image.decode();
+        return image;
+      } finally {
+        URL.revokeObjectURL(url);
+      }
+    }
+
+    function fitSize(width, height, maxWidth, maxHeight) {
+      const ratio = Math.min(maxWidth / width, maxHeight / height, 1);
+      return {
+        width: Math.max(1, Math.round(width * ratio)),
+        height: Math.max(1, Math.round(height * ratio))
+      };
+    }
+
+    function drawImageToCanvas(image, maxWidth, maxHeight, fillWhite = true) {
+      const size = fitSize(image.naturalWidth, image.naturalHeight, maxWidth, maxHeight);
+      const canvas = document.createElement("canvas");
+      canvas.width = size.width;
+      canvas.height = size.height;
+      const ctx = canvas.getContext("2d", { alpha: !fillWhite });
+      if (fillWhite) {
+        ctx.fillStyle = "#fff";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+      }
+      ctx.imageSmoothingEnabled = true;
+      ctx.imageSmoothingQuality = "high";
+      ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+      return canvas;
+    }
+
+    async function compressImage(file, options) {
+      const image = await loadImage(file);
+      const fillWhite = options.mime === "image/jpeg";
+      const canvas = drawImageToCanvas(image, options.maxWidth, options.maxHeight, fillWhite);
+      const blob = await blobFromCanvas(canvas, options.mime, options.quality);
+      return {
+        blob,
+        name: `${basename(file.name)}-compressed.${extForMime(options.mime)}`,
+        before: file.size,
+        after: blob.size
+      };
+    }
+
+    async function imagesToPdf(imageFiles, options) {
+      const PDFClass = getJsPDF();
+      const pdf = new PDFClass({ orientation: "p", unit: "pt", format: "a4", compress: true });
+      let first = true;
+      for (const file of imageFiles) {
+        const image = await loadImage(file);
+        const canvas = drawImageToCanvas(image, options.maxWidth, options.maxHeight, true);
+        const data = canvas.toDataURL("image/jpeg", options.quality);
+        const pageWidth = 595.28;
+        const pageHeight = 841.89;
+        if (!first) pdf.addPage([pageWidth, pageHeight], "p");
+        first = false;
+        const ratio = Math.min(pageWidth / canvas.width, pageHeight / canvas.height);
+        const width = canvas.width * ratio;
+        const height = canvas.height * ratio;
+        pdf.addImage(data, "JPEG", (pageWidth - width) / 2, (pageHeight - height) / 2, width, height, undefined, "FAST");
+      }
+      const blob = pdf.output("blob");
+      return {
+        blob,
+        name: imageFiles.length === 1 ? `${basename(imageFiles[0].name)}.pdf` : "compressed-images.pdf",
+        before: imageFiles.reduce((sum, file) => sum + file.size, 0),
+        after: blob.size
+      };
+    }
+
+    async function renderPdfPage(page, scale) {
+      const viewport = page.getViewport({ scale });
+      const canvas = document.createElement("canvas");
+      canvas.width = Math.ceil(viewport.width);
+      canvas.height = Math.ceil(viewport.height);
+      const ctx = canvas.getContext("2d");
+      ctx.fillStyle = "#fff";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      await page.render({ canvasContext: ctx, viewport }).promise;
+      return canvas;
+    }
+
+    async function compressPdfToPdf(file, options, onPage) {
+      const PDFClass = getJsPDF();
+      const buffer = await readAsArrayBuffer(file);
+      const pdfDoc = await pdfjsLib.getDocument({ data: buffer }).promise;
+      let output;
+      for (let pageNumber = 1; pageNumber <= pdfDoc.numPages; pageNumber++) {
+        const page = await pdfDoc.getPage(pageNumber);
+        const canvas = await renderPdfPage(page, options.pdfScale);
+        const data = canvas.toDataURL("image/jpeg", options.quality);
+        const orientation = canvas.width > canvas.height ? "l" : "p";
+        const pageWidth = canvas.width;
+        const pageHeight = canvas.height;
+        if (!output) {
+          output = new PDFClass({ orientation, unit: "px", format: [pageWidth, pageHeight], compress: true });
+        } else {
+          output.addPage([pageWidth, pageHeight], orientation);
+        }
+        output.addImage(data, "JPEG", 0, 0, pageWidth, pageHeight, undefined, "FAST");
+        onPage?.(pageNumber, pdfDoc.numPages);
+      }
+      const blob = output.output("blob");
+      return {
+        blob,
+        name: `${basename(file.name)}-compressed.pdf`,
+        before: file.size,
+        after: blob.size
+      };
+    }
+
+    async function pdfToImagesZip(file, options, onPage) {
+      const ZipClass = getJSZip();
+      const buffer = await readAsArrayBuffer(file);
+      const pdfDoc = await pdfjsLib.getDocument({ data: buffer }).promise;
+      const zip = new ZipClass();
+      const folder = zip.folder(`${basename(file.name)}-images`);
+      for (let pageNumber = 1; pageNumber <= pdfDoc.numPages; pageNumber++) {
+        const page = await pdfDoc.getPage(pageNumber);
+        const canvas = await renderPdfPage(page, options.pdfScale);
+        const blob = await blobFromCanvas(canvas, options.mime, options.quality);
+        folder.file(`page-${String(pageNumber).padStart(3, "0")}.${extForMime(options.mime)}`, blob);
+        onPage?.(pageNumber, pdfDoc.numPages);
+      }
+      const blob = await zip.generateAsync({ type: "blob", compression: "DEFLATE", compressionOptions: { level: 7 } });
+      return {
+        blob,
+        name: `${basename(file.name)}-images.zip`,
+        before: file.size,
+        after: blob.size
+      };
+    }
+
+    function renderFileList() {
+      els.compressButton.disabled = files.length === 0;
+      els.clearButton.disabled = files.length === 0 && results.length === 0;
+      els.statusPill.textContent = files.length ? `${files.length} 个文件待处理` : "等待文件";
+
+      if (!files.length) {
+        els.fileList.innerHTML = '<div class="empty">还没有文件。添加图片或 PDF 后，这里会显示待处理队列。</div>';
+        return;
+      }
+
+      els.fileList.innerHTML = "";
+      files.forEach(async (file, index) => {
+        const row = document.createElement("div");
+        row.className = "file-row";
+        const thumb = document.createElement("div");
+        thumb.className = "thumb";
+        thumb.textContent = isPdf(file) ? "PDF" : "IMG";
+        if (isImage(file)) {
+          const img = document.createElement("img");
+          img.alt = "";
+          img.src = await readAsDataURL(file);
+          thumb.textContent = "";
+          thumb.append(img);
+        }
+        const info = document.createElement("div");
+        info.innerHTML = `<p class="file-name"></p><p class="file-meta">${file.type || "未知类型"} · ${formatBytes(file.size)}</p>`;
+        info.querySelector(".file-name").textContent = file.name;
+        const remove = document.createElement("button");
+        remove.className = "icon-button";
+        remove.type = "button";
+        remove.title = "移除";
+        remove.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>';
+        remove.addEventListener("click", () => {
+          files.splice(index, 1);
+          renderFileList();
+        });
+        row.append(thumb, info, remove);
+        els.fileList.append(row);
+      });
+    }
+
+    function renderResults() {
+      if (!results.length) {
+        els.resultList.innerHTML = '<div class="empty">压缩完成后，可在这里下载输出文件。</div>';
+        return;
+      }
+
+      els.resultList.innerHTML = "";
+      for (const item of results) {
+        const url = URL.createObjectURL(item.blob);
+        const delta = item.before ? 1 - item.after / item.before : 0;
+        const good = delta >= 0;
+        const result = document.createElement("div");
+        result.className = "result-item";
+        result.innerHTML = `
+          <div class="result-head">
+            <p class="result-name"></p>
+            <a class="download" download>下载</a>
+          </div>
+          <p class="file-meta">${formatBytes(item.before)} → ${formatBytes(item.after)} · <span class="${good ? "saving" : "loss"}">${good ? "减少" : "增加"} ${Math.abs(delta * 100).toFixed(1)}%</span></p>
+        `;
+        result.querySelector(".result-name").textContent = item.name;
+        const link = result.querySelector("a");
+        link.href = url;
+        link.download = item.name;
+        els.resultList.append(result);
+      }
+    }
+
+    function addFiles(fileList) {
+      const incoming = [...fileList].filter((file) => isImage(file) || isPdf(file));
+      files.push(...incoming);
+      setToast(incoming.length ? `已添加 ${incoming.length} 个文件。` : "没有发现可处理的图片或 PDF。", !incoming.length);
+      renderFileList();
+    }
+
+    function getOptions() {
+      return {
+        mode: els.outputMode.value,
+        mime: els.imageFormat.value,
+        quality: Number(els.quality.value) / 100,
+        pdfScale: Number(els.pdfScale.value),
+        maxWidth: Math.max(100, Number(els.maxWidth.value) || 1920),
+        maxHeight: Math.max(100, Number(els.maxHeight.value) || 1920)
+      };
+    }
+
+    async function compressAll() {
+      if (!files.length) return;
+      els.compressButton.disabled = true;
+      els.clearButton.disabled = true;
+      results.splice(0);
+      renderResults();
+      setToast("正在处理，请保持页面打开。");
+      setProgress(0, 1);
+
+      const options = getOptions();
+      try {
+        const imageFiles = files.filter(isImage);
+        const pdfFiles = files.filter(isPdf);
+        let completed = 0;
+        const total = files.length;
+
+        if (options.mode === "pdf" && imageFiles.length) {
+          results.push(await imagesToPdf(imageFiles, options));
+          completed += imageFiles.length;
+          setProgress(completed, total);
+        } else {
+          for (const file of imageFiles) {
+            results.push(await compressImage(file, options));
+            completed += 1;
+            setProgress(completed, total);
+          }
+        }
+
+        for (const file of pdfFiles) {
+          const onPage = (page, pages) => {
+            const local = page / Math.max(pages, 1);
+            setProgress(completed + local, total);
+          };
+          if (options.mode === "image") {
+            results.push(await pdfToImagesZip(file, options, onPage));
+          } else {
+            results.push(await compressPdfToPdf(file, options, onPage));
+          }
+          completed += 1;
+          setProgress(completed, total);
+        }
+
+        setToast(`完成，生成 ${results.length} 个输出文件。`);
+      } catch (error) {
+        console.error(error);
+        setToast(`处理失败：${error.message || error}`, true);
+      } finally {
+        els.compressButton.disabled = files.length === 0;
+        els.clearButton.disabled = false;
+        renderResults();
+      }
+    }
+
+    els.pickButton.addEventListener("click", () => els.fileInput.click());
+    els.fileInput.addEventListener("change", () => {
+      addFiles(els.fileInput.files);
+      els.fileInput.value = "";
+    });
+
+    els.dropzone.addEventListener("dragover", (event) => {
+      event.preventDefault();
+      els.dropzone.classList.add("dragging");
+    });
+    els.dropzone.addEventListener("dragleave", () => els.dropzone.classList.remove("dragging"));
+    els.dropzone.addEventListener("drop", (event) => {
+      event.preventDefault();
+      els.dropzone.classList.remove("dragging");
+      addFiles(event.dataTransfer.files);
+    });
+
+    els.quality.addEventListener("input", () => {
+      els.qualityValue.textContent = `${els.quality.value}%`;
+    });
+    els.pdfScale.addEventListener("input", () => {
+      els.pdfScaleValue.textContent = `${Number(els.pdfScale.value).toFixed(2)}x`;
+    });
+    els.outputMode.addEventListener("change", () => {
+      els.imageFormatField.style.display = els.outputMode.value === "pdf" ? "none" : "";
+    });
+    els.compressButton.addEventListener("click", compressAll);
+    els.clearButton.addEventListener("click", () => {
+      files.splice(0);
+      results.splice(0);
+      setProgress(0, 0);
+      setToast("");
+      renderFileList();
+      renderResults();
+    });
+
+    renderFileList();
+    renderResults();
+    if (location.protocol === "file:") {
+      setToast("当前通过 file:// 打开。图片压缩可直接使用；如果 PDF 处理遇到安全限制，请在本目录运行 python3 -m http.server 8123 后访问 http://127.0.0.1:8123/compressor.html。");
+    }
+  </script>
+</body>
+</html>
