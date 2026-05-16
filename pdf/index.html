@@ -4,8 +4,41 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>免费PDF压缩与图片压缩工具 - 在线压缩到指定大小</title>
-  <meta name="description" content="免费在线压缩PDF、JPG、PNG图片,支持批量压缩和压缩到指定大小,适合报名材料、证件照、商品图、文档上传等场景,无需安装软件。">
+  <title>免费PDF压缩工具_在线压缩PDF到指定大小_图片压缩合并PDF</title>
+  <meta name="description" content="WIGSWAN 免费在线PDF压缩工具,支持PDF压缩到指定大小、图片压缩、JPG/PNG/WEBP压缩、多张图片合并PDF、多PDF合并。浏览器本地处理,无需上传文件,适合报名材料、证件照、商品图和文档上传。">
+  <meta name="keywords" content="PDF压缩,在线PDF压缩,免费PDF压缩,PDF压缩到指定大小,压缩PDF到2M,图片压缩,JPG压缩,PNG压缩,图片合并PDF,多PDF合并,PDF合并工具">
+  <meta name="robots" content="index,follow">
+  <meta name="applicable-device" content="pc,mobile">
+  <meta name="renderer" content="webkit">
+  <meta name="format-detection" content="telephone=no">
+  <link rel="canonical" href="https://wigswan.com/pdf/">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="免费PDF压缩工具_在线压缩PDF到指定大小">
+  <meta property="og:description" content="在线压缩PDF和图片,支持目标大小压缩、多PDF合并、多图片合并PDF,文件在浏览器本地处理。">
+  <meta property="og:url" content="https://wigswan.com/pdf/">
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "WIGSWAN PDF压缩工具",
+      "url": "https://wigswan.com/pdf/",
+      "applicationCategory": "UtilitiesApplication",
+      "operatingSystem": "Windows, macOS, iOS, Android",
+      "description": "免费在线PDF压缩、图片压缩和合并PDF工具,支持压缩到指定大小,浏览器本地处理文件。",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "CNY"
+      },
+      "featureList": [
+        "PDF压缩到指定大小",
+        "JPG、PNG、WEBP图片压缩",
+        "多PDF合并为单个PDF",
+        "多图片合并为PDF",
+        "浏览器本地处理文件"
+      ]
+    }
+  </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
   <style>
@@ -496,6 +529,82 @@
       font-weight: 650;
     }
 
+    .seo-content {
+      margin-top: 18px;
+      display: grid;
+      gap: 14px;
+    }
+
+    .seo-panel {
+      padding: 22px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.78);
+      box-shadow: var(--shadow);
+    }
+
+    .seo-panel h2,
+    .seo-panel h3 {
+      margin: 0 0 10px;
+      letter-spacing: 0;
+    }
+
+    .seo-panel h2 {
+      font-size: 24px;
+    }
+
+    .seo-panel h3 {
+      font-size: 18px;
+    }
+
+    .seo-panel p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.8;
+    }
+
+    .seo-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .seo-card {
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+    }
+
+    .seo-list {
+      margin: 0;
+      padding-left: 18px;
+      color: var(--muted);
+      line-height: 1.8;
+    }
+
+    .faq {
+      display: grid;
+      gap: 12px;
+    }
+
+    .faq details {
+      padding: 14px 16px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+    }
+
+    .faq summary {
+      cursor: pointer;
+      color: var(--ink);
+      font-weight: 750;
+    }
+
+    .faq details p {
+      margin-top: 8px;
+    }
+
     .target-ok {
       color: var(--accent-strong);
       font-weight: 750;
@@ -527,6 +636,10 @@
 
       .workspace {
         min-height: auto;
+      }
+
+      .seo-grid {
+        grid-template-columns: 1fr;
       }
 
       .side {
@@ -582,8 +695,8 @@
   <main class="shell">
     <header>
       <div>
-        <h1>图片 PDF 压缩工具</h1>
-        <p class="subtitle">在浏览器本地处理图片和 PDF。支持指定目标大小自动压缩，也可将多 PDF、多图片按队列顺序拼接为一个 PDF。</p>
+        <h1>免费 PDF 压缩与图片压缩工具</h1>
+        <p class="subtitle">在线压缩 PDF、JPG、PNG、WEBP 图片，支持输入目标大小自动压缩，也可将多 PDF、多图片按队列顺序合并为一个 PDF。</p>
       </div>
       <div class="header-pills">
         <div class="status-pill" id="statusPill">等待文件</div>
@@ -684,6 +797,54 @@
           </div>
         </section>
       </aside>
+    </section>
+
+    <section class="seo-content" aria-label="PDF压缩工具说明">
+      <div class="seo-panel">
+        <h2>在线压缩 PDF 到指定大小</h2>
+        <p>这个免费 PDF 压缩工具适合处理报名材料、证件照、商品图、合同扫描件、简历附件和平台上传资料。你可以输入目标大小，例如 2MB，工具会自动调节图片质量、最大尺寸和 PDF 清晰度，尽量把输出文件压缩到指定大小以内。</p>
+      </div>
+
+      <div class="seo-grid">
+        <article class="seo-card">
+          <h3>PDF 压缩</h3>
+          <p>支持单个 PDF 压缩和批量 PDF 压缩，可根据目标大小自动降低文件体积，适合需要上传小于 2M、5M、10M 限制的文档。</p>
+        </article>
+        <article class="seo-card">
+          <h3>图片压缩</h3>
+          <p>支持 JPG、PNG、WEBP、GIF、BMP 等常见图片格式，可输出 JPEG、WEBP 或 PNG，用于商品图、证件照、素材图压缩。</p>
+        </article>
+        <article class="seo-card">
+          <h3>合并为 PDF</h3>
+          <p>支持多张图片合并 PDF、多 PDF 合并，也支持 PDF 和图片混合合并，页面顺序按照文件队列顺序生成。</p>
+        </article>
+      </div>
+
+      <div class="seo-panel">
+        <h2>适用场景</h2>
+        <ul class="seo-list">
+          <li>压缩 PDF 到 2MB、5MB 或指定大小，满足网站、邮箱、报名系统上传限制。</li>
+          <li>压缩 JPG、PNG、WEBP 图片，减少商品图、证件照、宣传图文件体积。</li>
+          <li>把多张图片合并成一个 PDF，或把多个 PDF 按顺序合并成一个文件。</li>
+          <li>文件在浏览器本地处理，不需要上传到服务器，适合临时文档和个人资料处理。</li>
+        </ul>
+      </div>
+
+      <div class="seo-panel faq">
+        <h2>常见问题</h2>
+        <details>
+          <summary>PDF 压缩到指定大小一定能成功吗？</summary>
+          <p>工具会自动降低质量、尺寸和 PDF 清晰度，尽量达到目标大小。如果目标过低，页面会提示已尽力压缩但仍高于目标。</p>
+        </details>
+        <details>
+          <summary>压缩文件会上传到服务器吗？</summary>
+          <p>不会。压缩和合并都在当前浏览器本地完成，文件不会上传到 WIGSWAN 服务器。</p>
+        </details>
+        <details>
+          <summary>多张图片可以合并为一个 PDF 吗？</summary>
+          <p>可以。选择“合并为单个 PDF”模式后，上传多张图片或多个 PDF，工具会按照队列顺序生成一个 PDF 文件。</p>
+        </details>
+      </div>
     </section>
   </main>
 
