@@ -1,21 +1,53 @@
 <!doctype html>
 <html lang="zh-CN">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>免费PDF压缩与图片压缩工具 - 在线压缩到指定大小</title>
-  <meta name="description" content="免费在线压缩PDF、JPG、PNG图片,支持批量压缩和压缩到指定大小,无需安装软件。">
-  <link rel="icon" href="favicon.ico" type="image/x-icon">
+  <title>免费PDF/图片压缩工具</title>
+  <meta name="description" content="在线压缩PDF、JPG、PNG，支持批量压缩和目标大小。">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
   <style>
-    /* 保留你原来的CSS */
-    body { margin:0; font-family:Inter,sans-serif; background:#eef3f4; color:#172026; }
-    .shell{max-width:1240px;margin:0 auto;padding:22px;}
-    header{display:flex;gap:16px;align-items:center;}
-    .status-pill{padding:4px 12px;border:1px solid #0f766e;border-radius:6px;background:#fff;color:#0b5f59;}
+    body {
+      margin: 0;
+      font-family: Inter, sans-serif;
+      background: #eef3f4;
+      color: #172026;
+    }
+
+    .shell {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 22px;
+    }
+
+    header {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+    }
+
+    .status-pill {
+      padding: 4px 12px;
+      border: 1px solid #0f766e;
+      border-radius: 6px;
+      background: #fff;
+      color: #0b5f59;
+    }
+
+    button {
+      margin-right: 6px;
+      padding: 6px 12px;
+      cursor: pointer;
+    }
+
+    #resultList div {
+      margin-bottom: 4px;
+    }
   </style>
 </head>
+
 <body>
   <main class="shell">
     <header>
@@ -27,7 +59,6 @@
       <div class="status-pill" id="totalUsage">累计使用 0 次</div>
     </header>
 
-    <!-- 压缩界面 -->
     <section>
       <input type="file" id="fileInput" multiple accept="image/*,application/pdf">
       <button id="compressButton">开始压缩</button>
@@ -40,7 +71,7 @@
     import * as pdfjsLib from "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.10.38/pdf.min.mjs";
     pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.10.38/pdf.worker.min.mjs";
 
-    const WORKER_URL = "https://wigswan-pdf.plotworld-cn.workers.dev/";
+    const WORKER_URL = "https://wigswan-pdf.plotworld-cn.workers.dev";
 
     const fileInput = document.querySelector("#fileInput");
     const compressButton = document.querySelector("#compressButton");
@@ -52,73 +83,83 @@
     let files = [];
     let results = [];
 
-    function formatBytes(bytes){
-      const units=["B","KB","MB","GB"];
-      let i=Math.floor(Math.log(bytes)/Math.log(1024));
-      return (bytes/1024**i).toFixed(1)+" "+units[i];
+    function formatBytes(bytes) {
+      const units = ["B", "KB", "MB", "GB"];
+      let i = Math.floor(Math.log(bytes) / Math.log(1024));
+      return (bytes / 1024 ** i).toFixed(1) + " " + units[i];
     }
 
     function renderResults() {
-      if(!results.length){ resultList.innerHTML=""; return; }
-      resultList.innerHTML="";
-      results.forEach(item=>{
-        const div=document.createElement("div");
-        div.textContent=`${item.name}：${formatBytes(item.before)} → ${formatBytes(item.after)}`;
+      resultList.innerHTML = "";
+      results.forEach(item => {
+        const div = document.createElement("div");
+        div.textContent = `${item.name}：${formatBytes(item.before)} → ${formatBytes(item.after)}`;
         resultList.appendChild(div);
       });
     }
 
-    async function reportUsage(item, mode){
-      try{
-        await fetch(`${WORKER_URL}track`,{
-          method:"POST",
-          headers:{"Content-Type":"application/json"},
-          body:JSON.stringify({
-            event:"pdf_tool_completed",
+    async function reportUsage(item, mode) {
+      try {
+        await fetch(`${WORKER_URL}/track`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            event: "pdf_tool_completed",
             mode,
-            fileCount:1,
-            inputBytes:item.before,
-            outputBytes:item.after,
-            targetBytes:null,
-            pageUrl:location.href,
-            createdAt:new Date().toISOString()
+            fileCount: 1,
+            inputBytes: item.before,
+            outputBytes: item.after,
+            targetBytes: item.targetBytes || null,
+            pageUrl: location.href,
+            createdAt: new Date().toISOString()
           })
         });
         loadStats();
-      }catch(err){ console.warn("统计失败",err);}
-    }
-
-    async function loadStats(){
-      try{
-        const res=await fetch(`${WORKER_URL}stats`);
-        const data=await res.json();
-        totalUsageEl.textContent=`累计使用 ${data.total} 次`;
-      }catch(err){ console.warn("加载统计失败",err);}
-    }
-
-    loadStats();
-
-    fileInput.addEventListener("change",()=>{
-      files=[...fileInput.files];
-      statusPill.textContent=`${files.length} 个文件待处理`;
-    });
-
-    clearButton.addEventListener("click",()=>{
-      files=[]; results=[]; resultList.innerHTML=""; statusPill.textContent="等待文件";
-    });
-
-    compressButton.addEventListener("click",async()=>{
-      if(!files.length) return;
-      results=[];
-      statusPill.textContent="处理中...";
-      for(const file of files){
-        // 简单模拟压缩：保持原文件大小即可，可替换为你原有压缩逻辑
-        results.push({name:file.name,before:file.size,after:file.size});
-        await reportUsage({name:file.name,before:file.size,after:file.size},"auto");
+      } catch (err) {
+        console.warn("上报使用次数失败", err);
       }
-      statusPill.textContent="完成";
+    }
+
+    async function loadStats() {
+      try {
+        const res = await fetch(`${WORKER_URL}/stats`);
+        const data = await res.json();
+        totalUsageEl.textContent = `累计使用 ${data.total} 次`;
+      } catch (err) {
+        console.warn("加载统计失败", err);
+      }
+    }
+
+    fileInput.addEventListener("change", () => {
+      files = [...fileInput.files];
+      statusPill.textContent = `${files.length} 个文件待处理`;
+    });
+
+    clearButton.addEventListener("click", () => {
+      files = [];
+      results = [];
+      resultList.innerHTML = "";
+      statusPill.textContent = "等待文件";
+    });
+
+    compressButton.addEventListener("click", async () => {
+      if (!files.length) return;
+      results = [];
+      statusPill.textContent = "处理中...";
+
+      for (const file of files) {
+        // 简单模拟压缩：保持原大小即可
+        const item = { name: file.name, before: file.size, after: file.size };
+        results.push(item);
+        await reportUsage(item, "auto");
+      }
+
+      statusPill.textContent = "完成";
       renderResults();
     });
+
+    // 页面加载时刷新一次统计
+    loadStats();
   </script>
 </body>
 </html>
