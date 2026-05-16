@@ -700,7 +700,7 @@
       </div>
       <div class="header-pills">
         <div class="status-pill" id="statusPill">等待文件</div>
-        <div class="status-pill" id="usageCount">累计使用 -- 次</div>
+        <div class="status-pill" id="usageCount">累计助人 -- 次</div>
       </div>
     </header>
 
@@ -959,10 +959,10 @@
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
         const data = await response.json();
         const count = Number(data.total ?? data.count ?? data.usageCount ?? 0);
-        els.usageCount.textContent = `累计使用 ${count.toLocaleString("zh-CN")} 次`;
+        els.usageCount.textContent = `累计助人 ${count.toLocaleString("zh-CN")} 次`;
       } catch (error) {
         console.warn("Usage stats unavailable:", error);
-        els.usageCount.textContent = "累计使用 -- 次";
+        els.usageCount.textContent = "累计助人 -- 次";
         els.usageCount.title = "统计接口暂时不可用，压缩功能不受影响。";
       }
     }
