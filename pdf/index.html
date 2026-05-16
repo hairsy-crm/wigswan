@@ -1,534 +1,963 @@
 <!doctype html>
 <html lang="zh-CN">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>图片 PDF 压缩工具</title>
+  <title>免费PDF压缩与图片压缩工具 - 在线压缩到指定大小</title>
+  <meta name="description" content="免费在线压缩PDF、JPG、PNG图片,支持批量压缩和压缩到指定大小,适合报名材料、证件照、商品图、文档上传等场景,无需安装软件。">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
   <style>
     :root {
-      --ink:#172026; --muted:#62707a; --line:#d9e0e5; --panel:#f7f9fa;
-      --accent:#0f766e; --accent-strong:#0b5f59; --warn:#a15c00;
-      --danger:#b42318; --white:#fff; --shadow:0 18px 42px rgba(30,41,48,.12);
-      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color-scheme: light;
+      --ink: #172026;
+      --muted: #62707a;
+      --line: #d9e0e5;
+      --panel: #f7f9fa;
+      --accent: #0f766e;
+      --accent-strong: #0b5f59;
+      --warn: #a15c00;
+      --danger: #b42318;
+      --white: #ffffff;
+      --shadow: 0 18px 42px rgba(30, 41, 48, 0.12);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
-    *{box-sizing:border-box}
-    body{margin:0;min-height:100vh;color:var(--ink);background:linear-gradient(180deg,rgba(15,118,110,.09),transparent 360px),#eef3f4}
-    button,input,select{font:inherit}
-    button{border:0;cursor:pointer}
-    .shell{width:min(1240px,calc(100vw - 32px));margin:0 auto;padding:22px 0 34px}
-    header{display:grid;grid-template-columns:1fr auto;align-items:end;gap:22px;margin-bottom:22px}
-    h1{margin:0 0 8px;font-size:clamp(30px,4vw,52px);line-height:1.05}
-    .subtitle{margin:0;max-width:820px;color:var(--muted);font-size:16px;line-height:1.7}
-    .header-pills{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end}
-    .status-pill{display:inline-flex;align-items:center;min-height:36px;padding:0 12px;border:1px solid rgba(15,118,110,.28);border-radius:6px;color:var(--accent-strong);background:rgba(255,255,255,.66);white-space:nowrap}
-    .app{display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:14px;align-items:start}
-    .workspace,.controls,.results{background:var(--white);border:1px solid var(--line);border-radius:8px;box-shadow:var(--shadow)}
-    .workspace{min-height:540px;overflow:hidden}
-    .dropzone{min-height:150px;display:grid;place-items:center;padding:18px 22px;border-bottom:1px solid var(--line);background:linear-gradient(135deg,#fff,#f0f6f6)}
-    .dropzone.dragging{background:#e2f2ef}
-    .drop-inner{width:100%;display:grid;grid-template-columns:48px minmax(0,1fr) auto;align-items:center;gap:16px;text-align:left}
-    .upload-mark{width:48px;height:48px;display:grid;place-items:center;border-radius:50%;color:var(--accent);background:#dff1ee}
-    .upload-mark svg{width:24px;height:24px}
-    .drop-title{margin:0 0 5px;font-size:20px;font-weight:750}
-    .drop-copy{margin:0;color:var(--muted);line-height:1.65}
-    .file-input{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
-    .primary,.secondary,.icon-button{min-height:40px;border-radius:6px;display:inline-flex;align-items:center;justify-content:center;gap:8px}
-    .primary{padding:0 16px;color:#fff;background:var(--accent);font-weight:700}
-    .primary:hover{background:var(--accent-strong)}
-    .primary:disabled,.secondary:disabled,.icon-button:disabled{cursor:not-allowed;opacity:.45}
-    .secondary,.icon-button{border:1px solid var(--line);color:var(--ink);background:#fff}
-    .secondary{padding:0 14px;font-weight:650}
-    .icon-button{width:34px;min-height:34px;flex:0 0 34px}
-    #pickButton{min-width:112px;white-space:nowrap}
-    .file-list{padding:12px;display:grid;gap:8px}
-    .empty{min-height:180px;display:grid;place-items:center;color:var(--muted);text-align:center;line-height:1.6;border:1px dashed var(--line);border-radius:8px;background:var(--panel)}
-    .file-row{display:grid;grid-template-columns:52px minmax(0,1fr) auto;gap:12px;align-items:center;padding:10px;border:1px solid var(--line);border-radius:8px;background:#fbfcfc}
-    .thumb{width:52px;height:52px;border-radius:6px;overflow:hidden;display:grid;place-items:center;color:var(--accent-strong);background:#e8f3f1;border:1px solid #d6e6e3}
-    .thumb img{width:100%;height:100%;object-fit:cover}
-    .file-name{margin:0 0 5px;font-weight:700;overflow-wrap:anywhere}
-    .file-meta{margin:0;color:var(--muted);font-size:13px;line-height:1.55}
-    .queue-actions{display:flex;gap:6px;align-items:center}
-    .side{display:grid;gap:14px;position:sticky;top:14px}
-    .controls,.results{padding:14px}
-    .panel-title{margin:0 0 14px;font-size:17px}
-    .field{display:grid;gap:8px;margin-bottom:15px}
-    label,.label{color:#293941;font-weight:700;font-size:13px}
-    select,input[type=number]{width:100%;min-height:40px;border:1px solid var(--line);border-radius:6px;padding:0 10px;background:#fff;color:var(--ink)}
-    input[type=range]{width:100%;accent-color:var(--accent)}
-    .range-line,.field-head,.dual{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center}
-    .value{min-width:52px;text-align:right;color:var(--muted);font-variant-numeric:tabular-nums}
-    .dual{grid-template-columns:1fr 1fr}
-    .lock-toggle{display:inline-flex;align-items:center;gap:6px;color:var(--muted);font-size:12px;font-weight:650;cursor:pointer;user-select:none}
-    .lock-toggle input{width:15px;height:15px;accent-color:var(--accent)}
-    .note{margin:0;color:var(--muted);font-size:12px;line-height:1.55}
-    .warning{padding:10px 11px;border-radius:6px;border:1px solid #f1cf9a;color:#6f4200;background:#fff7e8;font-size:12px;line-height:1.55;margin-bottom:14px}
-    .actions{display:grid;grid-template-columns:1fr auto;gap:10px;margin-top:16px}
-    .progress{height:8px;border-radius:999px;overflow:hidden;background:#e8eef0;margin-top:12px}
-    .bar{height:100%;width:0;background:var(--accent)}
-    .result-list{display:grid;gap:10px}
-    .result-item{display:grid;gap:8px;padding:10px;border:1px solid var(--line);border-radius:8px;background:#fbfcfc}
-    .result-head{display:flex;gap:8px;justify-content:space-between;align-items:start}
-    .result-name{margin:0;font-weight:750;overflow-wrap:anywhere}
-    .saving,.target-ok{color:var(--accent-strong);font-weight:750}
-    .loss{color:var(--danger);font-weight:750}
-    .target-miss{color:var(--warn);font-weight:750}
-    .download{min-height:34px;padding:0 10px;border-radius:6px;display:inline-flex;align-items:center;justify-content:center;color:#fff;background:var(--accent);text-decoration:none;font-weight:700}
-    .toast{min-height:24px;margin-top:10px;color:var(--muted);font-size:13px;line-height:1.5}
-    .toast.error{color:var(--danger);font-weight:650}
-    @media(max-width:900px){header,.app{grid-template-columns:1fr}.header-pills{justify-content:flex-start}.side{position:static}.workspace{min-height:auto}}
-    @media(max-width:560px){.drop-inner{grid-template-columns:1fr;text-align:center}.upload-mark{margin:0 auto}#pickButton{justify-self:center}.file-row{grid-template-columns:48px minmax(0,1fr)}.queue-actions{grid-column:1/-1}.dual,.actions{grid-template-columns:1fr}.icon-button{width:100%}}
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      background:
+        linear-gradient(180deg, rgba(15, 118, 110, 0.09), transparent 360px),
+        #eef3f4;
+    }
+
+    button,
+    input,
+    select {
+      font: inherit;
+    }
+
+    button {
+      border: 0;
+      cursor: pointer;
+    }
+
+    .shell {
+      width: min(1240px, calc(100vw - 32px));
+      margin: 0 auto;
+      padding: 22px 0 34px;
+    }
+
+    header {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: end;
+      gap: 22px;
+      margin-bottom: 22px;
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: clamp(30px, 4vw, 52px);
+      line-height: 1.05;
+      letter-spacing: 0;
+    }
+
+    .subtitle {
+      margin: 0;
+      max-width: 760px;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.7;
+    }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      min-height: 36px;
+      padding: 0 12px;
+      border: 1px solid rgba(15, 118, 110, 0.28);
+      border-radius: 6px;
+      color: var(--accent-strong);
+      background: rgba(255, 255, 255, 0.66);
+      white-space: nowrap;
+    }
+
+    .header-pills {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+
+    .app {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 360px;
+      gap: 14px;
+      align-items: start;
+    }
+
+    .workspace,
+    .controls,
+    .results {
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+    }
+
+    .workspace {
+      min-height: 540px;
+      overflow: hidden;
+    }
+
+    .dropzone {
+      min-height: 150px;
+      display: grid;
+      place-items: center;
+      padding: 18px 22px;
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(135deg, #ffffff, #f0f6f6);
+      transition: background 0.15s ease, border-color 0.15s ease;
+    }
+
+    .dropzone.dragging {
+      background: #e2f2ef;
+    }
+
+    .drop-inner {
+      width: 100%;
+      display: grid;
+      grid-template-columns: 48px minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 16px;
+      text-align: left;
+    }
+
+    .upload-mark {
+      width: 48px;
+      height: 48px;
+      margin: 0;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      color: var(--accent);
+      background: #dff1ee;
+    }
+
+    .upload-mark svg {
+      width: 24px;
+      height: 24px;
+    }
+
+    .drop-title {
+      margin: 0 0 5px;
+      font-size: 20px;
+      font-weight: 750;
+    }
+
+    .drop-copy {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    .file-input {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+    }
+
+    .primary,
+    .secondary,
+    .icon-button {
+      min-height: 40px;
+      border-radius: 6px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: transform 0.12s ease, background 0.12s ease, opacity 0.12s ease;
+    }
+
+    .primary {
+      padding: 0 16px;
+      color: var(--white);
+      background: var(--accent);
+      font-weight: 700;
+    }
+
+    #pickButton {
+      min-width: 112px;
+      white-space: nowrap;
+    }
+
+    .primary:hover {
+      background: var(--accent-strong);
+    }
+
+    .primary:active,
+    .secondary:active,
+    .icon-button:active {
+      transform: translateY(1px);
+    }
+
+    .primary:disabled,
+    .secondary:disabled {
+      cursor: not-allowed;
+      opacity: 0.48;
+    }
+
+    .secondary,
+    .icon-button {
+      border: 1px solid var(--line);
+      color: var(--ink);
+      background: var(--white);
+    }
+
+    .secondary {
+      padding: 0 14px;
+      font-weight: 650;
+    }
+
+    .icon-button {
+      width: 40px;
+      flex: 0 0 40px;
+    }
+
+    .queue-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .queue-actions .icon-button {
+      width: 34px;
+      min-height: 34px;
+      flex-basis: 34px;
+    }
+
+    .icon-button:disabled {
+      cursor: not-allowed;
+      opacity: 0.36;
+    }
+
+    .file-list {
+      padding: 12px;
+      display: grid;
+      gap: 8px;
+    }
+
+    .empty {
+      min-height: 180px;
+      display: grid;
+      place-items: center;
+      color: var(--muted);
+      text-align: center;
+      line-height: 1.6;
+      border: 1px dashed var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+    }
+
+    .file-row {
+      display: grid;
+      grid-template-columns: 52px minmax(0, 1fr) auto;
+      gap: 12px;
+      align-items: center;
+      padding: 10px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fbfcfc;
+    }
+
+    .thumb {
+      width: 52px;
+      height: 52px;
+      border-radius: 6px;
+      overflow: hidden;
+      display: grid;
+      place-items: center;
+      color: var(--accent-strong);
+      background: #e8f3f1;
+      border: 1px solid #d6e6e3;
+    }
+
+    .thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .file-name {
+      margin: 0 0 5px;
+      font-weight: 700;
+      overflow-wrap: anywhere;
+    }
+
+    .file-meta {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .side {
+      display: grid;
+      gap: 14px;
+      position: sticky;
+      top: 14px;
+    }
+
+    .controls,
+    .results {
+      padding: 14px;
+    }
+
+    .panel-title {
+      margin: 0 0 14px;
+      font-size: 17px;
+      letter-spacing: 0;
+    }
+
+    .field {
+      display: grid;
+      gap: 8px;
+      margin-bottom: 15px;
+    }
+
+    label,
+    .label {
+      color: #293941;
+      font-weight: 700;
+      font-size: 13px;
+    }
+
+    select,
+    input[type="number"] {
+      width: 100%;
+      min-height: 40px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 0 10px;
+      background: #fff;
+      color: var(--ink);
+    }
+
+    input[type="range"] {
+      width: 100%;
+      accent-color: var(--accent);
+    }
+
+    .range-line,
+    .field-head,
+    .dual {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .lock-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 650;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .lock-toggle input {
+      width: 15px;
+      height: 15px;
+      accent-color: var(--accent);
+    }
+
+    .value {
+      min-width: 52px;
+      text-align: right;
+      color: var(--muted);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .dual {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .note {
+      margin: 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.55;
+    }
+
+    .warning {
+      padding: 10px 11px;
+      border-radius: 6px;
+      border: 1px solid #f1cf9a;
+      color: #6f4200;
+      background: #fff7e8;
+      font-size: 12px;
+      line-height: 1.55;
+      margin-bottom: 14px;
+    }
+
+    .actions {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .progress {
+      height: 8px;
+      border-radius: 999px;
+      overflow: hidden;
+      background: #e8eef0;
+      margin-top: 12px;
+    }
+
+    .bar {
+      height: 100%;
+      width: 0%;
+      background: var(--accent);
+      transition: width 0.18s ease;
+    }
+
+    .result-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .result-item {
+      display: grid;
+      gap: 8px;
+      padding: 10px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fbfcfc;
+    }
+
+    .result-head {
+      display: flex;
+      gap: 8px;
+      justify-content: space-between;
+      align-items: start;
+    }
+
+    .result-name {
+      margin: 0;
+      font-weight: 750;
+      overflow-wrap: anywhere;
+    }
+
+    .saving {
+      color: var(--accent-strong);
+      font-weight: 750;
+    }
+
+    .loss {
+      color: var(--danger);
+      font-weight: 750;
+    }
+
+    .download {
+      min-height: 34px;
+      padding: 0 10px;
+      border-radius: 6px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--white);
+      background: var(--accent);
+      text-decoration: none;
+      font-weight: 700;
+    }
+
+    .toast {
+      min-height: 24px;
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .toast.error {
+      color: var(--danger);
+      font-weight: 650;
+    }
+
+    .target-ok {
+      color: var(--accent-strong);
+      font-weight: 750;
+    }
+
+    .target-miss {
+      color: var(--warn);
+      font-weight: 750;
+    }
+
+    @media (max-width: 900px) {
+      .shell {
+        width: min(100vw - 22px, 720px);
+        padding-top: 20px;
+      }
+
+      header,
+      .app {
+        grid-template-columns: 1fr;
+      }
+
+      .status-pill {
+        justify-self: start;
+      }
+
+      .header-pills {
+        justify-content: flex-start;
+      }
+
+      .workspace {
+        min-height: auto;
+      }
+
+      .side {
+        position: static;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .drop-inner {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+
+      .upload-mark {
+        margin: 0 auto;
+      }
+
+      #pickButton {
+        justify-self: center;
+      }
+
+      .dropzone {
+        min-height: 210px;
+        padding: 22px 14px;
+      }
+
+      .file-row {
+        grid-template-columns: 48px minmax(0, 1fr);
+      }
+
+      .thumb {
+        width: 48px;
+        height: 48px;
+      }
+
+      .dual,
+      .actions {
+        grid-template-columns: 1fr;
+      }
+
+      .icon-button {
+        width: 100%;
+      }
+
+      .queue-actions {
+        grid-column: 1 / -1;
+      }
+    }
   </style>
 </head>
-<body>
-<main class="shell">
-  <header>
-    <div>
-      <h1>图片 PDF 压缩工具</h1>
-      <p class="subtitle">在浏览器本地处理图片和 PDF。支持指定目标大小自动压缩，也可将多 PDF、多图片按队列顺序拼接为一个 PDF。</p>
-    </div>
-    <div class="header-pills">
-      <div class="status-pill" id="statusPill">等待文件</div>
-      <div class="status-pill" id="usageCount">累计使用 -- 次</div>
-    </div>
-  </header>
 
-  <section class="app">
-    <div class="workspace">
-      <div class="dropzone" id="dropzone">
-        <div class="drop-inner">
-          <div class="upload-mark">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M12 16V4"></path><path d="m7 9 5-5 5 5"></path><path d="M20 16.5V19a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-2.5"></path>
-            </svg>
-          </div>
-          <div>
+<body>
+  <main class="shell">
+    <header>
+      <div>
+        <h1>图片 PDF 压缩工具</h1>
+        <p class="subtitle">在浏览器本地处理图片和 PDF。支持指定目标大小自动压缩，也可将多 PDF、多图片按队列顺序拼接为一个 PDF。</p>
+      </div>
+      <div class="header-pills">
+        <div class="status-pill" id="statusPill">等待文件</div>
+        <div class="status-pill" id="usageCount">累计使用 -- 次</div>
+      </div>
+    </header>
+
+    <section class="app" aria-label="压缩工具">
+      <div class="workspace">
+        <div class="dropzone" id="dropzone">
+          <div class="drop-inner">
+            <div class="upload-mark" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 16V4"></path>
+                <path d="m7 9 5-5 5 5"></path>
+                <path d="M20 16.5V19a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-2.5"></path>
+              </svg>
+            </div>
             <p class="drop-title">拖入文件</p>
             <p class="drop-copy">支持 JPG、PNG、WEBP、GIF、BMP、PDF。所有压缩都在当前浏览器里完成。</p>
+            <input class="file-input" id="fileInput" type="file" accept="image/*,application/pdf" multiple>
+            <button class="primary" id="pickButton" type="button">选择文件</button>
           </div>
-          <input class="file-input" id="fileInput" type="file" accept="image/*,application/pdf" multiple>
-          <button class="primary" id="pickButton" type="button">选择文件</button>
+        </div>
+        <div class="file-list" id="fileList">
+          <div class="empty">还没有文件。添加图片或 PDF 后，这里会显示待处理队列。</div>
         </div>
       </div>
-      <div class="file-list" id="fileList">
-        <div class="empty">还没有文件。添加图片或 PDF 后，这里会显示待处理队列。</div>
-      </div>
-    </div>
 
-    <aside class="side">
-      <section class="controls">
-        <h2 class="panel-title">设置</h2>
-
-        <div class="field">
-          <label for="outputMode">输出</label>
-          <select id="outputMode">
-            <option value="auto">自动：图片输出图片，PDF 输出 PDF</option>
-            <option value="image">输出图片</option>
-            <option value="pdf">输出 PDF</option>
-            <option value="merge-pdf">合并为单个 PDF</option>
-          </select>
-        </div>
-
-        <div class="field">
-          <label for="targetSize">目标大小（MB）</label>
-          <input id="targetSize" type="number" min="0" step="0.1" placeholder="例如 2">
-          <p class="note">留空表示不限制。启用后会自动调节质量、尺寸和 PDF 清晰度。</p>
-        </div>
-
-        <div class="field" id="imageFormatField">
-          <label for="imageFormat">图片格式</label>
-          <select id="imageFormat">
-            <option value="image/jpeg">JPEG</option>
-            <option value="image/webp">WEBP</option>
-            <option value="image/png">PNG</option>
-          </select>
-        </div>
-
-        <div class="field">
-          <div class="range-line">
-            <label for="quality">质量</label>
-            <span class="value" id="qualityValue">72%</span>
+      <aside class="side">
+        <section class="controls" aria-label="压缩设置">
+          <h2 class="panel-title">设置</h2>
+          <div class="field">
+            <label for="outputMode">输出</label>
+            <select id="outputMode">
+              <option value="auto">自动：图片输出图片，PDF 输出 PDF</option>
+              <option value="image">输出图片</option>
+              <option value="pdf">输出 PDF</option>
+              <option value="merge-pdf">合并为单个 PDF</option>
+            </select>
           </div>
-          <input id="quality" type="range" min="20" max="95" value="72">
-        </div>
-
-        <div class="field">
-          <div class="range-line">
-            <label for="pdfScale">PDF 清晰度</label>
-            <span class="value" id="pdfScaleValue">1.35x</span>
+          <div class="field">
+            <label for="targetSize">目标大小（MB）</label>
+            <input id="targetSize" type="number" min="0" step="0.1" placeholder="例如 2">
+            <p class="note">留空表示不限制。启用后会自动调节质量、尺寸和 PDF 清晰度。</p>
           </div>
-          <input id="pdfScale" type="range" min="0.7" max="2.4" value="1.35" step="0.05">
-          <p class="note">值越小，PDF 越小；值越大，文字和图像越清楚。</p>
-        </div>
-
-        <div class="field">
-          <div class="field-head">
-            <span class="label">最大尺寸</span>
-            <label class="lock-toggle">
-              <input id="lockAspect" type="checkbox" checked>
-              锁定比例
-            </label>
+          <div class="field" id="imageFormatField">
+            <label for="imageFormat">图片格式</label>
+            <select id="imageFormat">
+              <option value="image/jpeg">JPEG</option>
+              <option value="image/webp">WEBP</option>
+              <option value="image/png">PNG</option>
+            </select>
           </div>
-          <div class="dual">
-            <input id="maxWidth" type="number" min="100" max="12000" value="1920" aria-label="最大宽度">
-            <input id="maxHeight" type="number" min="100" max="12000" value="1920" aria-label="最大高度">
+          <div class="field">
+            <div class="range-line">
+              <label for="quality">质量</label>
+              <span class="value" id="qualityValue">72%</span>
+            </div>
+            <input id="quality" type="range" min="20" max="95" value="72">
           </div>
-        </div>
+          <div class="field">
+            <div class="range-line">
+              <label for="pdfScale">PDF 清晰度</label>
+              <span class="value" id="pdfScaleValue">1.35x</span>
+            </div>
+            <input id="pdfScale" type="range" min="0.7" max="2.4" value="1.35" step="0.05">
+            <p class="note">值越小，PDF 越小；值越大，文字和图像越清楚。</p>
+          </div>
+          <div class="field">
+            <div class="field-head">
+              <span class="label">最大尺寸</span>
+              <label class="lock-toggle">
+                <input id="lockAspect" type="checkbox" checked>
+                锁定比例
+              </label>
+            </div>
+            <div class="dual">
+              <input id="maxWidth" type="number" min="100" max="12000" value="1920" aria-label="最大宽度">
+              <input id="maxHeight" type="number" min="100" max="12000" value="1920" aria-label="最大高度">
+            </div>
+          </div>
+          <div class="warning">PDF 压缩会把页面栅格化后重新生成 PDF，文件通常会变小，但原 PDF 中可复制文字、书签、表单会被扁平化。</div>
+          <div class="actions">
+            <button class="primary" id="compressButton" type="button" disabled>开始压缩</button>
+            <button class="secondary" id="clearButton" type="button" disabled>清空</button>
+          </div>
+          <div class="progress" aria-hidden="true">
+            <div class="bar" id="bar"></div>
+          </div>
+          <div class="toast" id="toast"></div>
+        </section>
 
-        <div class="warning">PDF 会被栅格化后重新生成，原 PDF 中可复制文字、书签、表单会被扁平化。</div>
+        <section class="results" aria-label="输出结果">
+          <h2 class="panel-title">结果</h2>
+          <div class="result-list" id="resultList">
+            <div class="empty">压缩完成后，可在这里下载输出文件。</div>
+          </div>
+        </section>
+      </aside>
+    </section>
+  </main>
 
-        <div class="actions">
-          <button class="primary" id="compressButton" type="button" disabled>开始压缩</button>
-          <button class="secondary" id="clearButton" type="button" disabled>清空</button>
-        </div>
+  <script type="module">
+    import * as pdfjsLib from "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.10.38/pdf.min.mjs";
+    pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.10.38/pdf.worker.min.mjs";
 
-        <div class="progress"><div class="bar" id="bar"></div></div>
-        <div class="toast" id="toast"></div>
-      </section>
-
-      <section class="results">
-        <h2 class="panel-title">结果</h2>
-        <div class="result-list" id="resultList">
-          <div class="empty">压缩完成后，可在这里下载输出文件。</div>
-        </div>
-      </section>
-    </aside>
-  </section>
-</main>
-
-<script type="module">
-  import * as pdfjsLib from "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.10.38/pdf.min.mjs";
-  pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.10.38/pdf.worker.min.mjs";
-
-  const USAGE_API_URL = "https://wigswan-pdf.plotworld-cn.workers.dev";
-
-  const files = [];
-  const results = [];
-
-  const els = {
-    dropzone: document.querySelector("#dropzone"),
-    fileInput: document.querySelector("#fileInput"),
-    pickButton: document.querySelector("#pickButton"),
-    fileList: document.querySelector("#fileList"),
-    resultList: document.querySelector("#resultList"),
-    outputMode: document.querySelector("#outputMode"),
-    imageFormat: document.querySelector("#imageFormat"),
-    imageFormatField: document.querySelector("#imageFormatField"),
-    quality: document.querySelector("#quality"),
-    qualityValue: document.querySelector("#qualityValue"),
-    pdfScale: document.querySelector("#pdfScale"),
-    pdfScaleValue: document.querySelector("#pdfScaleValue"),
-    targetSize: document.querySelector("#targetSize"),
-    lockAspect: document.querySelector("#lockAspect"),
-    maxWidth: document.querySelector("#maxWidth"),
-    maxHeight: document.querySelector("#maxHeight"),
-    compressButton: document.querySelector("#compressButton"),
-    clearButton: document.querySelector("#clearButton"),
-    bar: document.querySelector("#bar"),
-    toast: document.querySelector("#toast"),
-    statusPill: document.querySelector("#statusPill"),
-    usageCount: document.querySelector("#usageCount")
-  };
-
-  const minQuality = 0.2;
-  const minScale = 0.55;
-  const sizeSteps = [1, 0.85, 0.7, 0.55, 0.42, 0.32];
-  let maxSizeRatio = 1;
-  let syncingSizeInputs = false;
-
-  const isPdf = file => file.type === "application/pdf" || /\.pdf$/i.test(file.name);
-  const isImage = file => file.type.startsWith("image/");
-  const basename = name => name.replace(/\.[^.]+$/, "");
-  const extForMime = mime => ({ "image/jpeg": "jpg", "image/webp": "webp", "image/png": "png" }[mime] || "bin");
-
-  function getJsPDF() {
-    const PDFClass = window.jspdf?.jsPDF;
-    if (!PDFClass) throw new Error("PDF 生成库没有加载成功。");
-    return PDFClass;
-  }
-
-  function getJSZip() {
-    if (!window.JSZip) throw new Error("ZIP 生成库没有加载成功。");
-    return window.JSZip;
-  }
-
-  function formatBytes(bytes) {
-    if (!Number.isFinite(bytes) || bytes === 0) return "0 B";
-    const units = ["B", "KB", "MB", "GB"];
-    const index = Math.min(Math.floor(Math.log(bytes) / Math.log(1024)), units.length - 1);
-    return `${(bytes / 1024 ** index).toFixed(index ? 1 : 0)} ${units[index]}`;
-  }
-
-  function setToast(message, isError = false) {
-    els.toast.textContent = message;
-    els.toast.classList.toggle("error", isError);
-  }
-
-  function setProgress(done, total) {
-    const percent = total ? Math.round((done / total) * 100) : 0;
-    els.bar.style.width = `${percent}%`;
-    els.statusPill.textContent = total ? `${percent}%` : (files.length ? `${files.length} 个文件待处理` : "等待文件");
-  }
-
-  function getTargetBytes() {
-    const value = Number(els.targetSize.value);
-    if (!Number.isFinite(value) || value <= 0) return null;
-    return Math.round(value * 1024 * 1024);
-  }
-
-  function withTargetMeta(result, targetBytes, note = "") {
-    if (!targetBytes) return result;
-    return { ...result, targetBytes, targetMet: result.after <= targetBytes, note };
-  }
-
-  function assertTargetCompatible(options) {
-    if (!options.targetBytes) return;
-    if (options.mode === "image" && options.mime === "image/png") {
-      throw new Error("PNG 不支持按质量自动压缩到目标大小。请把图片格式切换为 JPEG 或 WEBP。");
-    }
-  }
-
-  function clampDimension(value, fallback = 1920) {
-    const number = Number(value);
-    if (!Number.isFinite(number)) return fallback;
-    return Math.min(12000, Math.max(100, Math.round(number)));
-  }
-
-  function updateMaxSizeRatio() {
-    const width = clampDimension(els.maxWidth.value);
-    const height = clampDimension(els.maxHeight.value);
-    maxSizeRatio = height ? width / height : 1;
-  }
-
-  function syncMaxSize(source) {
-    if (!els.lockAspect.checked || syncingSizeInputs) return;
-    syncingSizeInputs = true;
-    if (source === "width") {
-      const width = clampDimension(els.maxWidth.value);
-      els.maxHeight.value = clampDimension(width / maxSizeRatio);
-    } else {
-      const height = clampDimension(els.maxHeight.value);
-      els.maxWidth.value = clampDimension(height * maxSizeRatio);
-    }
-    syncingSizeInputs = false;
-  }
-
-  function readAsArrayBuffer(file) {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = () => resolve(reader.result);
-      reader.onerror = reject;
-      reader.readAsArrayBuffer(file);
-    });
-  }
-
-  function blobFromCanvas(canvas, type, quality) {
-    return new Promise(resolve => canvas.toBlob(resolve, type, quality));
-  }
-
-  async function loadImage(file) {
-    const url = URL.createObjectURL(file);
-    try {
-      const image = new Image();
-      image.decoding = "async";
-      image.src = url;
-      await image.decode();
-      return image;
-    } finally {
-      URL.revokeObjectURL(url);
-    }
-  }
-
-  function fitSize(width, height, maxWidth, maxHeight) {
-    const ratio = Math.min(maxWidth / width, maxHeight / height, 1);
-    return {
-      width: Math.max(1, Math.round(width * ratio)),
-      height: Math.max(1, Math.round(height * ratio))
+    const USAGE_API_URL = "https://wigswan-pdf.plotworld-cn.workers.dev";
+    const files = [];
+    const results = [];
+    const els = {
+      dropzone: document.querySelector("#dropzone"),
+      fileInput: document.querySelector("#fileInput"),
+      pickButton: document.querySelector("#pickButton"),
+      fileList: document.querySelector("#fileList"),
+      resultList: document.querySelector("#resultList"),
+      outputMode: document.querySelector("#outputMode"),
+      imageFormat: document.querySelector("#imageFormat"),
+      imageFormatField: document.querySelector("#imageFormatField"),
+      quality: document.querySelector("#quality"),
+      qualityValue: document.querySelector("#qualityValue"),
+      pdfScale: document.querySelector("#pdfScale"),
+      pdfScaleValue: document.querySelector("#pdfScaleValue"),
+      targetSize: document.querySelector("#targetSize"),
+      lockAspect: document.querySelector("#lockAspect"),
+      maxWidth: document.querySelector("#maxWidth"),
+      maxHeight: document.querySelector("#maxHeight"),
+      compressButton: document.querySelector("#compressButton"),
+      clearButton: document.querySelector("#clearButton"),
+      bar: document.querySelector("#bar"),
+      toast: document.querySelector("#toast"),
+      statusPill: document.querySelector("#statusPill"),
+      usageCount: document.querySelector("#usageCount")
     };
-  }
 
-  function drawImageToCanvas(image, maxWidth, maxHeight, fillWhite = true) {
-    const size = fitSize(image.naturalWidth, image.naturalHeight, maxWidth, maxHeight);
-    const canvas = document.createElement("canvas");
-    canvas.width = size.width;
-    canvas.height = size.height;
-    const ctx = canvas.getContext("2d", { alpha: !fillWhite });
-    if (fillWhite) {
-      ctx.fillStyle = "#fff";
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-    }
-    ctx.imageSmoothingEnabled = true;
-    ctx.imageSmoothingQuality = "high";
-    ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
-    return canvas;
-  }
-
-  async function renderPdfPage(page, scale) {
-    const viewport = page.getViewport({ scale });
-    const canvas = document.createElement("canvas");
-    canvas.width = Math.ceil(viewport.width);
-    canvas.height = Math.ceil(viewport.height);
-    const ctx = canvas.getContext("2d");
-    ctx.fillStyle = "#fff";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    await page.render({ canvasContext: ctx, viewport }).promise;
-    return canvas;
-  }
-
-  async function makeImageBlobWithParams(file, image, options, quality, sizeRatio = 1) {
-    const fillWhite = options.mime === "image/jpeg";
-    const maxWidth = Math.max(100, Math.round(options.maxWidth * sizeRatio));
-    const maxHeight = Math.max(100, Math.round(options.maxHeight * sizeRatio));
-    const canvas = drawImageToCanvas(image, maxWidth, maxHeight, fillWhite);
-    const blob = await blobFromCanvas(canvas, options.mime, quality);
-    return { blob, quality, sizeRatio };
-  }
-
-  async function compressImage(file, options) {
-    const image = await loadImage(file);
-    const { blob } = await makeImageBlobWithParams(file, image, options, options.quality);
-    return withTargetMeta({
-      blob,
-      name: `${basename(file.name)}-compressed.${extForMime(options.mime)}`,
-      before: file.size,
-      after: blob.size
-    }, options.targetBytes);
-  }
-
-  async function compressImageToTarget(file, options) {
-    if (!options.targetBytes) return compressImage(file, options);
-    if (options.mime === "image/png") {
-      throw new Error("PNG 不支持按质量自动压缩到目标大小。请把图片格式切换为 JPEG 或 WEBP。");
-    }
-
-    const image = await loadImage(file);
-    let smallest;
-    let best;
-
-    for (const sizeRatio of sizeSteps) {
-      let low = minQuality;
-      let high = Math.max(minQuality, options.quality);
-      let candidate = null;
-
-      for (let attempt = 0; attempt < 7; attempt++) {
-        const quality = (low + high) / 2;
-        const current = await makeImageBlobWithParams(file, image, options, quality, sizeRatio);
-        smallest = !smallest || current.blob.size < smallest.blob.size ? current : smallest;
-
-        if (current.blob.size <= options.targetBytes) {
-          candidate = current;
-          low = quality;
-        } else {
-          high = quality;
-        }
+    function getJsPDF() {
+      const PDFClass = window.jspdf?.jsPDF;
+      if (!PDFClass) {
+        throw new Error("PDF 生成库没有加载成功。请确认网络可访问 cdnjs，或用本地服务打开页面。");
       }
+      return PDFClass;
+    }
 
-      if (candidate) {
-        best = candidate;
-        break;
+    function getJSZip() {
+      if (!window.JSZip) {
+        throw new Error("ZIP 生成库没有加载成功。请确认网络可访问 cdnjs，或用本地服务打开页面。");
+      }
+      return window.JSZip;
+    }
+
+    const formatBytes = (bytes) => {
+      if (!Number.isFinite(bytes) || bytes === 0) return "0 B";
+      const units = ["B", "KB", "MB", "GB"];
+      const index = Math.min(Math.floor(Math.log(bytes) / Math.log(1024)), units.length - 1);
+      return `${(bytes / 1024 ** index).toFixed(index ? 1 : 0)} ${units[index]}`;
+    };
+
+    const basename = (name) => name.replace(/\.[^.]+$/, "");
+    const extForMime = (mime) => ({ "image/jpeg": "jpg", "image/webp": "webp", "image/png": "png" }[mime] || "bin");
+    const isPdf = (file) => file.type === "application/pdf" || /\.pdf$/i.test(file.name);
+    const isImage = (file) => file.type.startsWith("image/");
+    const minQuality = 0.2;
+    const minScale = 0.55;
+    const sizeSteps = [1, 0.85, 0.7, 0.55, 0.42, 0.32];
+    let maxSizeRatio = 1;
+    let syncingSizeInputs = false;
+
+    function setToast(message, isError = false) {
+      els.toast.textContent = message;
+      els.toast.classList.toggle("error", isError);
+    }
+
+    function setProgress(done, total) {
+      const percent = total ? Math.round((done / total) * 100) : 0;
+      els.bar.style.width = `${percent}%`;
+      els.statusPill.textContent = total ? `${percent}%` : "等待文件";
+    }
+
+    function getTargetBytes() {
+      const value = Number(els.targetSize.value);
+      if (!Number.isFinite(value) || value <= 0) return null;
+      return Math.round(value * 1024 * 1024);
+    }
+
+    function withTargetMeta(result, targetBytes, note = "") {
+      if (!targetBytes) return result;
+      return {
+        ...result,
+        targetBytes,
+        targetMet: result.after <= targetBytes,
+        note
+      };
+    }
+
+    async function fetchWithTimeout(url, options = {}, timeout = 4000) {
+      const controller = new AbortController();
+      const timer = window.setTimeout(() => controller.abort(), timeout);
+      try {
+        return await fetch(url, { ...options, signal: controller.signal });
+      } finally {
+        window.clearTimeout(timer);
       }
     }
 
-    const output = best || smallest;
-    return withTargetMeta({
-      blob: output.blob,
-      name: `${basename(file.name)}-compressed.${extForMime(options.mime)}`,
-      before: file.size,
-      after: output.blob.size
-    }, options.targetBytes, best ? "已按目标大小自动调节。" : "已尽力压缩，仍高于目标大小。");
-  }
-
-  async function imageCanvasForPdf(file, options, sizeRatio = 1) {
-    const image = await loadImage(file);
-    const maxWidth = Math.max(100, Math.round(options.maxWidth * sizeRatio));
-    const maxHeight = Math.max(100, Math.round(options.maxHeight * sizeRatio));
-    return drawImageToCanvas(image, maxWidth, maxHeight, true);
-  }
-
-  function addCanvasPage(pdf, canvas, quality, firstPage) {
-    const orientation = canvas.width > canvas.height ? "l" : "p";
-    const data = canvas.toDataURL("image/jpeg", quality);
-
-    if (!firstPage) {
-      pdf.addPage([canvas.width, canvas.height], orientation);
-    }
-
-    pdf.addImage(data, "JPEG", 0, 0, canvas.width, canvas.height, undefined, "FAST");
-  }
-
-  async function buildPdfFromItems(items, options, onPage) {
-    const PDFClass = getJsPDF();
-    let output;
-    let firstPage = true;
-    let pageIndex = 0;
-
-    for (const file of items) {
-      if (isImage(file)) {
-        const canvas = await imageCanvasForPdf(file, options, options.sizeRatio || 1);
-        const orientation = canvas.width > canvas.height ? "l" : "p";
-        if (!output) output = new PDFClass({ orientation, unit: "px", format: [canvas.width, canvas.height], compress: true });
-        addCanvasPage(output, canvas, options.quality, firstPage);
-        firstPage = false;
-        pageIndex++;
-        onPage?.(pageIndex, pageIndex);
-      }
-
-      if (isPdf(file)) {
-        const buffer = await readAsArrayBuffer(file);
-        const pdfDoc = await pdfjsLib.getDocument({ data: buffer }).promise;
-
-        for (let pageNumber = 1; pageNumber <= pdfDoc.numPages; pageNumber++) {
-          const page = await pdfDoc.getPage(pageNumber);
-          const canvas = await renderPdfPage(page, options.pdfScale);
-          const orientation = canvas.width > canvas.height ? "l" : "p";
-          if (!output) output = new PDFClass({ orientation, unit: "px", format: [canvas.width, canvas.height], compress: true });
-          addCanvasPage(output, canvas, options.quality, firstPage);
-          firstPage = false;
-          pageIndex++;
-          onPage?.(pageIndex, pageIndex);
-        }
+    async function loadUsageStats() {
+      if (!els.usageCount) return;
+      try {
+        const response = await fetchWithTimeout(`${USAGE_API_URL}/stats`, {
+          headers: { "Accept": "application/json" },
+          cache: "no-store"
+        });
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const data = await response.json();
+        const count = Number(data.total ?? data.count ?? data.usageCount ?? 0);
+        els.usageCount.textContent = `累计使用 ${count.toLocaleString("zh-CN")} 次`;
+      } catch (error) {
+        console.warn("Usage stats unavailable:", error);
+        els.usageCount.textContent = "累计使用 -- 次";
+        els.usageCount.title = "统计接口暂时不可用，压缩功能不受影响。";
       }
     }
 
-    if (!output) throw new Error("没有可处理的图片或 PDF。");
-    return output.output("blob");
-  }
+    async function trackUsage(options, outputItems) {
+      try {
+        await fetchWithTimeout(`${USAGE_API_URL}/track`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            event: "pdf_tool_completed",
+            mode: options.mode,
+            file_count: files.length,
+            input_bytes: files.reduce((sum, file) => sum + file.size, 0),
+            output_bytes: outputItems.reduce((sum, item) => sum + item.after, 0),
+            target_bytes: options.targetBytes,
+            page_url: window.location.href,
+            submitted_at: new Date().toISOString()
+          })
+        });
+      } catch (error) {
+        console.warn("Usage tracking failed:", error);
+      }
+    }
 
-  async function pdfResultToTarget(items, options, name, onPage) {
-    if (!options.targetBytes) {
-      const blob = await buildPdfFromItems(items, options, onPage);
+    function assertTargetCompatible(options) {
+      if (!options.targetBytes) return;
+      if (options.mode === "image" && options.mime === "image/png") {
+        throw new Error("PNG 不支持按质量自动压缩到目标大小。请把图片格式切换为 JPEG 或 WEBP。");
+      }
+    }
+
+    function clampDimension(value, fallback = 1920) {
+      const number = Number(value);
+      if (!Number.isFinite(number)) return fallback;
+      return Math.min(12000, Math.max(100, Math.round(number)));
+    }
+
+    function updateMaxSizeRatio() {
+      const width = clampDimension(els.maxWidth.value);
+      const height = clampDimension(els.maxHeight.value);
+      maxSizeRatio = height ? width / height : 1;
+    }
+
+    function syncMaxSize(source) {
+      if (!els.lockAspect.checked || syncingSizeInputs) return;
+      syncingSizeInputs = true;
+      if (source === "width") {
+        const width = clampDimension(els.maxWidth.value);
+        els.maxHeight.value = clampDimension(width / maxSizeRatio);
+      } else {
+        const height = clampDimension(els.maxHeight.value);
+        els.maxWidth.value = clampDimension(height * maxSizeRatio);
+      }
+      syncingSizeInputs = false;
+    }
+
+    function readAsDataURL(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+    }
+
+    function readAsArrayBuffer(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = reject;
+        reader.readAsArrayBuffer(file);
+      });
+    }
+
+    function blobFromCanvas(canvas, type, quality) {
+      return new Promise((resolve) => canvas.toBlob(resolve, type, quality));
+    }
+
+    async function loadImage(file) {
+      const url = URL.createObjectURL(file);
+      try {
+        const image = new Image();
+        image.decoding = "async";
+        image.src = url;
+        await image.decode();
+        return image;
+      } finally {
+        URL.revokeObjectURL(url);
+      }
+    }
+
+    function fitSize(width, height, maxWidth, maxHeight) {
+      const ratio = Math.min(maxWidth / width, maxHeight / height, 1);
+      return {
+        width: Math.max(1, Math.round(width * ratio)),
+        height: Math.max(1, Math.round(height * ratio))
+      };
+    }
+
+    function drawImageToCanvas(image, maxWidth, maxHeight, fillWhite = true) {
+      const size = fitSize(image.naturalWidth, image.naturalHeight, maxWidth, maxHeight);
+      const canvas = document.createElement("canvas");
+      canvas.width = size.width;
+      canvas.height = size.height;
+      const ctx = canvas.getContext("2d", { alpha: !fillWhite });
+      if (fillWhite) {
+        ctx.fillStyle = "#fff";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+      }
+      ctx.imageSmoothingEnabled = true;
+      ctx.imageSmoothingQuality = "high";
+      ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+      return canvas;
+    }
+
+    async function makeImageBlobWithParams(file, image, options, quality, sizeRatio = 1) {
+      const fillWhite = options.mime === "image/jpeg";
+      const maxWidth = Math.max(100, Math.round(options.maxWidth * sizeRatio));
+      const maxHeight = Math.max(100, Math.round(options.maxHeight * sizeRatio));
+      const canvas = drawImageToCanvas(image, maxWidth, maxHeight, fillWhite);
+      const blob = await blobFromCanvas(canvas, options.mime, quality);
+      return { blob, quality, sizeRatio };
+    }
+
+    async function compressImage(file, options) {
+      const image = await loadImage(file);
+      const { blob } = await makeImageBlobWithParams(file, image, options, options.quality);
       return withTargetMeta({
         blob,
-        name,
-        before: items.reduce((sum, file) => sum + file.size, 0),
+        name: `${basename(file.name)}-compressed.${extForMime(options.mime)}`,
+        before: file.size,
         after: blob.size
       }, options.targetBytes);
     }
 
-    let smallest;
-    let best;
-    const startScale = Math.max(minScale, options.pdfScale);
+    async function compressImageToTarget(file, options) {
+      if (!options.targetBytes) return compressImage(file, options);
+      if (options.mime === "image/png") {
+        throw new Error("PNG 不支持按质量自动压缩到目标大小。请把图片格式切换为 JPEG 或 WEBP。");
+      }
+      const image = await loadImage(file);
+      let smallest;
+      let best;
 
-    for (const sizeRatio of sizeSteps) {
-      for (let scale = startScale; scale >= minScale; scale -= 0.2) {
+      for (const sizeRatio of sizeSteps) {
         let low = minQuality;
         let high = Math.max(minQuality, options.quality);
         let candidate = null;
 
-        for (let attempt = 0; attempt < 6; attempt++) {
+        for (let attempt = 0; attempt < 7; attempt++) {
           const quality = (low + high) / 2;
-          const blob = await buildPdfFromItems(items, {
-            ...options,
-            quality,
-            pdfScale: Number(scale.toFixed(2)),
-            sizeRatio
-          }, onPage);
+          const current = await makeImageBlobWithParams(file, image, options, quality, sizeRatio);
+          smallest = !smallest || current.blob.size < smallest.blob.size ? current : smallest;
 
-          const current = { blob };
-          smallest = !smallest || blob.size < smallest.blob.size ? current : smallest;
-
-          if (blob.size <= options.targetBytes) {
+          if (current.blob.size <= options.targetBytes) {
             candidate = current;
             low = quality;
           } else {
@@ -541,367 +970,446 @@
           break;
         }
       }
-      if (best) break;
+
+      const output = best || smallest;
+      return withTargetMeta({
+        blob: output.blob,
+        name: `${basename(file.name)}-compressed.${extForMime(options.mime)}`,
+        before: file.size,
+        after: output.blob.size
+      }, options.targetBytes, best ? "已按目标大小自动调节。" : "已尽力压缩，仍高于目标大小。");
     }
 
-    const output = best || smallest;
-    return withTargetMeta({
-      blob: output.blob,
-      name,
-      before: items.reduce((sum, file) => sum + file.size, 0),
-      after: output.blob.size
-    }, options.targetBytes, best ? "已按目标大小自动调节。" : "已尽力压缩，仍高于目标大小。");
-  }
-
-  async function imagesToPdf(imageFiles, options, onPage) {
-    const name = imageFiles.length === 1 ? `${basename(imageFiles[0].name)}.pdf` : "compressed-images.pdf";
-    return pdfResultToTarget(imageFiles, options, name, onPage);
-  }
-
-  async function mergeToTarget(items, options, onPage) {
-    return pdfResultToTarget(items, options, "merged-compressed.pdf", onPage);
-  }
-
-  async function compressPdfToTarget(file, options, onPage) {
-    return pdfResultToTarget([file], options, `${basename(file.name)}-compressed.pdf`, onPage);
-  }
-
-  async function pdfToImagesZip(file, options, onPage) {
-    const ZipClass = getJSZip();
-    const buffer = await readAsArrayBuffer(file);
-    const pdfDoc = await pdfjsLib.getDocument({ data: buffer }).promise;
-    const zip = new ZipClass();
-    const folder = zip.folder(`${basename(file.name)}-images`);
-
-    for (let pageNumber = 1; pageNumber <= pdfDoc.numPages; pageNumber++) {
-      const page = await pdfDoc.getPage(pageNumber);
-      const canvas = await renderPdfPage(page, options.pdfScale);
-      const blob = await blobFromCanvas(canvas, options.mime, options.quality);
-      folder.file(`page-${String(pageNumber).padStart(3, "0")}.${extForMime(options.mime)}`, blob);
-      onPage?.(pageNumber, pdfDoc.numPages);
+    async function imageCanvasForPdf(file, options, sizeRatio = 1) {
+      const image = await loadImage(file);
+      const maxWidth = Math.max(100, Math.round(options.maxWidth * sizeRatio));
+      const maxHeight = Math.max(100, Math.round(options.maxHeight * sizeRatio));
+      return drawImageToCanvas(image, maxWidth, maxHeight, true);
     }
 
-    const blob = await zip.generateAsync({ type: "blob", compression: "DEFLATE", compressionOptions: { level: 7 } });
-    return withTargetMeta({
-      blob,
-      name: `${basename(file.name)}-images.zip`,
-      before: file.size,
-      after: blob.size
-    }, options.targetBytes);
-  }
+    function addCanvasPage(pdf, canvas, quality, firstPage) {
+      const orientation = canvas.width > canvas.height ? "l" : "p";
+      const pageWidth = canvas.width;
+      const pageHeight = canvas.height;
+      const data = canvas.toDataURL("image/jpeg", quality);
 
-  async function zipToTarget(file, options, onPage) {
-    if (!options.targetBytes) return pdfToImagesZip(file, options, onPage);
+      if (!firstPage) {
+        pdf.addPage([pageWidth, pageHeight], orientation);
+      }
+      pdf.addImage(data, "JPEG", 0, 0, pageWidth, pageHeight, undefined, "FAST");
+    }
 
-    let smallest;
-    let best;
+    async function buildPdfFromItems(items, options, onPage) {
+      const PDFClass = getJsPDF();
+      let output;
+      let firstPage = true;
+      let pageIndex = 0;
 
-    for (let scale = Math.max(minScale, options.pdfScale); scale >= minScale; scale -= 0.2) {
-      let low = minQuality;
-      let high = Math.max(minQuality, options.quality);
+      for (const file of items) {
+        if (isImage(file)) {
+          const canvas = await imageCanvasForPdf(file, options, options.sizeRatio || 1);
+          const orientation = canvas.width > canvas.height ? "l" : "p";
+          if (!output) {
+            output = new PDFClass({ orientation, unit: "px", format: [canvas.width, canvas.height], compress: true });
+          }
+          addCanvasPage(output, canvas, options.quality, firstPage);
+          firstPage = false;
+          pageIndex += 1;
+          onPage?.(pageIndex, pageIndex);
+          continue;
+        }
 
-      for (let attempt = 0; attempt < 6; attempt++) {
-        const quality = (low + high) / 2;
-        const current = await pdfToImagesZip(file, { ...options, quality, pdfScale: Number(scale.toFixed(2)) }, onPage);
-        smallest = !smallest || current.after < smallest.after ? current : smallest;
-
-        if (current.after <= options.targetBytes) {
-          best = current;
-          low = quality;
-        } else {
-          high = quality;
+        if (isPdf(file)) {
+          const buffer = await readAsArrayBuffer(file);
+          const pdfDoc = await pdfjsLib.getDocument({ data: buffer }).promise;
+          for (let pageNumber = 1; pageNumber <= pdfDoc.numPages; pageNumber++) {
+            const page = await pdfDoc.getPage(pageNumber);
+            const canvas = await renderPdfPage(page, options.pdfScale);
+            const orientation = canvas.width > canvas.height ? "l" : "p";
+            if (!output) {
+              output = new PDFClass({ orientation, unit: "px", format: [canvas.width, canvas.height], compress: true });
+            }
+            addCanvasPage(output, canvas, options.quality, firstPage);
+            firstPage = false;
+            pageIndex += 1;
+            onPage?.(pageIndex, pageIndex);
+          }
         }
       }
 
-      if (best) break;
-    }
-
-    return withTargetMeta(best || smallest, options.targetBytes, best ? "已按目标大小自动调节。" : "已尽力压缩，仍高于目标大小。");
-  }
-
-  function renderFileList() {
-    els.compressButton.disabled = files.length === 0;
-    els.clearButton.disabled = files.length === 0 && results.length === 0;
-    els.statusPill.textContent = files.length ? `${files.length} 个文件待处理` : "等待文件";
-
-    if (!files.length) {
-      els.fileList.innerHTML = '<div class="empty">还没有文件。添加图片或 PDF 后，这里会显示待处理队列。</div>';
-      return;
-    }
-
-    els.fileList.innerHTML = "";
-
-    files.forEach((file, index) => {
-      const row = document.createElement("div");
-      row.className = "file-row";
-
-      const thumb = document.createElement("div");
-      thumb.className = "thumb";
-      thumb.textContent = isPdf(file) ? "PDF" : "IMG";
-
-      if (isImage(file)) {
-        const img = document.createElement("img");
-        img.alt = "";
-        img.src = URL.createObjectURL(file);
-        img.addEventListener("load", () => URL.revokeObjectURL(img.src), { once: true });
-        thumb.textContent = "";
-        thumb.append(img);
+      if (!output) {
+        throw new Error("没有可合并的图片或 PDF。");
       }
 
-      const info = document.createElement("div");
-      info.innerHTML = `<p class="file-name"></p><p class="file-meta">${file.type || "未知类型"} · ${formatBytes(file.size)}</p>`;
-      info.querySelector(".file-name").textContent = file.name;
-
-      const actions = document.createElement("div");
-      actions.className = "queue-actions";
-
-      const up = document.createElement("button");
-      up.className = "icon-button";
-      up.type = "button";
-      up.title = "上移";
-      up.disabled = index === 0;
-      up.textContent = "↑";
-      up.onclick = () => {
-        [files[index - 1], files[index]] = [files[index], files[index - 1]];
-        renderFileList();
-      };
-
-      const down = document.createElement("button");
-      down.className = "icon-button";
-      down.type = "button";
-      down.title = "下移";
-      down.disabled = index === files.length - 1;
-      down.textContent = "↓";
-      down.onclick = () => {
-        [files[index], files[index + 1]] = [files[index + 1], files[index]];
-        renderFileList();
-      };
-
-      const remove = document.createElement("button");
-      remove.className = "icon-button";
-      remove.type = "button";
-      remove.title = "移除";
-      remove.textContent = "×";
-      remove.onclick = () => {
-        files.splice(index, 1);
-        renderFileList();
-      };
-
-      actions.append(up, down, remove);
-      row.append(thumb, info, actions);
-      els.fileList.append(row);
-    });
-  }
-
-  function renderResults() {
-    if (!results.length) {
-      els.resultList.innerHTML = '<div class="empty">压缩完成后，可在这里下载输出文件。</div>';
-      return;
+      return output.output("blob");
     }
 
-    els.resultList.innerHTML = "";
-
-    for (const item of results) {
-      const url = URL.createObjectURL(item.blob);
-      const delta = item.before ? 1 - item.after / item.before : 0;
-      const good = delta >= 0;
-
-      const result = document.createElement("div");
-      result.className = "result-item";
-      result.innerHTML = `
-        <div class="result-head">
-          <p class="result-name"></p>
-          <a class="download" download>下载</a>
-        </div>
-        <p class="file-meta">${formatBytes(item.before)} → ${formatBytes(item.after)} · <span class="${good ? "saving" : "loss"}">${good ? "减少" : "增加"} ${Math.abs(delta * 100).toFixed(1)}%</span></p>
-        ${item.targetBytes ? `<p class="file-meta">目标 ${formatBytes(item.targetBytes)} · <span class="${item.targetMet ? "target-ok" : "target-miss"}">${item.targetMet ? "已达到目标" : "高于目标"}</span>${item.note ? ` · ${item.note}` : ""}</p>` : ""}
-      `;
-
-      result.querySelector(".result-name").textContent = item.name;
-      const link = result.querySelector("a");
-      link.href = url;
-      link.download = item.name;
-      els.resultList.append(result);
+    async function buildPdfWithParams(items, options, quality, pdfScale, sizeRatio, onPage) {
+      return buildPdfFromItems(items, { ...options, quality, pdfScale, sizeRatio }, onPage);
     }
-  }
 
-  function addFiles(fileList) {
-    const incoming = [...fileList].filter(file => isImage(file) || isPdf(file));
-    files.push(...incoming);
-    setToast(incoming.length ? `已添加 ${incoming.length} 个文件。` : "没有发现可处理的图片或 PDF。", !incoming.length);
-    renderFileList();
-  }
-
-  function getOptions() {
-    return {
-      mode: els.outputMode.value,
-      mime: els.imageFormat.value,
-      quality: Number(els.quality.value) / 100,
-      pdfScale: Number(els.pdfScale.value),
-      targetBytes: getTargetBytes(),
-      maxWidth: clampDimension(els.maxWidth.value),
-      maxHeight: clampDimension(els.maxHeight.value)
-    };
-  }
-
-  async function trackUsage(options, outputItems) {
-    try {
-      const inputBytes = files.reduce((sum, file) => sum + file.size, 0);
-      const outputBytes = outputItems.reduce((sum, item) => sum + item.after, 0);
-
-      await fetch(`${USAGE_API_URL}/track`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          event: "pdf_tool_completed",
-          mode: options.mode,
-          fileCount: files.length,
-          inputBytes,
-          outputBytes,
-          targetBytes: options.targetBytes || null,
-          pageUrl: window.location.href,
-          createdAt: new Date().toISOString()
-        })
-      });
-    } catch (error) {
-      console.warn("usage tracking failed", error);
+    async function pdfResultFromItems(items, options, name, onPage) {
+      const blob = await buildPdfFromItems(items, options, onPage);
+      return withTargetMeta({
+        blob,
+        name,
+        before: items.reduce((sum, file) => sum + file.size, 0),
+        after: blob.size
+      }, options.targetBytes);
     }
-  }
 
-  async function loadUsageStats() {
-    try {
-      const response = await fetch(`${USAGE_API_URL}/stats`);
-      const data = await response.json();
+    async function pdfResultToTarget(items, options, name, onPage) {
+      if (!options.targetBytes) return pdfResultFromItems(items, options, name, onPage);
+      let smallest;
+      let best;
+      const startScale = Math.max(minScale, options.pdfScale);
 
-      if (data.ok) {
-        els.usageCount.textContent = `累计使用 ${data.totalUses} 次`;
+      for (const sizeRatio of sizeSteps) {
+        for (let scale = startScale; scale >= minScale; scale -= 0.2) {
+          let low = minQuality;
+          let high = Math.max(minQuality, options.quality);
+          let candidate = null;
+
+          for (let attempt = 0; attempt < 6; attempt++) {
+            const quality = (low + high) / 2;
+            const blob = await buildPdfWithParams(items, options, quality, Number(scale.toFixed(2)), sizeRatio, onPage);
+            const current = { blob, quality, scale, sizeRatio };
+            smallest = !smallest || blob.size < smallest.blob.size ? current : smallest;
+
+            if (blob.size <= options.targetBytes) {
+              candidate = current;
+              low = quality;
+            } else {
+              high = quality;
+            }
+          }
+
+          if (candidate) {
+            best = candidate;
+            break;
+          }
+        }
+        if (best) break;
       }
-    } catch (error) {
-      console.warn("usage stats failed", error);
+
+      const output = best || smallest;
+      return withTargetMeta({
+        blob: output.blob,
+        name,
+        before: items.reduce((sum, file) => sum + file.size, 0),
+        after: output.blob.size
+      }, options.targetBytes, best ? "已按目标大小自动调节。" : "已尽力压缩，仍高于目标大小。");
     }
-  }
 
-  async function compressAll() {
-    if (!files.length) return;
+    async function imagesToPdf(imageFiles, options, onPage) {
+      const name = imageFiles.length === 1 ? `${basename(imageFiles[0].name)}.pdf` : "compressed-images.pdf";
+      return pdfResultToTarget(imageFiles, options, name, onPage);
+    }
 
-    els.compressButton.disabled = true;
-    els.clearButton.disabled = true;
-    results.splice(0);
-    renderResults();
-    setToast("正在处理，请保持页面打开。");
-    setProgress(0, 1);
+    async function mergeToTarget(items, options, onPage) {
+      return pdfResultToTarget(items, options, "merged-compressed.pdf", onPage);
+    }
 
-    const options = getOptions();
+    async function compressPdfToTarget(file, options, onPage) {
+      return pdfResultToTarget([file], options, `${basename(file.name)}-compressed.pdf`, onPage);
+    }
 
-    try {
-      assertTargetCompatible(options);
+    async function zipToTarget(file, options, onPage) {
+      if (!options.targetBytes) return pdfToImagesZip(file, options, onPage);
+      let smallest;
+      let best;
 
-      const imageFiles = files.filter(isImage);
-      const pdfFiles = files.filter(isPdf);
-      let completed = 0;
-      const total = files.length;
+      for (let scale = Math.max(minScale, options.pdfScale); scale >= minScale; scale -= 0.2) {
+        let low = minQuality;
+        let high = Math.max(minQuality, options.quality);
 
-      if (options.mode === "merge-pdf") {
-        results.push(await mergeToTarget(files, options, () => setProgress(0.5, 1)));
-        setProgress(1, 1);
-        setToast("完成，已按队列顺序合并为 1 个 PDF。");
-        await trackUsage(options, results);
-        loadUsageStats();
+        for (let attempt = 0; attempt < 6; attempt++) {
+          const quality = (low + high) / 2;
+          const current = await pdfToImagesZip(file, { ...options, quality, pdfScale: Number(scale.toFixed(2)) }, onPage);
+          smallest = !smallest || current.after < smallest.after ? current : smallest;
+
+          if (current.after <= options.targetBytes) {
+            best = current;
+            low = quality;
+          } else {
+            high = quality;
+          }
+        }
+
+        if (best) break;
+      }
+
+      return withTargetMeta({
+        ...(best || smallest),
+        note: best ? "已按目标大小自动调节。" : "已尽力压缩，仍高于目标大小。"
+      }, options.targetBytes, best ? "已按目标大小自动调节。" : "已尽力压缩，仍高于目标大小。");
+    }
+
+    async function renderPdfPage(page, scale) {
+      const viewport = page.getViewport({ scale });
+      const canvas = document.createElement("canvas");
+      canvas.width = Math.ceil(viewport.width);
+      canvas.height = Math.ceil(viewport.height);
+      const ctx = canvas.getContext("2d");
+      ctx.fillStyle = "#fff";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      await page.render({ canvasContext: ctx, viewport }).promise;
+      return canvas;
+    }
+
+    async function pdfToImagesZip(file, options, onPage) {
+      const ZipClass = getJSZip();
+      const buffer = await readAsArrayBuffer(file);
+      const pdfDoc = await pdfjsLib.getDocument({ data: buffer }).promise;
+      const zip = new ZipClass();
+      const folder = zip.folder(`${basename(file.name)}-images`);
+      for (let pageNumber = 1; pageNumber <= pdfDoc.numPages; pageNumber++) {
+        const page = await pdfDoc.getPage(pageNumber);
+        const canvas = await renderPdfPage(page, options.pdfScale);
+        const blob = await blobFromCanvas(canvas, options.mime, options.quality);
+        folder.file(`page-${String(pageNumber).padStart(3, "0")}.${extForMime(options.mime)}`, blob);
+        onPage?.(pageNumber, pdfDoc.numPages);
+      }
+      const blob = await zip.generateAsync({ type: "blob", compression: "DEFLATE", compressionOptions: { level: 7 } });
+      return {
+        blob,
+        name: `${basename(file.name)}-images.zip`,
+        before: file.size,
+        after: blob.size
+      };
+    }
+
+    function renderFileList() {
+      els.compressButton.disabled = files.length === 0;
+      els.clearButton.disabled = files.length === 0 && results.length === 0;
+      els.statusPill.textContent = files.length ? `${files.length} 个文件待处理` : "等待文件";
+
+      if (!files.length) {
+        els.fileList.innerHTML = '<div class="empty">还没有文件。添加图片或 PDF 后，这里会显示待处理队列。</div>';
         return;
       }
 
-      if (options.mode === "pdf" && imageFiles.length) {
-        results.push(await imagesToPdf(imageFiles, options, () => setProgress(completed + 0.5, total)));
-        completed += imageFiles.length;
-        setProgress(completed, total);
-      } else {
-        for (const file of imageFiles) {
-          results.push(await compressImageToTarget(file, options));
+      els.fileList.innerHTML = "";
+      files.forEach((file, index) => {
+        const row = document.createElement("div");
+        row.className = "file-row";
+        const thumb = document.createElement("div");
+        thumb.className = "thumb";
+        thumb.textContent = isPdf(file) ? "PDF" : "IMG";
+        if (isImage(file)) {
+          const img = document.createElement("img");
+          img.alt = "";
+          img.src = URL.createObjectURL(file);
+          img.addEventListener("load", () => URL.revokeObjectURL(img.src), { once: true });
+          thumb.textContent = "";
+          thumb.append(img);
+        }
+        const info = document.createElement("div");
+        info.innerHTML = `<p class="file-name"></p><p class="file-meta">${file.type || "未知类型"} · ${formatBytes(file.size)}</p>`;
+        info.querySelector(".file-name").textContent = file.name;
+        const actions = document.createElement("div");
+        actions.className = "queue-actions";
+        const up = document.createElement("button");
+        up.className = "icon-button";
+        up.type = "button";
+        up.title = "上移";
+        up.disabled = index === 0;
+        up.innerHTML = '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m18 15-6-6-6 6"></path></svg>';
+        up.addEventListener("click", () => {
+          [files[index - 1], files[index]] = [files[index], files[index - 1]];
+          renderFileList();
+        });
+        const down = document.createElement("button");
+        down.className = "icon-button";
+        down.type = "button";
+        down.title = "下移";
+        down.disabled = index === files.length - 1;
+        down.innerHTML = '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"></path></svg>';
+        down.addEventListener("click", () => {
+          [files[index], files[index + 1]] = [files[index + 1], files[index]];
+          renderFileList();
+        });
+        const remove = document.createElement("button");
+        remove.className = "icon-button";
+        remove.type = "button";
+        remove.title = "移除";
+        remove.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>';
+        remove.addEventListener("click", () => {
+          files.splice(index, 1);
+          renderFileList();
+        });
+        actions.append(up, down, remove);
+        row.append(thumb, info, actions);
+        els.fileList.append(row);
+      });
+    }
+
+    function renderResults() {
+      if (!results.length) {
+        els.resultList.innerHTML = '<div class="empty">压缩完成后，可在这里下载输出文件。</div>';
+        return;
+      }
+
+      els.resultList.innerHTML = "";
+      for (const item of results) {
+        const url = URL.createObjectURL(item.blob);
+        const delta = item.before ? 1 - item.after / item.before : 0;
+        const good = delta >= 0;
+        const result = document.createElement("div");
+        result.className = "result-item";
+        result.innerHTML = `
+          <div class="result-head">
+            <p class="result-name"></p>
+            <a class="download" download>下载</a>
+          </div>
+          <p class="file-meta">${formatBytes(item.before)} → ${formatBytes(item.after)} · <span class="${good ? "saving" : "loss"}">${good ? "减少" : "增加"} ${Math.abs(delta * 100).toFixed(1)}%</span></p>
+          ${item.targetBytes ? `<p class="file-meta">目标 ${formatBytes(item.targetBytes)} · <span class="${item.targetMet ? "target-ok" : "target-miss"}">${item.targetMet ? "已达到目标" : "高于目标"}</span>${item.note ? ` · ${item.note}` : ""}</p>` : ""}
+        `;
+        result.querySelector(".result-name").textContent = item.name;
+        const link = result.querySelector("a");
+        link.href = url;
+        link.download = item.name;
+        els.resultList.append(result);
+      }
+    }
+
+    function addFiles(fileList) {
+      const incoming = [...fileList].filter((file) => isImage(file) || isPdf(file));
+      files.push(...incoming);
+      setToast(incoming.length ? `已添加 ${incoming.length} 个文件。` : "没有发现可处理的图片或 PDF。", !incoming.length);
+      renderFileList();
+    }
+
+    function getOptions() {
+      return {
+        mode: els.outputMode.value,
+        mime: els.imageFormat.value,
+        quality: Number(els.quality.value) / 100,
+        pdfScale: Number(els.pdfScale.value),
+        targetBytes: getTargetBytes(),
+        maxWidth: Math.max(100, Number(els.maxWidth.value) || 1920),
+        maxHeight: Math.max(100, Number(els.maxHeight.value) || 1920)
+      };
+    }
+
+    async function compressAll() {
+      if (!files.length) return;
+      els.compressButton.disabled = true;
+      els.clearButton.disabled = true;
+      results.splice(0);
+      renderResults();
+      setToast("正在处理，请保持页面打开。");
+      setProgress(0, 1);
+
+      const options = getOptions();
+      try {
+        assertTargetCompatible(options);
+        const imageFiles = files.filter(isImage);
+        const pdfFiles = files.filter(isPdf);
+        let completed = 0;
+        const total = files.length;
+
+        if (options.mode === "merge-pdf") {
+          results.push(await mergeToTarget(files, options, () => {
+            setProgress(0.5, 1);
+          }));
+          setProgress(1, 1);
+          setToast("完成，已按队列顺序合并为 1 个 PDF。");
+          await trackUsage(options, results);
+          loadUsageStats();
+          return;
+        }
+
+        if (options.mode === "pdf" && imageFiles.length) {
+          results.push(await imagesToPdf(imageFiles, options, () => {
+            setProgress(completed + 0.5, total);
+          }));
+          completed += imageFiles.length;
+          setProgress(completed, total);
+        } else {
+          for (const file of imageFiles) {
+            results.push(await compressImageToTarget(file, options));
+            completed += 1;
+            setProgress(completed, total);
+          }
+        }
+
+        for (const file of pdfFiles) {
+          const onPage = (page, pages) => {
+            const local = page / Math.max(pages, 1);
+            setProgress(completed + local, total);
+          };
+          if (options.mode === "image") {
+            results.push(await zipToTarget(file, options, onPage));
+          } else {
+            results.push(await compressPdfToTarget(file, options, onPage));
+          }
           completed += 1;
           setProgress(completed, total);
         }
+
+        setToast(`完成，生成 ${results.length} 个输出文件。`);
+        await trackUsage(options, results);
+        loadUsageStats();
+      } catch (error) {
+        console.error(error);
+        setToast(`处理失败：${error.message || error}`, true);
+      } finally {
+        els.compressButton.disabled = files.length === 0;
+        els.clearButton.disabled = false;
+        renderResults();
       }
-
-      for (const file of pdfFiles) {
-        const onPage = (page, pages) => setProgress(completed + page / Math.max(pages, 1), total);
-
-        if (options.mode === "image") {
-          results.push(await zipToTarget(file, options, onPage));
-        } else {
-          results.push(await compressPdfToTarget(file, options, onPage));
-        }
-
-        completed += 1;
-        setProgress(completed, total);
-      }
-
-      setToast(`完成，生成 ${results.length} 个输出文件。`);
-      await trackUsage(options, results);
-      loadUsageStats();
-    } catch (error) {
-      console.error(error);
-      setToast(`处理失败：${error.message || error}`, true);
-    } finally {
-      els.compressButton.disabled = files.length === 0;
-      els.clearButton.disabled = false;
-      renderResults();
     }
-  }
 
-  els.pickButton.onclick = () => els.fileInput.click();
+    els.pickButton.addEventListener("click", () => els.fileInput.click());
+    els.fileInput.addEventListener("change", () => {
+      addFiles(els.fileInput.files);
+      els.fileInput.value = "";
+    });
 
-  els.fileInput.onchange = () => {
-    addFiles(els.fileInput.files);
-    els.fileInput.value = "";
-  };
+    els.dropzone.addEventListener("dragover", (event) => {
+      event.preventDefault();
+      els.dropzone.classList.add("dragging");
+    });
+    els.dropzone.addEventListener("dragleave", () => els.dropzone.classList.remove("dragging"));
+    els.dropzone.addEventListener("drop", (event) => {
+      event.preventDefault();
+      els.dropzone.classList.remove("dragging");
+      addFiles(event.dataTransfer.files);
+    });
 
-  els.dropzone.ondragover = event => {
-    event.preventDefault();
-    els.dropzone.classList.add("dragging");
-  };
+    els.quality.addEventListener("input", () => {
+      els.qualityValue.textContent = `${els.quality.value}%`;
+    });
+    els.pdfScale.addEventListener("input", () => {
+      els.pdfScaleValue.textContent = `${Number(els.pdfScale.value).toFixed(2)}x`;
+    });
+    els.lockAspect.addEventListener("change", () => {
+      if (els.lockAspect.checked) updateMaxSizeRatio();
+    });
+    els.maxWidth.addEventListener("input", () => syncMaxSize("width"));
+    els.maxHeight.addEventListener("input", () => syncMaxSize("height"));
+    els.outputMode.addEventListener("change", () => {
+      els.imageFormatField.style.display = ["pdf", "merge-pdf"].includes(els.outputMode.value) ? "none" : "";
+    });
+    els.compressButton.addEventListener("click", compressAll);
+    els.clearButton.addEventListener("click", () => {
+      files.splice(0);
+      results.splice(0);
+      setProgress(0, 0);
+      setToast("");
+      renderFileList();
+      renderResults();
+    });
 
-  els.dropzone.ondragleave = () => els.dropzone.classList.remove("dragging");
-
-  els.dropzone.ondrop = event => {
-    event.preventDefault();
-    els.dropzone.classList.remove("dragging");
-    addFiles(event.dataTransfer.files);
-  };
-
-  els.quality.oninput = () => {
-    els.qualityValue.textContent = `${els.quality.value}%`;
-  };
-
-  els.pdfScale.oninput = () => {
-    els.pdfScaleValue.textContent = `${Number(els.pdfScale.value).toFixed(2)}x`;
-  };
-
-  els.lockAspect.onchange = () => {
-    if (els.lockAspect.checked) updateMaxSizeRatio();
-  };
-
-  els.maxWidth.oninput = () => syncMaxSize("width");
-  els.maxHeight.oninput = () => syncMaxSize("height");
-
-  els.outputMode.onchange = () => {
-    els.imageFormatField.style.display = ["pdf", "merge-pdf"].includes(els.outputMode.value) ? "none" : "";
-  };
-
-  els.compressButton.onclick = compressAll;
-
-  els.clearButton.onclick = () => {
-    files.splice(0);
-    results.splice(0);
-    setProgress(0, 0);
-    setToast("");
     renderFileList();
     renderResults();
-  };
-
-  renderFileList();
-  renderResults();
-  updateMaxSizeRatio();
-  loadUsageStats();
-</script>
+    updateMaxSizeRatio();
+    loadUsageStats();
+    if (location.protocol === "file:") {
+      setToast("当前通过 file:// 打开。图片压缩可直接使用；如果 PDF 处理遇到安全限制，请在项目目录运行 python3 -m http.server 8123 后访问 http://127.0.0.1:8123/pdf/。");
+    }
+  </script>
 </body>
+
 </html>
