@@ -1,11 +1,11 @@
 <!doctype html>
 <html lang="zh-CN">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>免费PDF压缩与图片压缩工具 - 在线压缩到指定大小</title>
-  <meta name="description"
-        content="免费在线压缩PDF、JPG、PNG图片，支持批量压缩和压缩到指定大小，适合报名材料、证件照、商品图、文档上传等场景，无需安装软件。">
+  <meta name="description" content="免费在线压缩PDF、JPG、PNG图片,支持批量压缩和压缩到指定大小,适合报名材料、证件照、商品图、文档上传等场景,无需安装软件。">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
   <style>
@@ -49,9 +49,9 @@
     }
 
     .shell {
-      width: min(1180px, calc(100vw - 32px));
+      width: min(1240px, calc(100vw - 32px));
       margin: 0 auto;
-      padding: 30px 0 42px;
+      padding: 22px 0 34px;
     }
 
     header {
@@ -91,8 +91,8 @@
 
     .app {
       display: grid;
-      grid-template-columns: minmax(0, 1fr) 340px;
-      gap: 18px;
+      grid-template-columns: minmax(0, 1fr) 360px;
+      gap: 14px;
       align-items: start;
     }
 
@@ -106,15 +106,15 @@
     }
 
     .workspace {
-      min-height: 620px;
+      min-height: 540px;
       overflow: hidden;
     }
 
     .dropzone {
-      min-height: 250px;
+      min-height: 150px;
       display: grid;
       place-items: center;
-      padding: 28px;
+      padding: 18px 22px;
       border-bottom: 1px solid var(--line);
       background: linear-gradient(135deg, #ffffff, #f0f6f6);
       transition: background 0.15s ease, border-color 0.15s ease;
@@ -125,14 +125,18 @@
     }
 
     .drop-inner {
-      width: min(560px, 100%);
-      text-align: center;
+      width: 100%;
+      display: grid;
+      grid-template-columns: 48px minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 16px;
+      text-align: left;
     }
 
     .upload-mark {
-      width: 58px;
-      height: 58px;
-      margin: 0 auto 16px;
+      width: 48px;
+      height: 48px;
+      margin: 0;
       display: grid;
       place-items: center;
       border-radius: 50%;
@@ -141,18 +145,18 @@
     }
 
     .upload-mark svg {
-      width: 30px;
-      height: 30px;
+      width: 24px;
+      height: 24px;
     }
 
     .drop-title {
-      margin: 0 0 8px;
-      font-size: 22px;
+      margin: 0 0 5px;
+      font-size: 20px;
       font-weight: 750;
     }
 
     .drop-copy {
-      margin: 0 0 18px;
+      margin: 0;
       color: var(--muted);
       line-height: 1.65;
     }
@@ -182,6 +186,11 @@
       color: var(--white);
       background: var(--accent);
       font-weight: 700;
+    }
+
+    #pickButton {
+      min-width: 112px;
+      white-space: nowrap;
     }
 
     .primary:hover {
@@ -217,14 +226,31 @@
       flex: 0 0 40px;
     }
 
+    .queue-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .queue-actions .icon-button {
+      width: 34px;
+      min-height: 34px;
+      flex-basis: 34px;
+    }
+
+    .icon-button:disabled {
+      cursor: not-allowed;
+      opacity: 0.36;
+    }
+
     .file-list {
-      padding: 16px;
+      padding: 12px;
       display: grid;
-      gap: 10px;
+      gap: 8px;
     }
 
     .empty {
-      min-height: 250px;
+      min-height: 180px;
       display: grid;
       place-items: center;
       color: var(--muted);
@@ -237,7 +263,7 @@
 
     .file-row {
       display: grid;
-      grid-template-columns: 58px minmax(0, 1fr) auto;
+      grid-template-columns: 52px minmax(0, 1fr) auto;
       gap: 12px;
       align-items: center;
       padding: 10px;
@@ -247,8 +273,8 @@
     }
 
     .thumb {
-      width: 58px;
-      height: 58px;
+      width: 52px;
+      height: 52px;
       border-radius: 6px;
       overflow: hidden;
       display: grid;
@@ -278,12 +304,14 @@
 
     .side {
       display: grid;
-      gap: 18px;
+      gap: 14px;
+      position: sticky;
+      top: 14px;
     }
 
     .controls,
     .results {
-      padding: 16px;
+      padding: 14px;
     }
 
     .panel-title {
@@ -322,11 +350,29 @@
     }
 
     .range-line,
+    .field-head,
     .dual {
       display: grid;
       grid-template-columns: minmax(0, 1fr) auto;
       gap: 10px;
       align-items: center;
+    }
+
+    .lock-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 650;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .lock-toggle input {
+      width: 15px;
+      height: 15px;
+      accent-color: var(--accent);
     }
 
     .value {
@@ -443,6 +489,16 @@
       font-weight: 650;
     }
 
+    .target-ok {
+      color: var(--accent-strong);
+      font-weight: 750;
+    }
+
+    .target-miss {
+      color: var(--warn);
+      font-weight: 750;
+    }
+
     @media (max-width: 900px) {
       .shell {
         width: min(100vw - 22px, 720px);
@@ -461,16 +517,33 @@
       .workspace {
         min-height: auto;
       }
+
+      .side {
+        position: static;
+      }
     }
 
     @media (max-width: 560px) {
+      .drop-inner {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+
+      .upload-mark {
+        margin: 0 auto;
+      }
+
+      #pickButton {
+        justify-self: center;
+      }
+
       .dropzone {
-        min-height: 230px;
+        min-height: 210px;
         padding: 22px 14px;
       }
 
       .file-row {
-        grid-template-columns: 48px minmax(0, 1fr) 40px;
+        grid-template-columns: 48px minmax(0, 1fr);
       }
 
       .thumb {
@@ -486,15 +559,20 @@
       .icon-button {
         width: 100%;
       }
+
+      .queue-actions {
+        grid-column: 1 / -1;
+      }
     }
   </style>
 </head>
+
 <body>
   <main class="shell">
     <header>
       <div>
         <h1>图片 PDF 压缩工具</h1>
-        <p class="subtitle">在浏览器本地处理图片和 PDF。图片可输出为 JPEG、WEBP、PNG 或合并 PDF；PDF 可按页面重采样后输出更小的 PDF，也可导出为图片压缩包。</p>
+        <p class="subtitle">在浏览器本地处理图片和 PDF。支持指定目标大小自动压缩，也可将多 PDF、多图片按队列顺序拼接为一个 PDF。</p>
       </div>
       <div class="status-pill" id="statusPill">等待文件</div>
     </header>
@@ -530,7 +608,13 @@
               <option value="auto">自动：图片输出图片，PDF 输出 PDF</option>
               <option value="image">输出图片</option>
               <option value="pdf">输出 PDF</option>
+              <option value="merge-pdf">合并为单个 PDF</option>
             </select>
+          </div>
+          <div class="field">
+            <label for="targetSize">目标大小（MB）</label>
+            <input id="targetSize" type="number" min="0" step="0.1" placeholder="例如 2">
+            <p class="note">留空表示不限制。启用后会自动调节质量、尺寸和 PDF 清晰度。</p>
           </div>
           <div class="field" id="imageFormatField">
             <label for="imageFormat">图片格式</label>
@@ -556,7 +640,13 @@
             <p class="note">值越小，PDF 越小；值越大，文字和图像越清楚。</p>
           </div>
           <div class="field">
-            <span class="label">最大尺寸</span>
+            <div class="field-head">
+              <span class="label">最大尺寸</span>
+              <label class="lock-toggle">
+                <input id="lockAspect" type="checkbox" checked>
+                锁定比例
+              </label>
+            </div>
             <div class="dual">
               <input id="maxWidth" type="number" min="100" max="12000" value="1920" aria-label="最大宽度">
               <input id="maxHeight" type="number" min="100" max="12000" value="1920" aria-label="最大高度">
@@ -567,7 +657,9 @@
             <button class="primary" id="compressButton" type="button" disabled>开始压缩</button>
             <button class="secondary" id="clearButton" type="button" disabled>清空</button>
           </div>
-          <div class="progress" aria-hidden="true"><div class="bar" id="bar"></div></div>
+          <div class="progress" aria-hidden="true">
+            <div class="bar" id="bar"></div>
+          </div>
           <div class="toast" id="toast"></div>
         </section>
 
@@ -600,6 +692,8 @@
       qualityValue: document.querySelector("#qualityValue"),
       pdfScale: document.querySelector("#pdfScale"),
       pdfScaleValue: document.querySelector("#pdfScaleValue"),
+      targetSize: document.querySelector("#targetSize"),
+      lockAspect: document.querySelector("#lockAspect"),
       maxWidth: document.querySelector("#maxWidth"),
       maxHeight: document.querySelector("#maxHeight"),
       compressButton: document.querySelector("#compressButton"),
@@ -635,6 +729,11 @@
     const extForMime = (mime) => ({ "image/jpeg": "jpg", "image/webp": "webp", "image/png": "png" }[mime] || "bin");
     const isPdf = (file) => file.type === "application/pdf" || /\.pdf$/i.test(file.name);
     const isImage = (file) => file.type.startsWith("image/");
+    const minQuality = 0.2;
+    const minScale = 0.55;
+    const sizeSteps = [1, 0.85, 0.7, 0.55, 0.42, 0.32];
+    let maxSizeRatio = 1;
+    let syncingSizeInputs = false;
 
     function setToast(message, isError = false) {
       els.toast.textContent = message;
@@ -645,6 +744,54 @@
       const percent = total ? Math.round((done / total) * 100) : 0;
       els.bar.style.width = `${percent}%`;
       els.statusPill.textContent = total ? `${percent}%` : "等待文件";
+    }
+
+    function getTargetBytes() {
+      const value = Number(els.targetSize.value);
+      if (!Number.isFinite(value) || value <= 0) return null;
+      return Math.round(value * 1024 * 1024);
+    }
+
+    function withTargetMeta(result, targetBytes, note = "") {
+      if (!targetBytes) return result;
+      return {
+        ...result,
+        targetBytes,
+        targetMet: result.after <= targetBytes,
+        note
+      };
+    }
+
+    function assertTargetCompatible(options) {
+      if (!options.targetBytes) return;
+      if (options.mode === "image" && options.mime === "image/png") {
+        throw new Error("PNG 不支持按质量自动压缩到目标大小。请把图片格式切换为 JPEG 或 WEBP。");
+      }
+    }
+
+    function clampDimension(value, fallback = 1920) {
+      const number = Number(value);
+      if (!Number.isFinite(number)) return fallback;
+      return Math.min(12000, Math.max(100, Math.round(number)));
+    }
+
+    function updateMaxSizeRatio() {
+      const width = clampDimension(els.maxWidth.value);
+      const height = clampDimension(els.maxHeight.value);
+      maxSizeRatio = height ? width / height : 1;
+    }
+
+    function syncMaxSize(source) {
+      if (!els.lockAspect.checked || syncingSizeInputs) return;
+      syncingSizeInputs = true;
+      if (source === "width") {
+        const width = clampDimension(els.maxWidth.value);
+        els.maxHeight.value = clampDimension(width / maxSizeRatio);
+      } else {
+        const height = clampDimension(els.maxHeight.value);
+        els.maxWidth.value = clampDimension(height * maxSizeRatio);
+      }
+      syncingSizeInputs = false;
     }
 
     function readAsDataURL(file) {
@@ -706,43 +853,231 @@
       return canvas;
     }
 
+    async function makeImageBlobWithParams(file, image, options, quality, sizeRatio = 1) {
+      const fillWhite = options.mime === "image/jpeg";
+      const maxWidth = Math.max(100, Math.round(options.maxWidth * sizeRatio));
+      const maxHeight = Math.max(100, Math.round(options.maxHeight * sizeRatio));
+      const canvas = drawImageToCanvas(image, maxWidth, maxHeight, fillWhite);
+      const blob = await blobFromCanvas(canvas, options.mime, quality);
+      return { blob, quality, sizeRatio };
+    }
+
     async function compressImage(file, options) {
       const image = await loadImage(file);
-      const fillWhite = options.mime === "image/jpeg";
-      const canvas = drawImageToCanvas(image, options.maxWidth, options.maxHeight, fillWhite);
-      const blob = await blobFromCanvas(canvas, options.mime, options.quality);
-      return {
+      const { blob } = await makeImageBlobWithParams(file, image, options, options.quality);
+      return withTargetMeta({
         blob,
         name: `${basename(file.name)}-compressed.${extForMime(options.mime)}`,
         before: file.size,
         after: blob.size
-      };
+      }, options.targetBytes);
     }
 
-    async function imagesToPdf(imageFiles, options) {
-      const PDFClass = getJsPDF();
-      const pdf = new PDFClass({ orientation: "p", unit: "pt", format: "a4", compress: true });
-      let first = true;
-      for (const file of imageFiles) {
-        const image = await loadImage(file);
-        const canvas = drawImageToCanvas(image, options.maxWidth, options.maxHeight, true);
-        const data = canvas.toDataURL("image/jpeg", options.quality);
-        const pageWidth = 595.28;
-        const pageHeight = 841.89;
-        if (!first) pdf.addPage([pageWidth, pageHeight], "p");
-        first = false;
-        const ratio = Math.min(pageWidth / canvas.width, pageHeight / canvas.height);
-        const width = canvas.width * ratio;
-        const height = canvas.height * ratio;
-        pdf.addImage(data, "JPEG", (pageWidth - width) / 2, (pageHeight - height) / 2, width, height, undefined, "FAST");
+    async function compressImageToTarget(file, options) {
+      if (!options.targetBytes) return compressImage(file, options);
+      if (options.mime === "image/png") {
+        throw new Error("PNG 不支持按质量自动压缩到目标大小。请把图片格式切换为 JPEG 或 WEBP。");
       }
-      const blob = pdf.output("blob");
-      return {
+      const image = await loadImage(file);
+      let smallest;
+      let best;
+
+      for (const sizeRatio of sizeSteps) {
+        let low = minQuality;
+        let high = Math.max(minQuality, options.quality);
+        let candidate = null;
+
+        for (let attempt = 0; attempt < 7; attempt++) {
+          const quality = (low + high) / 2;
+          const current = await makeImageBlobWithParams(file, image, options, quality, sizeRatio);
+          smallest = !smallest || current.blob.size < smallest.blob.size ? current : smallest;
+
+          if (current.blob.size <= options.targetBytes) {
+            candidate = current;
+            low = quality;
+          } else {
+            high = quality;
+          }
+        }
+
+        if (candidate) {
+          best = candidate;
+          break;
+        }
+      }
+
+      const output = best || smallest;
+      return withTargetMeta({
+        blob: output.blob,
+        name: `${basename(file.name)}-compressed.${extForMime(options.mime)}`,
+        before: file.size,
+        after: output.blob.size
+      }, options.targetBytes, best ? "已按目标大小自动调节。" : "已尽力压缩，仍高于目标大小。");
+    }
+
+    async function imageCanvasForPdf(file, options, sizeRatio = 1) {
+      const image = await loadImage(file);
+      const maxWidth = Math.max(100, Math.round(options.maxWidth * sizeRatio));
+      const maxHeight = Math.max(100, Math.round(options.maxHeight * sizeRatio));
+      return drawImageToCanvas(image, maxWidth, maxHeight, true);
+    }
+
+    function addCanvasPage(pdf, canvas, quality, firstPage) {
+      const orientation = canvas.width > canvas.height ? "l" : "p";
+      const pageWidth = canvas.width;
+      const pageHeight = canvas.height;
+      const data = canvas.toDataURL("image/jpeg", quality);
+
+      if (!firstPage) {
+        pdf.addPage([pageWidth, pageHeight], orientation);
+      }
+      pdf.addImage(data, "JPEG", 0, 0, pageWidth, pageHeight, undefined, "FAST");
+    }
+
+    async function buildPdfFromItems(items, options, onPage) {
+      const PDFClass = getJsPDF();
+      let output;
+      let firstPage = true;
+      let pageIndex = 0;
+
+      for (const file of items) {
+        if (isImage(file)) {
+          const canvas = await imageCanvasForPdf(file, options, options.sizeRatio || 1);
+          const orientation = canvas.width > canvas.height ? "l" : "p";
+          if (!output) {
+            output = new PDFClass({ orientation, unit: "px", format: [canvas.width, canvas.height], compress: true });
+          }
+          addCanvasPage(output, canvas, options.quality, firstPage);
+          firstPage = false;
+          pageIndex += 1;
+          onPage?.(pageIndex, pageIndex);
+          continue;
+        }
+
+        if (isPdf(file)) {
+          const buffer = await readAsArrayBuffer(file);
+          const pdfDoc = await pdfjsLib.getDocument({ data: buffer }).promise;
+          for (let pageNumber = 1; pageNumber <= pdfDoc.numPages; pageNumber++) {
+            const page = await pdfDoc.getPage(pageNumber);
+            const canvas = await renderPdfPage(page, options.pdfScale);
+            const orientation = canvas.width > canvas.height ? "l" : "p";
+            if (!output) {
+              output = new PDFClass({ orientation, unit: "px", format: [canvas.width, canvas.height], compress: true });
+            }
+            addCanvasPage(output, canvas, options.quality, firstPage);
+            firstPage = false;
+            pageIndex += 1;
+            onPage?.(pageIndex, pageIndex);
+          }
+        }
+      }
+
+      if (!output) {
+        throw new Error("没有可合并的图片或 PDF。");
+      }
+
+      return output.output("blob");
+    }
+
+    async function buildPdfWithParams(items, options, quality, pdfScale, sizeRatio, onPage) {
+      return buildPdfFromItems(items, { ...options, quality, pdfScale, sizeRatio }, onPage);
+    }
+
+    async function pdfResultFromItems(items, options, name, onPage) {
+      const blob = await buildPdfFromItems(items, options, onPage);
+      return withTargetMeta({
         blob,
-        name: imageFiles.length === 1 ? `${basename(imageFiles[0].name)}.pdf` : "compressed-images.pdf",
-        before: imageFiles.reduce((sum, file) => sum + file.size, 0),
+        name,
+        before: items.reduce((sum, file) => sum + file.size, 0),
         after: blob.size
-      };
+      }, options.targetBytes);
+    }
+
+    async function pdfResultToTarget(items, options, name, onPage) {
+      if (!options.targetBytes) return pdfResultFromItems(items, options, name, onPage);
+      let smallest;
+      let best;
+      const startScale = Math.max(minScale, options.pdfScale);
+
+      for (const sizeRatio of sizeSteps) {
+        for (let scale = startScale; scale >= minScale; scale -= 0.2) {
+          let low = minQuality;
+          let high = Math.max(minQuality, options.quality);
+          let candidate = null;
+
+          for (let attempt = 0; attempt < 6; attempt++) {
+            const quality = (low + high) / 2;
+            const blob = await buildPdfWithParams(items, options, quality, Number(scale.toFixed(2)), sizeRatio, onPage);
+            const current = { blob, quality, scale, sizeRatio };
+            smallest = !smallest || blob.size < smallest.blob.size ? current : smallest;
+
+            if (blob.size <= options.targetBytes) {
+              candidate = current;
+              low = quality;
+            } else {
+              high = quality;
+            }
+          }
+
+          if (candidate) {
+            best = candidate;
+            break;
+          }
+        }
+        if (best) break;
+      }
+
+      const output = best || smallest;
+      return withTargetMeta({
+        blob: output.blob,
+        name,
+        before: items.reduce((sum, file) => sum + file.size, 0),
+        after: output.blob.size
+      }, options.targetBytes, best ? "已按目标大小自动调节。" : "已尽力压缩，仍高于目标大小。");
+    }
+
+    async function imagesToPdf(imageFiles, options, onPage) {
+      const name = imageFiles.length === 1 ? `${basename(imageFiles[0].name)}.pdf` : "compressed-images.pdf";
+      return pdfResultToTarget(imageFiles, options, name, onPage);
+    }
+
+    async function mergeToTarget(items, options, onPage) {
+      return pdfResultToTarget(items, options, "merged-compressed.pdf", onPage);
+    }
+
+    async function compressPdfToTarget(file, options, onPage) {
+      return pdfResultToTarget([file], options, `${basename(file.name)}-compressed.pdf`, onPage);
+    }
+
+    async function zipToTarget(file, options, onPage) {
+      if (!options.targetBytes) return pdfToImagesZip(file, options, onPage);
+      let smallest;
+      let best;
+
+      for (let scale = Math.max(minScale, options.pdfScale); scale >= minScale; scale -= 0.2) {
+        let low = minQuality;
+        let high = Math.max(minQuality, options.quality);
+
+        for (let attempt = 0; attempt < 6; attempt++) {
+          const quality = (low + high) / 2;
+          const current = await pdfToImagesZip(file, { ...options, quality, pdfScale: Number(scale.toFixed(2)) }, onPage);
+          smallest = !smallest || current.after < smallest.after ? current : smallest;
+
+          if (current.after <= options.targetBytes) {
+            best = current;
+            low = quality;
+          } else {
+            high = quality;
+          }
+        }
+
+        if (best) break;
+      }
+
+      return withTargetMeta({
+        ...(best || smallest),
+        note: best ? "已按目标大小自动调节。" : "已尽力压缩，仍高于目标大小。"
+      }, options.targetBytes, best ? "已按目标大小自动调节。" : "已尽力压缩，仍高于目标大小。");
     }
 
     async function renderPdfPage(page, scale) {
@@ -755,35 +1090,6 @@
       ctx.fillRect(0, 0, canvas.width, canvas.height);
       await page.render({ canvasContext: ctx, viewport }).promise;
       return canvas;
-    }
-
-    async function compressPdfToPdf(file, options, onPage) {
-      const PDFClass = getJsPDF();
-      const buffer = await readAsArrayBuffer(file);
-      const pdfDoc = await pdfjsLib.getDocument({ data: buffer }).promise;
-      let output;
-      for (let pageNumber = 1; pageNumber <= pdfDoc.numPages; pageNumber++) {
-        const page = await pdfDoc.getPage(pageNumber);
-        const canvas = await renderPdfPage(page, options.pdfScale);
-        const data = canvas.toDataURL("image/jpeg", options.quality);
-        const orientation = canvas.width > canvas.height ? "l" : "p";
-        const pageWidth = canvas.width;
-        const pageHeight = canvas.height;
-        if (!output) {
-          output = new PDFClass({ orientation, unit: "px", format: [pageWidth, pageHeight], compress: true });
-        } else {
-          output.addPage([pageWidth, pageHeight], orientation);
-        }
-        output.addImage(data, "JPEG", 0, 0, pageWidth, pageHeight, undefined, "FAST");
-        onPage?.(pageNumber, pdfDoc.numPages);
-      }
-      const blob = output.output("blob");
-      return {
-        blob,
-        name: `${basename(file.name)}-compressed.pdf`,
-        before: file.size,
-        after: blob.size
-      };
     }
 
     async function pdfToImagesZip(file, options, onPage) {
@@ -819,7 +1125,7 @@
       }
 
       els.fileList.innerHTML = "";
-      files.forEach(async (file, index) => {
+      files.forEach((file, index) => {
         const row = document.createElement("div");
         row.className = "file-row";
         const thumb = document.createElement("div");
@@ -828,13 +1134,36 @@
         if (isImage(file)) {
           const img = document.createElement("img");
           img.alt = "";
-          img.src = await readAsDataURL(file);
+          img.src = URL.createObjectURL(file);
+          img.addEventListener("load", () => URL.revokeObjectURL(img.src), { once: true });
           thumb.textContent = "";
           thumb.append(img);
         }
         const info = document.createElement("div");
         info.innerHTML = `<p class="file-name"></p><p class="file-meta">${file.type || "未知类型"} · ${formatBytes(file.size)}</p>`;
         info.querySelector(".file-name").textContent = file.name;
+        const actions = document.createElement("div");
+        actions.className = "queue-actions";
+        const up = document.createElement("button");
+        up.className = "icon-button";
+        up.type = "button";
+        up.title = "上移";
+        up.disabled = index === 0;
+        up.innerHTML = '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m18 15-6-6-6 6"></path></svg>';
+        up.addEventListener("click", () => {
+          [files[index - 1], files[index]] = [files[index], files[index - 1]];
+          renderFileList();
+        });
+        const down = document.createElement("button");
+        down.className = "icon-button";
+        down.type = "button";
+        down.title = "下移";
+        down.disabled = index === files.length - 1;
+        down.innerHTML = '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"></path></svg>';
+        down.addEventListener("click", () => {
+          [files[index], files[index + 1]] = [files[index + 1], files[index]];
+          renderFileList();
+        });
         const remove = document.createElement("button");
         remove.className = "icon-button";
         remove.type = "button";
@@ -844,7 +1173,8 @@
           files.splice(index, 1);
           renderFileList();
         });
-        row.append(thumb, info, remove);
+        actions.append(up, down, remove);
+        row.append(thumb, info, actions);
         els.fileList.append(row);
       });
     }
@@ -868,6 +1198,7 @@
             <a class="download" download>下载</a>
           </div>
           <p class="file-meta">${formatBytes(item.before)} → ${formatBytes(item.after)} · <span class="${good ? "saving" : "loss"}">${good ? "减少" : "增加"} ${Math.abs(delta * 100).toFixed(1)}%</span></p>
+          ${item.targetBytes ? `<p class="file-meta">目标 ${formatBytes(item.targetBytes)} · <span class="${item.targetMet ? "target-ok" : "target-miss"}">${item.targetMet ? "已达到目标" : "高于目标"}</span>${item.note ? ` · ${item.note}` : ""}</p>` : ""}
         `;
         result.querySelector(".result-name").textContent = item.name;
         const link = result.querySelector("a");
@@ -890,6 +1221,7 @@
         mime: els.imageFormat.value,
         quality: Number(els.quality.value) / 100,
         pdfScale: Number(els.pdfScale.value),
+        targetBytes: getTargetBytes(),
         maxWidth: Math.max(100, Number(els.maxWidth.value) || 1920),
         maxHeight: Math.max(100, Number(els.maxHeight.value) || 1920)
       };
@@ -906,18 +1238,30 @@
 
       const options = getOptions();
       try {
+        assertTargetCompatible(options);
         const imageFiles = files.filter(isImage);
         const pdfFiles = files.filter(isPdf);
         let completed = 0;
         const total = files.length;
 
+        if (options.mode === "merge-pdf") {
+          results.push(await mergeToTarget(files, options, () => {
+            setProgress(0.5, 1);
+          }));
+          setProgress(1, 1);
+          setToast("完成，已按队列顺序合并为 1 个 PDF。");
+          return;
+        }
+
         if (options.mode === "pdf" && imageFiles.length) {
-          results.push(await imagesToPdf(imageFiles, options));
+          results.push(await imagesToPdf(imageFiles, options, () => {
+            setProgress(completed + 0.5, total);
+          }));
           completed += imageFiles.length;
           setProgress(completed, total);
         } else {
           for (const file of imageFiles) {
-            results.push(await compressImage(file, options));
+            results.push(await compressImageToTarget(file, options));
             completed += 1;
             setProgress(completed, total);
           }
@@ -929,9 +1273,9 @@
             setProgress(completed + local, total);
           };
           if (options.mode === "image") {
-            results.push(await pdfToImagesZip(file, options, onPage));
+            results.push(await zipToTarget(file, options, onPage));
           } else {
-            results.push(await compressPdfToPdf(file, options, onPage));
+            results.push(await compressPdfToTarget(file, options, onPage));
           }
           completed += 1;
           setProgress(completed, total);
@@ -971,8 +1315,13 @@
     els.pdfScale.addEventListener("input", () => {
       els.pdfScaleValue.textContent = `${Number(els.pdfScale.value).toFixed(2)}x`;
     });
+    els.lockAspect.addEventListener("change", () => {
+      if (els.lockAspect.checked) updateMaxSizeRatio();
+    });
+    els.maxWidth.addEventListener("input", () => syncMaxSize("width"));
+    els.maxHeight.addEventListener("input", () => syncMaxSize("height"));
     els.outputMode.addEventListener("change", () => {
-      els.imageFormatField.style.display = els.outputMode.value === "pdf" ? "none" : "";
+      els.imageFormatField.style.display = ["pdf", "merge-pdf"].includes(els.outputMode.value) ? "none" : "";
     });
     els.compressButton.addEventListener("click", compressAll);
     els.clearButton.addEventListener("click", () => {
@@ -986,9 +1335,11 @@
 
     renderFileList();
     renderResults();
+    updateMaxSizeRatio();
     if (location.protocol === "file:") {
-      setToast("当前通过 file:// 打开。图片压缩可直接使用；如果 PDF 处理遇到安全限制，请在本目录运行 python3 -m http.server 8123 后访问 http://127.0.0.1:8123/compressor.html。");
+      setToast("当前通过 file:// 打开。图片压缩可直接使用；如果 PDF 处理遇到安全限制，请在项目目录运行 python3 -m http.server 8123 后访问 http://127.0.0.1:8123/pdf/。");
     }
   </script>
 </body>
+
 </html>
