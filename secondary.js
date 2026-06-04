@@ -30,6 +30,7 @@ if (cooperationForm) {
     wig_store: {
       title: '假发店将填写的信息',
       items: [
+        ['◈', '加盟类型', '选择个人、单店或连锁规模'],
         ['◈', '主营业务', '选择当前主要经营项目'],
         ['▣', '接待能力', '确认线下服务与预约条件'],
         ['◎', '可承接服务', '说明可配合平台完成的服务'],
@@ -136,6 +137,7 @@ if (cooperationForm) {
 
     const partnerType = getPartnerType();
     if (partnerType === 'wig_store') {
+      if (!getRadioValue('storeScale')) addError('storeScale', '请选择加盟店铺类型');
       if (getCheckedValues('mainBusiness').length === 0) addError('mainBusiness', '请至少选择1项主营业务');
       if (!getRadioValue('receptionAbility')) addError('receptionAbility', '请选择线下接待能力');
       if (getCheckedValues('services').length === 0) addError('services', '请至少选择1项可承接服务');
@@ -170,6 +172,7 @@ if (cooperationForm) {
       phone: contact,
       demandType: partnerTypeLabel,
 
+      storeScale: getRadioValue('storeScale'),
       mainBusiness: getCheckedValues('mainBusiness'),
       receptionAbility: getRadioValue('receptionAbility'),
       services: getCheckedValues('services'),
