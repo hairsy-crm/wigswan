@@ -34,17 +34,17 @@ if (cooperationForm) {
         ['▣', '接待能力', '确认线下服务与预约条件'],
         ['◎', '可承接服务', '说明可配合平台完成的服务'],
         ['▤', '合作匹配', '平台按城市与能力匹配订单'],
-        ['☑', '门店简介', '介绍门店特色与合作优势']
+        ['☑', '补充说明', '介绍门店特色与合作优势']
       ]
     },
     salon: {
       title: '理发店将填写的信息',
       items: [
-        ['◈', '门店类型', '选择最贴近的理发店形态'],
-        ['▣', '合作意向', '确认承接、转介或先了解'],
+        ['◈', '合作类型', '选择个人、单店或连锁规模'],
+        ['▣', '合作意向', '确认服务承接、转介绍或服务点合作'],
         ['◎', '客户经验', '说明是否遇到假发 / 补发客户'],
-        ['▤', '可合作方式', '选择转介、服务点或联合获客'],
-        ['☑', '门店简介', '说明门店基础与增长诉求']
+        ['▤', '合作方式', '选择转介绍、服务点、培训认证或联合获客'],
+        ['☑', '补充说明', '说明服务基础与合作诉求']
       ]
     }
   };
@@ -132,7 +132,7 @@ if (cooperationForm) {
     if (!getValue('city')) addError('city', '请输入所在城市 / 区域');
     if (!getValue('contactName')) addError('contactName', '请输入联系人姓名');
     if (!getValue('contact')) addError('contact', '请输入手机号或微信号');
-    if (getValue('description').length > 300) addError('description', '门店简介最多300字');
+    if (getValue('description').length > 300) addError('description', '补充说明最多300字');
 
     const partnerType = getPartnerType();
     if (partnerType === 'wig_store') {
@@ -140,7 +140,7 @@ if (cooperationForm) {
       if (!getRadioValue('receptionAbility')) addError('receptionAbility', '请选择线下接待能力');
       if (getCheckedValues('services').length === 0) addError('services', '请至少选择1项可承接服务');
     } else {
-      if (!getRadioValue('salonType')) addError('salonType', '请选择理发店类型');
+      if (!getRadioValue('salonType')) addError('salonType', '请选择理发合作类型');
       if (!getRadioValue('cooperationIntent')) addError('cooperationIntent', '请选择合作意向');
       if (!getRadioValue('wigCustomerExperience')) addError('wigCustomerExperience', '请选择是否接触过假发客户');
       if (getCheckedValues('cooperationMethods').length === 0) addError('cooperationMethods', '请至少选择1项可合作方式');
@@ -175,6 +175,7 @@ if (cooperationForm) {
       services: getCheckedValues('services'),
 
       salonType: getRadioValue('salonType'),
+      salonScale: getRadioValue('salonType'),
       cooperationIntent: getRadioValue('cooperationIntent'),
       wigCustomerExperience: getRadioValue('wigCustomerExperience'),
       cooperationMethods: getCheckedValues('cooperationMethods'),

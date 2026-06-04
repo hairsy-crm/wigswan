@@ -43,7 +43,7 @@
         <div class="apply-hero-copy">
           <p class="sub-kicker">加入 WIGSWAN</p>
           <h1>全国服务<span>合作网络</span></h1>
-          <p>无论您是假发店还是理发店，都可以提交合作申请。平台将根据城市、门店能力与合作方向，为您匹配合适的合作方式。</p>
+          <p>无论您是假发店、理发师个人，还是不同规模的理发门店，都可以提交合作申请。平台将根据所在城市、服务能力与经营规模匹配合作方案。</p>
           <div class="apply-badges" aria-label="合作支持">
             <article><span>♟</span><strong>获客支持</strong></article>
             <article><span>▱</span><strong>培训赋能</strong></article>
@@ -141,14 +141,15 @@
 
             <div class="partner-fields" data-partner-section="salon" hidden>
               <div class="choice-block" data-field-block="salonType">
-                <label class="required">理发店类型</label>
+                <label class="required">理发合作类型</label>
                 <div class="choice-grid">
-                  <label><input type="radio" name="salonType" value="社区理发店"><span>社区理发店</span></label>
-                  <label><input type="radio" name="salonType" value="中高端美发店"><span>中高端美发店</span></label>
-                  <label><input type="radio" name="salonType" value="男士理发店"><span>男士理发店</span></label>
-                  <label><input type="radio" name="salonType" value="养发 / 头皮护理店"><span>养发 / 头皮护理店</span></label>
-                  <label><input type="radio" name="salonType" value="综合美容美发店"><span>综合美容美发店</span></label>
-                  <label><input type="radio" name="salonType" value="其他"><span>其他</span></label>
+                  <label><input type="radio" name="salonType" value="个人（具备假发修剪造型能力）"><span>个人（具备假发修剪造型能力）</span></label>
+                  <label><input type="radio" name="salonType" value="小门店"><span>小门店</span></label>
+                  <label><input type="radio" name="salonType" value="普通门店"><span>普通门店</span></label>
+                  <label><input type="radio" name="salonType" value="大门店"><span>大门店</span></label>
+                  <label><input type="radio" name="salonType" value="区域连锁"><span>区域连锁</span></label>
+                  <label><input type="radio" name="salonType" value="全国连锁"><span>全国连锁</span></label>
+                  <label><input type="radio" name="salonType" value="全球连锁"><span>全球连锁</span></label>
                 </div>
                 <p class="field-error" data-error-for="salonType"></p>
               </div>
@@ -156,10 +157,10 @@
               <div class="choice-block" data-field-block="cooperationIntent">
                 <label class="required">合作意向</label>
                 <div class="choice-grid">
-                  <label><input type="radio" name="cooperationIntent" value="愿意学习并承接"><span>愿意学习并承接</span></label>
-                  <label><input type="radio" name="cooperationIntent" value="只愿意介绍客户"><span>只愿意介绍客户</span></label>
-                  <label><input type="radio" name="cooperationIntent" value="可提供基础修剪服务"><span>可提供基础修剪服务</span></label>
-                  <label><input type="radio" name="cooperationIntent" value="暂时不确定，想先了解"><span>暂时不确定，想先了解</span></label>
+                  <label><input type="radio" name="cooperationIntent" value="承接假发修剪造型服务"><span>承接假发修剪造型服务</span></label>
+                  <label><input type="radio" name="cooperationIntent" value="转介绍假发客户"><span>转介绍假发客户</span></label>
+                  <label><input type="radio" name="cooperationIntent" value="合作设立服务点"><span>合作设立服务点</span></label>
+                  <label><input type="radio" name="cooperationIntent" value="先了解项目方案"><span>先了解项目方案</span></label>
                 </div>
                 <p class="field-error" data-error-for="cooperationIntent"></p>
               </div>
@@ -178,19 +179,19 @@
               <div class="choice-block" data-field-block="cooperationMethods">
                 <label class="required">可合作方式</label>
                 <div class="choice-grid">
-                  <label><input type="checkbox" name="cooperationMethods" value="推荐客户赚佣金"><span>推荐客户赚佣金</span></label>
-                  <label><input type="checkbox" name="cooperationMethods" value="提供修剪 / 造型服务"><span>提供修剪 / 造型服务</span></label>
-                  <label><input type="checkbox" name="cooperationMethods" value="作为城市服务点"><span>作为城市服务点</span></label>
-                  <label><input type="checkbox" name="cooperationMethods" value="学习假发服务技术"><span>学习假发服务技术</span></label>
-                  <label><input type="checkbox" name="cooperationMethods" value="联合获客"><span>联合获客</span></label>
+                  <label><input type="checkbox" name="cooperationMethods" value="客户转介绍"><span>客户转介绍</span></label>
+                  <label><input type="checkbox" name="cooperationMethods" value="假发修剪 / 造型服务"><span>假发修剪 / 造型服务</span></label>
+                  <label><input type="checkbox" name="cooperationMethods" value="区域服务点"><span>区域服务点</span></label>
+                  <label><input type="checkbox" name="cooperationMethods" value="技术培训与认证"><span>技术培训与认证</span></label>
+                  <label><input type="checkbox" name="cooperationMethods" value="联合获客与活动"><span>联合获客与活动</span></label>
                 </div>
                 <p class="field-error" data-error-for="cooperationMethods"></p>
               </div>
             </div>
 
             <div class="field full description-field">
-              <label for="description">门店简介</label>
-              <textarea id="description" name="description" maxlength="300" placeholder="简单介绍门店情况、优势、合作想法等"></textarea>
+              <label for="description">补充说明</label>
+              <textarea id="description" name="description" maxlength="300" placeholder="可补充服务能力、门店优势、合作诉求等"></textarea>
               <span class="count-tip"><output id="descriptionCount">0</output> / 300</span>
               <p class="field-error" data-error-for="description"></p>
             </div>
