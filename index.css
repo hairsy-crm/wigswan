@@ -9,6 +9,8 @@
   --text-muted: #94a3b8;
   --glass-border: rgba(255, 255, 255, 0.08);
   --max-width: 1280px;
+  --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
 
 body::before {
   content: "";
@@ -107,6 +109,18 @@ body {
   transform: rotate(-10deg);
 }
 
+.brand strong {
+  font-size: 18px;
+  line-height: 1.1;
+  color: #fff;
+}
+
+.brand small {
+  font-size: 11px;
+  color: var(--text-muted);
+  letter-spacing: 1px;
+}
+
 .main-nav a {
   color: var(--text-muted);
   text-decoration: none;
@@ -201,7 +215,6 @@ body {
 .btn.ghost {
   border: 1px solid var(--glass-border);
   color: var(--text-main);
-  margin-left: 20px;
 }
 
 .btn.ghost:hover {
@@ -292,10 +305,14 @@ body {
 .income-result {
   margin-top: 40px;
   text-align: center;
+  min-height: 120px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .income-result strong {
-  font-size: 56px;
+  font-size: 48px;
   color: var(--accent-gold);
   display: block;
   margin-top: 10px;
