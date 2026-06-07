@@ -3,305 +3,184 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="提交 WIGSWAN 美业云链服务商合作申请，适用于假发店与理发店，获取获客支持、培训赋能、供应链协同与数字化经营服务。">
-  <meta name="keywords" content="WIGSWAN申请合作,假发店合作,理发店假发项目,美业云链服务商,假发加盟">
-  <title>申请合作 - WIGSWAN 美业云链</title>
+  <meta name="description" content="申请加入 WIGSWAN 全球增长网络，开启门店数字化评估。">
+  <title>合伙人审计 | 开启盈利诊断 - WIGSWAN</title>
   <link rel="stylesheet" href="../index.css">
-  <link rel="stylesheet" href="../meiye-yunlian.css">
-  <link rel="stylesheet" href="../secondary-pages.css">
+  <style>
+    .audit-form-container {
+      margin-top: 60px;
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .form-step {
+      display: none;
+    }
+    .form-step.active {
+      display: block;
+      animation: fadeIn 0.6s ease;
+    }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    
+    .input-field {
+      margin-bottom: 30px;
+    }
+    .input-field label {
+      display: block;
+      margin-bottom: 12px;
+      font-weight: 600;
+      color: var(--accent-gold);
+    }
+    .input-field input, .input-field select, .input-field textarea {
+      width: 100%;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--glass-border);
+      border-radius: 12px;
+      padding: 15px 20px;
+      color: #fff;
+      font-size: 16px;
+      outline: none;
+    }
+    .input-field input:focus {
+      border-color: var(--accent-gold);
+    }
+    .step-indicator {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 40px;
+      justify-content: center;
+    }
+    .indicator-dot {
+      width: 40px;
+      height: 4px;
+      background: var(--glass-border);
+      border-radius: 2px;
+    }
+    .indicator-dot.active {
+      background: var(--accent-gold);
+    }
+  </style>
 </head>
-<body class="sub-page apply-page">
-  <header class="site-header" id="siteHeader">
+<body class="sub-page">
+  <header class="site-header">
     <div class="shell header-inner">
-      <a class="brand" href="../index.html" aria-label="WIGSWAN 首页">
+      <a class="brand" href="../index.html">
         <span class="brand-mark">S</span>
-        <span>
-          <strong>WIGSWAN</strong>
-          <small>美 · 自信 · 从发开始</small>
-        </span>
+        <strong>WIGSWAN<br><small>PARTNER AUDIT</small></strong>
       </a>
-
-      <nav class="main-nav" id="mainNav" aria-label="主导航">
+      <nav class="main-nav">
         <a href="../index.html">首页</a>
-        <a href="../meiye-yunlian.html">美业云链</a>
-        <a href="../success-cases.html">成功案例</a>
-        <a href="../news.html">行业资讯</a>
-        <a href="../about.html">关于我们</a>
+        <a href="../meiye-yunlian.html">增长中枢</a>
+        <a href="../success-cases.html">全球案例</a>
+        <a href="#" class="active">申请诊断</a>
       </nav>
-
-      <div class="header-actions">
-        <button class="btn ghost" type="button">商户登录</button>
-        <a class="btn solid header-link active-action" href="./">申请合作</a>
-      </div>
-      <button class="menu-toggle" id="menuToggle" type="button" aria-label="打开菜单">☰</button>
     </div>
   </header>
 
-  <main>
-    <section class="apply-hero" id="top">
-      <div class="shell apply-hero-inner">
-        <div class="apply-hero-copy">
-          <p class="sub-kicker">加入 WIGSWAN</p>
-          <h1>全国服务<span>合作网络</span></h1>
-          <p>无论您是假发店、理发师个人，还是不同规模的理发门店，都可以提交合作申请。平台将根据所在城市、服务能力与经营规模匹配合作方案。</p>
-          <div class="apply-badges" aria-label="合作支持">
-            <article><span>♟</span><strong>获客支持</strong></article>
-            <article><span>▱</span><strong>培训赋能</strong></article>
-            <article><span>∞</span><strong>供应链协同</strong></article>
-            <article><span>▥</span><strong>数字化经营</strong></article>
-          </div>
-        </div>
+  <main style="padding: 140px 0 80px;">
+    <div class="shell">
+      <div class="section-header">
+        <p class="hero-eyebrow">Onboarding Process</p>
+        <h2>战略合伙人资格审计</h2>
+        <p>WIGSWAN 仅筛选具有强烈增长意愿且具备高标准交付能力的门店，开启 60 天盈利闭环实验。</p>
       </div>
-    </section>
 
-    <section class="shell apply-main">
-      <form class="apply-card apply-form" id="cooperationForm" novalidate>
-        <div class="apply-form-heading">
-          <h2>服务商合作申请</h2>
-          <p>请先选择门店类型，再填写对应信息</p>
+      <div class="audit-form-container glass-card">
+        <div class="step-indicator">
+          <div class="indicator-dot active"></div>
+          <div class="indicator-dot"></div>
+          <div class="indicator-dot"></div>
         </div>
 
-        <fieldset class="store-type" aria-label="门店类型">
-          <label class="type-card">
-            <input type="radio" name="partnerType" value="wig_store" checked>
-            <span class="type-icon">♙</span>
-            <strong>我是假发店</strong>
-          </label>
-          <label class="type-card">
-            <input type="radio" name="partnerType" value="salon">
-            <span class="type-icon">✂</span>
-            <strong>我是理发店</strong>
-          </label>
-        </fieldset>
-
-        <div class="apply-content-grid">
-          <div class="apply-fields">
-            <div class="form-grid">
-              <div class="field">
-                <label class="required" for="storeName">门店名称</label>
-                <input id="storeName" name="storeName" type="text" placeholder="请输入门店名称" autocomplete="organization">
-                <p class="field-error" data-error-for="storeName"></p>
-              </div>
-              <div class="field">
-                <label class="required" for="city">所在城市 / 区域</label>
-                <input id="city" name="city" type="text" placeholder="请输入所在城市 / 区域" autocomplete="address-level2">
-                <p class="field-error" data-error-for="city"></p>
-              </div>
-              <div class="field">
-                <label class="required" for="contactName">联系人</label>
-                <input id="contactName" name="contactName" type="text" placeholder="请输入联系人姓名" autocomplete="name">
-                <p class="field-error" data-error-for="contactName"></p>
-              </div>
-              <div class="field">
-                <label class="required" for="contact">联系电话 / 微信</label>
-                <input id="contact" name="contact" type="text" placeholder="请输入手机号或微信号" autocomplete="tel">
-                <p class="field-error" data-error-for="contact"></p>
-              </div>
+        <form id="auditForm">
+          <!-- Step 1: Base Profile -->
+          <div class="form-step active" data-step="1">
+            <h3 style="margin-bottom: 24px; color: #fff;">01. 门店经营画像</h3>
+            <div class="input-field">
+              <label>机构全称 / 品牌</label>
+              <input type="text" placeholder="例如：型格沙龙深圳旗舰店" required>
             </div>
-
-            <div class="partner-fields is-active" data-partner-section="wig_store">
-              <div class="choice-block" data-field-block="storeScale">
-                <label class="required">加盟店铺类型</label>
-                <div class="choice-grid">
-                  <label><input type="radio" name="storeScale" value="个人（具备假发修剪造型能力）"><span>个人（具备假发修剪造型能力）</span></label>
-                  <label><input type="radio" name="storeScale" value="小门店"><span>小门店</span></label>
-                  <label><input type="radio" name="storeScale" value="普通门店"><span>普通门店</span></label>
-                  <label><input type="radio" name="storeScale" value="大门店"><span>大门店</span></label>
-                  <label><input type="radio" name="storeScale" value="区域连锁"><span>区域连锁</span></label>
-                  <label><input type="radio" name="storeScale" value="全国连锁"><span>全国连锁</span></label>
-                  <label><input type="radio" name="storeScale" value="全球连锁"><span>全球连锁</span></label>
-                </div>
-                <p class="field-error" data-error-for="storeScale"></p>
-              </div>
-
-              <div class="choice-block" data-field-block="mainBusiness">
-                <label class="required">主营业务</label>
-                <div class="choice-grid">
-                  <label><input type="checkbox" name="mainBusiness" value="真人发假发"><span>真人发假发</span></label>
-                  <label><input type="checkbox" name="mainBusiness" value="化纤假发"><span>化纤假发</span></label>
-                  <label><input type="checkbox" name="mainBusiness" value="男士补发"><span>男士补发</span></label>
-                  <label><input type="checkbox" name="mainBusiness" value="女士全头套"><span>女士全头套</span></label>
-                  <label><input type="checkbox" name="mainBusiness" value="假发定制"><span>假发定制</span></label>
-                  <label><input type="checkbox" name="mainBusiness" value="假发修剪造型"><span>假发修剪造型</span></label>
-                  <label><input type="checkbox" name="mainBusiness" value="售后护理"><span>售后护理</span></label>
-                </div>
-                <p class="field-error" data-error-for="mainBusiness"></p>
-              </div>
-
-              <div class="choice-block" data-field-block="receptionAbility">
-                <label class="required">线下接待能力</label>
-                <div class="inline-choices">
-                  <label><input type="radio" name="receptionAbility" value="有独立门店，可接待客户"><span>有独立门店，可接待客户</span></label>
-                  <label><input type="radio" name="receptionAbility" value="有工作室，可预约接待"><span>有工作室，可预约接待</span></label>
-                  <label><input type="radio" name="receptionAbility" value="暂时只做线上 / 上门"><span>暂时只做线上 / 上门</span></label>
-                </div>
-                <p class="field-error" data-error-for="receptionAbility"></p>
-              </div>
-
-              <div class="choice-block" data-field-block="services">
-                <label class="required">可承接服务</label>
-                <div class="choice-grid">
-                  <label><input type="checkbox" name="services" value="到店试戴"><span>到店试戴</span></label>
-                  <label><input type="checkbox" name="services" value="发型修剪"><span>发型修剪</span></label>
-                  <label><input type="checkbox" name="services" value="假发定制"><span>假发定制</span></label>
-                  <label><input type="checkbox" name="services" value="男士补发"><span>男士补发</span></label>
-                  <label><input type="checkbox" name="services" value="女士假发"><span>女士假发</span></label>
-                  <label><input type="checkbox" name="services" value="佩戴教学"><span>佩戴教学</span></label>
-                  <label><input type="checkbox" name="services" value="售后护理"><span>售后护理</span></label>
-                </div>
-                <p class="field-error" data-error-for="services"></p>
-              </div>
+            <div class="input-field">
+              <label>目前核心业务占比</label>
+              <select>
+                <option>传统洗剪吹为主</option>
+                <option>烫染护理为主</option>
+                <option>已有假发/接发项目</option>
+              </select>
             </div>
-
-            <div class="partner-fields" data-partner-section="salon" hidden>
-              <div class="choice-block" data-field-block="salonType">
-                <label class="required">理发合作类型</label>
-                <div class="choice-grid">
-                  <label><input type="radio" name="salonType" value="个人（具备假发修剪造型能力）"><span>个人（具备假发修剪造型能力）</span></label>
-                  <label><input type="radio" name="salonType" value="小门店"><span>小门店</span></label>
-                  <label><input type="radio" name="salonType" value="普通门店"><span>普通门店</span></label>
-                  <label><input type="radio" name="salonType" value="大门店"><span>大门店</span></label>
-                  <label><input type="radio" name="salonType" value="区域连锁"><span>区域连锁</span></label>
-                  <label><input type="radio" name="salonType" value="全国连锁"><span>全国连锁</span></label>
-                  <label><input type="radio" name="salonType" value="全球连锁"><span>全球连锁</span></label>
-                </div>
-                <p class="field-error" data-error-for="salonType"></p>
-              </div>
-
-              <div class="choice-block" data-field-block="cooperationIntent">
-                <label class="required">合作意向</label>
-                <div class="choice-grid">
-                  <label><input type="radio" name="cooperationIntent" value="承接假发修剪造型服务"><span>承接假发修剪造型服务</span></label>
-                  <label><input type="radio" name="cooperationIntent" value="转介绍假发客户"><span>转介绍假发客户</span></label>
-                  <label><input type="radio" name="cooperationIntent" value="合作设立服务点"><span>合作设立服务点</span></label>
-                  <label><input type="radio" name="cooperationIntent" value="先了解项目方案"><span>先了解项目方案</span></label>
-                </div>
-                <p class="field-error" data-error-for="cooperationIntent"></p>
-              </div>
-
-              <div class="choice-block" data-field-block="wigCustomerExperience">
-                <label class="required">是否接触过假发 / 补发客户</label>
-                <div class="choice-grid">
-                  <label><input type="radio" name="wigCustomerExperience" value="经常遇到"><span>经常遇到</span></label>
-                  <label><input type="radio" name="wigCustomerExperience" value="偶尔遇到"><span>偶尔遇到</span></label>
-                  <label><input type="radio" name="wigCustomerExperience" value="很少遇到"><span>很少遇到</span></label>
-                  <label><input type="radio" name="wigCustomerExperience" value="没有，但感兴趣"><span>没有，但感兴趣</span></label>
-                </div>
-                <p class="field-error" data-error-for="wigCustomerExperience"></p>
-              </div>
-
-              <div class="choice-block" data-field-block="cooperationMethods">
-                <label class="required">可合作方式</label>
-                <div class="choice-grid">
-                  <label><input type="checkbox" name="cooperationMethods" value="客户转介绍"><span>客户转介绍</span></label>
-                  <label><input type="checkbox" name="cooperationMethods" value="假发修剪 / 造型服务"><span>假发修剪 / 造型服务</span></label>
-                  <label><input type="checkbox" name="cooperationMethods" value="区域服务点"><span>区域服务点</span></label>
-                  <label><input type="checkbox" name="cooperationMethods" value="技术培训与认证"><span>技术培训与认证</span></label>
-                  <label><input type="checkbox" name="cooperationMethods" value="联合获客与活动"><span>联合获客与活动</span></label>
-                </div>
-                <p class="field-error" data-error-for="cooperationMethods"></p>
-              </div>
-            </div>
-
-            <div class="field full description-field">
-              <label for="description">补充说明</label>
-              <textarea id="description" name="description" maxlength="300" placeholder="可补充服务能力、门店优势、合作诉求等"></textarea>
-              <span class="count-tip"><output id="descriptionCount">0</output> / 300</span>
-              <p class="field-error" data-error-for="description"></p>
-            </div>
-
-            <p class="safe-note">提交后，我们会根据您的信息和门店情况尽快联系您。</p>
-            <button class="submit-btn" id="submitLead" type="submit">提交合作申请</button>
-            <p class="form-result" id="formResult" role="status" aria-live="polite"></p>
+            <button type="button" class="btn primary next-btn" style="width: 100%;">下一步：交付能力评估</button>
           </div>
 
-          <aside class="apply-guide" aria-label="填写指引">
-            <h3 id="guideTitle">假发店将填写的信息</h3>
-            <div class="guide-list" id="guideList"></div>
-            <div class="store-illustration" aria-hidden="true">
-              <span></span>
+          <!-- Step 2: Capacity -->
+          <div class="form-step" data-step="2">
+            <h3 style="margin-bottom: 24px; color: #fff;">02. 交付与空间冗余</h3>
+            <div class="input-field">
+              <label>资深发型师数量 (5年以上经验)</label>
+              <input type="number" value="2">
             </div>
-          </aside>
-        </div>
-      </form>
-    </section>
+            <div class="input-field">
+              <label>是否具备独立私密接待空间？</label>
+              <select>
+                <option>已具备独立房间</option>
+                <option>可进行半私密改造</option>
+                <option>暂无（需专家指导规划）</option>
+              </select>
+            </div>
+            <div style="display: flex; gap: 20px;">
+              <button type="button" class="btn ghost prev-btn" style="flex: 1; margin: 0;">返回</button>
+              <button type="button" class="btn primary next-btn" style="flex: 2;">下一步：联系方式</button>
+            </div>
+          </div>
 
-    <section class="shell apply-support">
-      <article>
-        <span>♟</span>
-        <div><strong>平台派单支持</strong><small>精准匹配高意向客户，客户转化更高效</small></div>
-      </article>
-      <article>
-        <span>▱</span>
-        <div><strong>培训与项目赋能</strong><small>提供系统培训支持，提升服务能力与专业度</small></div>
-      </article>
-      <article>
-        <span>▥</span>
-        <div><strong>数字化协同</strong><small>接入服务系统与数据，运营更轻松，增长更快</small></div>
-      </article>
-    </section>
+          <!-- Step 3: Contact -->
+          <div class="form-step" data-step="3">
+            <h3 style="margin-bottom: 24px; color: #fff;">03. 增长顾问对接</h3>
+            <div class="input-field">
+              <label>主理人姓名</label>
+              <input type="text" required>
+            </div>
+            <div class="input-field">
+              <label>联系电话（接收诊断报告）</label>
+              <input type="tel" required>
+            </div>
+            <div style="display: flex; gap: 20px;">
+              <button type="button" class="btn ghost prev-btn" style="flex: 1; margin: 0;">返回</button>
+              <button type="submit" class="btn primary" style="flex: 2;">提交审计并获取 1V1 报告</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
   </main>
 
-  <aside class="side-tools" aria-label="快捷咨询">
-    <a href="#cooperationForm"><span>♧</span>在线咨询</a>
-    <a href="#cooperationForm"><span>☏</span>微信咨询</a>
-    <a href="#cooperationForm"><span>☎</span>电话咨询</a>
-    <a href="#top"><span>⌃</span>顶部</a>
-  </aside>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const steps = document.querySelectorAll('.form-step');
+      const dots = document.querySelectorAll('.indicator-dot');
+      const nextBtns = document.querySelectorAll('.next-btn');
+      const prevBtns = document.querySelectorAll('.prev-btn');
+      let currentStep = 0;
 
-  <footer class="cloud-footer">
-    <div class="shell footer-grid">
-      <div class="footer-brand">
-        <a class="brand" href="../index.html">
-          <span class="brand-mark">S</span>
-          <span>
-            <strong>WIGSWAN</strong>
-            <small>美 · 自信 · 从发开始</small>
-          </span>
-        </a>
-        <p>科技改变美业，让每一家门店更强大<br>AI + 产业互联网平台赋能美业服务生态</p>
-      </div>
-      <div>
-        <h3>美业云链</h3>
-        <a href="../meiye-yunlian.html#model">服务商服务</a>
-        <a href="../meiye-yunlian.html#model">对接假发项目</a>
-        <a href="../meiye-yunlian.html#challenge">合作流程</a>
-        <a href="../meiye-yunlian.html#join">常见问题</a>
-      </div>
-      <div>
-        <h3>成功案例</h3>
-        <a href="../success-cases.html">门店案例</a>
-        <a href="../success-cases.html">理发店案例</a>
-        <a href="../success-cases.html">客户见证</a>
-      </div>
-      <div>
-        <h3>行业资讯</h3>
-        <a href="../news.html">行业动态</a>
-        <a href="../news.html">经营技巧</a>
-        <a href="../news.html">政策解读</a>
-      </div>
-      <div>
-        <h3>关于我们</h3>
-        <a href="../about.html">公司介绍</a>
-        <a href="../about.html">团队介绍</a>
-        <a href="../about.html">联系我们</a>
-      </div>
-      <div class="footer-contact">
-        <h3>联系我们</h3>
-        <p>400-888-1234<br>周一至周日 9:00-18:00</p>
-        <p>service@wigswan.com</p>
-        <div class="qr">W</div>
-        <small>关注公众号<br>了解更多</small>
-      </div>
-    </div>
-    <div class="shell footer-bottom">
-      <span>© 2026 WIGSWAN 美业云链 版权所有</span>
-      <span>粤ICP备2024001234号-1</span>
-      <span>隐私政策</span>
-      <span>服务条款</span>
-    </div>
-  </footer>
+      nextBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          steps[currentStep].classList.remove('active');
+          dots[currentStep].classList.remove('active');
+          currentStep++;
+          steps[currentStep].classList.add('active');
+          dots[currentStep].classList.add('active');
+        });
+      });
 
-  <script src="../secondary.js"></script>
+      prevBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          steps[currentStep].classList.remove('active');
+          dots[currentStep].classList.remove('active');
+          currentStep--;
+          steps[currentStep].classList.add('active');
+          dots[currentStep].classList.add('active');
+        });
+      });
+    });
+  </script>
 </body>
 </html>

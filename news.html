@@ -3,96 +3,99 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="WIGSWAN 行业资讯关注假发行业动态、AI美业、美业数字化、门店经营方法与科技创新趋势。">
-  <title>行业资讯 - WIGSWAN 美业云链</title>
+  <meta name="description" content="获取 WIGSWAN 美业云链最新增长动态、行业趋势与数字化经营技巧。">
+  <title>增长情报 | 商业洞察 - WIGSWAN</title>
   <link rel="stylesheet" href="index.css">
-  <link rel="stylesheet" href="meiye-yunlian.css">
-  <link rel="stylesheet" href="secondary-pages.css">
+  <style>
+    .news-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 30px;
+      margin-top: 40px;
+    }
+    .news-item {
+      display: flex;
+      flex-direction: column;
+    }
+    .news-item img {
+      width: 100%;
+      height: 240px;
+      object-fit: cover;
+      border-radius: 16px;
+      margin-bottom: 20px;
+      filter: grayscale(0.5) contrast(1.1);
+      transition: var(--transition);
+    }
+    .news-item:hover img {
+      filter: grayscale(0) contrast(1);
+    }
+    .news-meta {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--accent-gold);
+      margin-bottom: 12px;
+    }
+    .news-item h3 {
+      font-size: 20px;
+      color: #fff;
+      margin-bottom: 15px;
+      line-height: 1.4;
+    }
+  </style>
 </head>
 <body class="sub-page">
-  <header class="site-header" id="siteHeader"><div class="shell header-inner"><a class="brand" href="index.html"><span class="brand-mark">S</span><span><strong>WIGSWAN</strong><small>美 · 自信 · 从发开始</small></span></a><nav class="main-nav" id="mainNav"><a href="index.html">首页</a><a href="meiye-yunlian.html">美业云链</a><a href="success-cases.html">成功案例</a><a class="active" href="news.html">行业资讯</a><a href="about.html">关于我们</a></nav><div class="header-actions"><button class="btn ghost">商户登录</button><a class="btn solid header-link" href="join/">申请合作</a></div><button class="menu-toggle" id="menuToggle">☰</button></div></header>
+  <header class="site-header">
+    <div class="shell header-inner">
+      <a class="brand" href="index.html">
+        <span class="brand-mark">S</span>
+        <strong>WIGSWAN<br><small>GROWTH INTEL</small></strong>
+      </a>
+      <nav class="main-nav">
+        <a href="index.html">首页</a>
+        <a href="meiye-yunlian.html">增长中枢</a>
+        <a href="success-cases.html">全球案例</a>
+        <a href="#" class="active">增长情报</a>
+      </nav>
+    </div>
+  </header>
 
-  <main>
-    <section class="sub-hero" style="--hero-image:url('assets/hero-chinese-ai-beauty.png')">
-      <div class="shell sub-hero-inner">
-        <div><h1>洞察行业趋势<br>引领美业未来</h1><p>关注假发行业动态、美业经营方法与科技创新，助力门店把握机遇，赢在未来。</p></div>
-        <div class="sub-orbit"><div class="orb"><strong>WIGSWAN</strong><small>研究院</small></div><span class="orbit-tag ot1">行业趋势</span><span class="orbit-tag ot2">门店增长</span><span class="orbit-tag ot3">AI技术</span><span class="orbit-tag ot4">经营方法</span></div>
+  <main style="padding: 140px 0 80px;">
+    <div class="shell">
+      <div class="section-header">
+        <p class="hero-eyebrow">Strategic Insights</p>
+        <h2>全球增长情报站</h2>
+        <p>我们持续监测全球美业数字化趋势，为您输出具备实战价值的商业洞察。</p>
       </div>
-    </section>
 
-    <section class="section-block shell">
-      <div class="news-layout">
-        <aside class="news-side soft-card"><h3>资讯分类</h3><div class="cat-list"><a class="active">全部资讯</a><a>行业趋势</a><a>美业经营</a><a>假发知识</a><a>科技赋能</a><a>客户故事</a><a>平台动态</a></div></aside>
-        <div>
-          <div class="search-bar soft-card"><span>搜索文章、关键词</span><b>⌕</b></div>
-          <article class="feature-news soft-card"><img src="assets/hero-chinese-ai-beauty.png" alt="AI美业趋势"><div><p class="sub-kicker">行业趋势</p><h2>AI正在重构美业服务：从流量思维到价值运营</h2><p>AI技术如何帮助美业门店实现精准获客、智能匹配和服务升级，开启美业经营新时代。</p><p class="meta">WIGSWAN研究院 · 2026-05-20 · 2568 阅读</p></div></article>
-          <div class="section-title" style="text-align:left"><h2>最新资讯</h2></div>
-          <div class="news-grid">
-            <article class="news-card soft-card"><img src="assets/wig-store-busy-cn.png" alt=""><div><h3>理发店如何通过假发项目提升客单价？</h3><p>解析假发项目如何成为门店新增长点。</p><p class="meta">经营指南 · 2026-05-18</p></div></article>
-            <article class="news-card soft-card"><img src="assets/service-provider-cn.png" alt=""><div><h3>数字化工具如何提升门店运营效率？</h3><p>从预约管理到客户跟进，数字化系统让门店更高效。</p><p class="meta">运营技巧 · 2026-05-16</p></div></article>
-            <article class="news-card soft-card"><img src="assets/barbershop-quiet-cn.png" alt=""><div><h3>2026年假发行业发展趋势报告</h3><p>市场规模增长，需求升级推动行业向高品质发展。</p><p class="meta">行业报告 · 2026-05-14</p></div></article>
-            <article class="news-card soft-card"><img src="assets/hairdresser-wig-cn.png" alt=""><div><h3>从0到月增营收10万：一条假发项目链路</h3><p>真实案例分享，看门店如何完成项目升级。</p><p class="meta">客户故事 · 2026-05-12</p></div></article>
-            <article class="news-card soft-card"><img src="assets/service-provider-cn.png" alt=""><div><h3>真人发假发和化纤假发的区别</h3><p>从材质、舒适度、护理角度了解产品差异。</p><p class="meta">假发知识 · 2026-05-10</p></div></article>
-            <article class="news-card soft-card"><img src="assets/wig-store-busy-cn.png" alt=""><div><h3>WIGSWAN美业云链全国合作伙伴大会即将举行</h3><p>携手合作伙伴，共建美业新生态。</p><p class="meta">平台动态 · 2026-05-08</p></div></article>
-          </div>
-          <div class="subscribe soft-card"><div><h2>订阅行业资讯</h2><p>获取最新行业动态和经营干货，助力门店持续增长。</p></div><form><input placeholder="请输入您的手机号"><button type="button">立即订阅</button></form></div>
-        </div>
-        <aside class="hot-side soft-card"><h3>热门文章</h3><div class="hot-list"><article><b>01</b><p>AI智能派单如何提升门店接单效率</p></article><article><b>02</b><p>假发行业的蓝海市场机会在哪里？</p></article><article><b>03</b><p>美业门店数字化转型的5个关键步骤</p></article><article><b>04</b><p>如何通过服务升级提升客户复购率？</p></article><article><b>05</b><p>医疗假发市场需求与服务要点解析</p></article></div></aside>
+      <div class="news-grid">
+        <!-- Intel 1 -->
+        <article class="glass-card news-item">
+          <img src="assets/service-provider-cn.png" alt="数字化工具">
+          <div class="news-meta">Macro Trend · 2026.06</div>
+          <h3>从“理发店”到“形象资产管理中心”：行业转型的奇点已至</h3>
+          <p style="color: var(--text-muted);">深度解析为什么单一的剪发业务将逐渐丧失竞争力，而围绕 LTV 展开的“资产管理”模式将成为未来的核心盈利引擎。</p>
+        </article>
+
+        <!-- Intel 2 -->
+        <article class="glass-card news-item">
+          <img src="assets/wig-store-busy-cn.png" alt="AI获客">
+          <div class="news-meta">Scaling Tactics · 2026.05</div>
+          <h3>AI 矩阵工厂：如何通过自动化脚本在公域流量池实现“低成本爆破”</h3>
+          <p style="color: var(--text-muted);">揭秘 WIGSWAN 2.0 系统的短视频自动化逻辑，解析 100+ 样板店如何通过系统自动分发实现线索量翻倍。</p>
+        </article>
       </div>
-    </section>
-  </main>
-<footer class="cloud-footer">
-    <div class="shell footer-grid">
-      <div class="footer-brand">
-        <a class="brand" href="index.html">
-          <span class="brand-mark">S</span>
-          <span>
-            <strong>WIGSWAN</strong>
-            <small>美 · 自信 · 从发开始</small>
-          </span>
-        </a>
-        <p>科技改变美业，让每一家门店更强大<br>AI + 产业互联网平台赋能美业服务生态</p>
-      </div>
-      <div>
-        <h3>美业云链</h3>
-        <a href="meiye-yunlian.html#model">服务商服务</a>
-        <a href="meiye-yunlian.html#model">对接假发项目</a>
-        <a href="meiye-yunlian.html#challenge">合作流程</a>
-        <a href="meiye-yunlian.html#join">常见问题</a>
-      </div>
-      <div>
-        <h3>成功案例</h3>
-        <a href="success-cases.html">门店案例</a>
-        <a href="success-cases.html">理发店案例</a>
-        <a href="success-cases.html">客户见证</a>
-      </div>
-      <div>
-        <h3>行业资讯</h3>
-        <a href="news.html">行业动态</a>
-        <a href="news.html">经营技巧</a>
-        <a href="news.html">政策解读</a>
-      </div>
-      <div>
-        <h3>关于我们</h3>
-        <a href="about.html">公司介绍</a>
-        <a href="about.html">团队介绍</a>
-        <a href="about.html">联系我们</a>
-      </div>
-      <div class="footer-contact">
-        <h3>联系我们</h3>
-        <p>400-888-1234<br>周一至周日 9:00-18:00</p>
-        <p>service@wigswan.com</p>
-        <div class="qr">W</div>
-        <small>关注公众号<br>了解更多</small>
+
+      <div style="margin-top: 60px; text-align: center;">
+         <a href="join/" class="btn ghost">订阅深度行业报告 (PDF)</a>
       </div>
     </div>
-    <div class="shell footer-bottom">
-      <span>© 2026 WIGSWAN 美业云链 版权所有</span>
-      <span>粤ICP备2024001234号-1</span>
-      <span>隐私政策</span>
-      <span>服务条款</span>
+  </main>
+
+  <footer class="site-footer">
+    <div class="shell footer-inner">
+      <p>© 2026 WIGSWAN. 赋能手艺人，重构美业链.</p>
     </div>
   </footer>
-  <script src="secondary.js"></script>
 </body>
 </html>
