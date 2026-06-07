@@ -4,6 +4,9 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
+  const i18n = window.WIGSWAN_I18N;
+  const translate = (text) => i18n ? i18n.t(text) : text;
+
   // --- Navigation Highlighting ---
   const sections = document.querySelectorAll('section');
   const navLinks = document.querySelectorAll('.main-nav a');
@@ -39,7 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const t = parseInt(trafficInput.value) || 0;
 
       // Show "Computing" state
-      incomeDisplay.innerHTML = '<span style="font-size: 14px; color: var(--text-muted); font-style: italic; letter-spacing: 2px;">AI 调度模型计算中...</span>';
+      incomeDisplay.innerHTML = `<span style="font-size: 14px; color: var(--text-muted); font-style: italic; letter-spacing: 2px;">${translate('AI 调度模型计算中...')}</span>`;
 
       clearTimeout(debounceTimer);
       debounceTimer = setTimeout(() => {
@@ -63,7 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         incomeDisplay.innerHTML = `
           <div style="font-size: 14px; margin-bottom: 8px; color: ${color}; font-weight: 800; letter-spacing: 1px; animation: fadeIn 0.4s ease;">
-            ${grade}
+            ${translate(grade)}
           </div>
           <div style="animation: fadeIn 0.6s ease;">
             <span style="font-size: 0.8em; opacity: 0.6; margin-right: 4px;">¥</span>${lowRange.toLocaleString()} - ${highRange.toLocaleString()}
