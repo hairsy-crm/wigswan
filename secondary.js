@@ -7,6 +7,23 @@ document.addEventListener('DOMContentLoaded', () => {
   const i18n = window.WIGSWAN_I18N;
   const translate = (text) => i18n ? i18n.t(text) : text;
 
+  // --- Preloader Logic ---
+  const preloader = document.getElementById('preloader');
+  if (preloader) {
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        preloader.classList.add('fade-out');
+      }, 500); // Small buffer for smoothness
+    });
+    
+    // Safety timeout: force hide after 5s
+    setTimeout(() => {
+      if (!preloader.classList.contains('fade-out')) {
+        preloader.classList.add('fade-out');
+      }
+    }, 5000);
+  }
+
   // --- Navigation Highlighting ---
   const sections = document.querySelectorAll('section');
   const navLinks = document.querySelectorAll('.main-nav a');
