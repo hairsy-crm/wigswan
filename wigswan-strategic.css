@@ -296,6 +296,42 @@ table {
   color: var(--text-main);
 }
 
+.btn-split {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 30px !important;
+  line-height: 1.2 !important;
+  min-width: 280px;
+  text-align: center;
+}
+
+.btn-label {
+  display: block;
+  font-size: 15px;
+  font-weight: 800;
+  margin-bottom: 2px;
+}
+
+.btn-data {
+  display: block;
+  font-size: 11px;
+  opacity: 0.6;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+}
+
+@media (max-width: 480px) {
+  .btn-split {
+    width: 100%;
+    min-width: 0;
+    padding: 10px 15px !important;
+  }
+  .btn-label { font-size: 14px; }
+  .btn-data { font-size: 10px; }
+}
+
 .btn.ghost:hover {
   background: rgba(255, 255, 255, 0.05);
   border-color: var(--accent-gold);
