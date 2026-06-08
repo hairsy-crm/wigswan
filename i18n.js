@@ -692,25 +692,25 @@
       .is-localized .case-card { grid-template-columns: minmax(0, 40%) minmax(0, 60%); }
       .is-localized .case-card[style*="60% 40%"] { grid-template-columns: minmax(0, 60%) minmax(0, 40%) !important; }
       @media (max-width: 1180px) {
-        .site-header .header-inner { height: auto; min-height: 90px; padding-top: 14px; padding-bottom: 14px; gap: 18px; }
+        .site-header .header-inner { height: auto; min-height: 80px; padding-top: 12px; padding-bottom: 12px; gap: 15px; }
         .site-header .main-nav { gap: 8px 16px; }
         .site-header .main-nav a { font-size: 12px; }
         .language-switcher { margin-left: 0; }
       }
       @media (max-width: 960px) {
-        .language-switcher { margin: 12px 0 0; flex-wrap: wrap; }
+        .language-switcher { margin: 12px auto 0; display: flex; justify-content: center; width: auto; }
         .is-localized .hero h1 { font-size: clamp(28px, 8vw, 48px); }
         .is-localized .section-header h2 { font-size: clamp(26px, 7vw, 40px); }
         .is-localized .case-card, .is-localized .case-card[style*="60% 40%"] { grid-template-columns: 1fr !important; }
       }
       @media (max-width: 480px) {
-        .shell { padding: 0 20px; }
-        .hero h1 { font-size: 36px; }
-        .section-header h2 { font-size: 28px; }
-        .main-nav { justify-content: center; width: 100%; }
-        .nav-cta { width: 100%; margin-top: 10px; }
-        .language-switcher { width: 100%; justify-content: center; }
-        .language-switcher select { width: 100%; text-align: center; }
+        .shell { padding: 0 15px; }
+        .hero h1 { font-size: 32px; line-height: 1.2; }
+        .section-header h2 { font-size: 26px; }
+        .main-nav { justify-content: center; width: 100%; gap: 12px; }
+        .language-switcher { margin-top: 10px; width: 100%; }
+        .language-switcher select { width: 100%; text-align: center; height: 38px; }
+        .nav-cta { margin-left: 0 !important; width: 100%; }
       }
     `;
     document.head.appendChild(style);

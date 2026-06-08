@@ -101,9 +101,24 @@ body {
 }
 
 @media (max-width: 960px) {
-  .header-inner { height: auto; padding: 15px 0; flex-direction: column; gap: 15px; }
-  .main-nav { margin-top: 10px; display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; }
-  .main-nav a { margin-left: 0 !important; }
+  .header-inner { height: auto; padding: 12px 0; flex-direction: column; gap: 10px; }
+  .main-nav { margin-top: 5px; display: flex; flex-wrap: wrap; justify-content: center; gap: 10px 18px; }
+  .main-nav a { margin-left: 0 !important; font-size: 13px; }
+}
+
+@media (max-width: 480px) {
+  /* Hide non-essential anchor links to keep mobile header clean */
+  .main-nav a:not(.nav-cta):not([href="#hero"]) {
+    display: none;
+  }
+  .header-inner { padding: 10px 0; }
+  .brand strong { font-size: 16px; }
+  .nav-cta { 
+    width: 100%; 
+    margin-top: 8px; 
+    height: 44px; 
+    font-size: 14px;
+  }
 }
 
 /* --- Case Cards --- */
