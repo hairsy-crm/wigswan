@@ -28,7 +28,12 @@
   <main>
     <!-- Section 1: Hero - The Strategic Tone -->
     <section class="hero" id="hero">
-      <div class="hero-bg-fx"></div>
+      <div class="hero-bg-fx">
+        <video class="hero-video-bg" autoplay muted loop playsinline poster="assets/hero-chinese-ai-beauty.png">
+          <source src="Hair_fibers_weaving_luxury_hairs…_202606082335.mp4" type="video/mp4">
+        </video>
+        <div class="hero-bg-overlay"></div>
+      </div>
       <div class="shell hero-inner">
         <div class="hero-copy">
           <p class="hero-eyebrow">Digital Intelligence Ecosystem</p>
@@ -40,6 +45,9 @@
               <span class="btn-label">立即下载《2026转型手册》</span>
               <span class="btn-data">获取门店增长评估框架与行动清单</span>
             </a>
+            <button class="btn-play" id="openVideo" title="观看品牌大片">
+              <span class="play-icon"></span>
+            </button>
           </div>
           <p class="market-hero-note" data-market-slot="hero-note" hidden></p>
         </div>
@@ -194,6 +202,15 @@
       </nav>
     </div>
   </footer>
+
+  <div class="video-modal" id="videoModal">
+    <div class="modal-content">
+      <button class="modal-close" id="closeVideo">×</button>
+      <video id="promoVideo" controls playsinline>
+        <source src="Hair_fibers_weaving_luxury_hairs…_202606082335.mp4" type="video/mp4">
+      </video>
+    </div>
+  </div>
 
   <script src="i18n.js"></script>
   <script src="secondary.js"></script>

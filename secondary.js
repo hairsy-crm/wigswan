@@ -115,4 +115,39 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   });
+
+  // --- Video Modal Logic ---
+  const openVideoBtn = document.getElementById('openVideo');
+  const closeVideoBtn = document.getElementById('closeVideo');
+  const videoModal = document.getElementById('videoModal');
+  const promoVideo = document.getElementById('promoVideo');
+
+  if (openVideoBtn && videoModal && promoVideo) {
+    openVideoBtn.addEventListener('click', () => {
+      videoModal.classList.add('active');
+      promoVideo.currentTime = 0;
+      promoVideo.play();
+      document.body.style.overflow = 'hidden'; // Prevent scroll
+    });
+
+    const closeHandler = () => {
+      videoModal.classList.remove('active');
+      promoVideo.pause();
+      document.body.style.overflow = ''; // Restore scroll
+    };
+
+    closeVideoBtn.addEventListener('click', closeHandler);
+    
+    // Close on click outside
+    videoModal.addEventListener('click', (e) => {
+      if (e.target === videoModal) closeHandler();
+    });
+
+    // Close on Escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && videoModal.classList.contains('active')) {
+        closeHandler();
+      }
+    });
+  }
 });
