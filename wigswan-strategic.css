@@ -423,7 +423,7 @@ table {
   font-size: 14px;
 }
 
-.market-dispatch-feed {
+.market-growth-feed {
   margin-bottom: 30px;
   padding: 15px;
   overflow: hidden;
@@ -434,15 +434,15 @@ table {
   font-size: 13px;
 }
 
-.market-dispatch-title {
+.market-growth-title {
   margin-bottom: 10px;
 }
 
-.market-dispatch-title strong {
+.market-growth-title strong {
   color: var(--accent-gold);
 }
 
-.market-dispatch-title small {
+.market-growth-title small {
   color: var(--text-muted);
   margin-left: 10px;
 }
@@ -452,14 +452,14 @@ table {
   100% { transform: translateX(-50%); }
 }
 
-.market-dispatch-text {
+.market-growth-text {
   display: inline-block;
   white-space: nowrap;
   animation: market-scroll-left 25s linear infinite;
   color: var(--text-muted);
 }
 
-.market-dispatch-feed::after {
+.market-growth-feed::after {
   content: "";
   position: absolute;
   inset: 0;
@@ -793,12 +793,12 @@ table {
     padding: 20px;
   }
 
-  .market-dispatch-feed {
+  .market-growth-feed {
     padding: 12px;
     font-size: 11px;
   }
 
-  .market-dispatch-title small {
+  .market-growth-title small {
     display: block;
     margin: 4px 0 0;
   }

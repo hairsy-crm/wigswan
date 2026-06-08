@@ -1,6 +1,6 @@
 /**
  * WIGSWAN 2.0 Strategic Script
- * Handles high-end interactions and the obfuscated ROI model.
+ * Handles high-end interactions and the public diagnostic preview.
  */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // --- ROI Diagnostic Model (Obfuscated & Weighted) ---
+  // --- Public Diagnostic Preview ---
   const stationInput = document.getElementById('stationCount');
   const trafficInput = document.getElementById('dailyTraffic');
   const incomeDisplay = document.getElementById('potentialIncome');
@@ -49,53 +49,33 @@ document.addEventListener('DOMContentLoaded', () => {
       const t = parseInt(trafficInput.value) || 0;
       const currentLang = i18n ? i18n.lang() : 'zh';
 
-      // Show "Computing" state
-      incomeDisplay.innerHTML = `<span style="font-size: 14px; color: var(--text-muted); font-style: italic; letter-spacing: 2px;">${translate('AI 调度模型计算中...')}</span>`;
+      incomeDisplay.innerHTML = `<span style="font-size: 14px; color: var(--text-muted); font-style: italic; letter-spacing: 2px;">${translate('增长潜力评估中...')}</span>`;
 
       clearTimeout(debounceTimer);
       debounceTimer = setTimeout(() => {
-        // --- Market-Specific Scaling Logic ---
-        let baseAlpha = 342.5; 
-        let densityBeta = 18.2;
-        let leadsMultiplier = 1;
-
-        if (currentLang === 'zh') {
-          // China Market: Focus on High-Volume Traffic & AI Matrix Efficiency
-          baseAlpha = 450.2; // Higher yield per station with AI dispatch
-          densityBeta = 25.5; // Higher conversion of traffic due to content factory
-          leadsMultiplier = 3.5; // AI Matrix Factory impact
-        }
-
-        const rawPotential = (s * baseAlpha) + (t * densityBeta * 12.5);
+        const previewScore = Math.min(100, Math.round((s * 12) + (t * 4)));
         
         let grade = 'B级：稳健增长型';
         let color = '#94a3b8';
-        if (rawPotential > 18000) {
-          grade = 'S级：旗舰增长引擎';
+        if (previewScore >= 72) {
+          grade = 'S级：旗舰增长型';
           color = '#e3a760';
-        } else if (rawPotential > 9000) {
-          grade = 'A级：高效爆发型';
+        } else if (previewScore >= 42) {
+          grade = 'A级：高效增长型';
           color = '#c5a059';
         }
 
-        const lowRange = Math.round(rawPotential * 0.82 / 100) * 100;
-        const highRange = Math.round(rawPotential * 1.35 / 100) * 100;
-
-        // Custom Chinese Display with Leads Count & Scarcity
+        const confidence = previewScore >= 72 ? '高潜力合作样本' : previewScore >= 42 ? '具备清晰增长空间' : '适合基础能力梳理';
         if (currentLang === 'zh') {
-          const estimatedLeads = Math.round(t * leadsMultiplier * 4.2);
           incomeDisplay.innerHTML = `
             <div style="font-size: 14px; margin-bottom: 8px; color: ${color}; font-weight: 800; letter-spacing: 1px;">
               ${translate(grade)}
             </div>
-            <div style="margin-bottom: 12px; font-size: 16px; color: var(--accent-gold);">
-              预计每月新增精准线索: <strong>${estimatedLeads}</strong> 条
+            <div style="margin-bottom: 12px; font-size: 18px; color: var(--accent-gold); font-weight: 900;">
+              ${translate(confidence)}
             </div>
-            <div style="margin-bottom: 15px;">
-              <span style="font-size: 0.8em; opacity: 0.6; margin-right: 4px;">¥</span>${lowRange.toLocaleString()} - ${highRange.toLocaleString()}
-            </div>
-            <div style="background: rgba(255,71,87,0.1); border: 1px solid #ff4757; color: #ff4757; padding: 8px; border-radius: 6px; font-size: 12px; font-weight: bold;">
-              ⚠️ 您所在的商圈目前仅剩 1 个名额
+            <div style="color: var(--text-muted); font-size: 13px; line-height: 1.7;">
+              ${translate('详细评估结果将由增长顾问结合门店实际情况解读。')}
             </div>
           `;
         } else {
@@ -103,8 +83,11 @@ document.addEventListener('DOMContentLoaded', () => {
             <div style="font-size: 14px; margin-bottom: 8px; color: ${color}; font-weight: 800; letter-spacing: 1px;">
               ${translate(grade)}
             </div>
-            <div>
-              <span style="font-size: 0.8em; opacity: 0.6; margin-right: 4px;">¥</span>${lowRange.toLocaleString()} - ${highRange.toLocaleString()}
+            <div style="color: var(--accent-gold); font-size: 18px; font-weight: 900; margin-bottom: 10px;">
+              ${translate(confidence)}
+            </div>
+            <div style="color: var(--text-muted); font-size: 13px; line-height: 1.7;">
+              ${translate('详细评估结果将由增长顾问结合门店实际情况解读。')}
             </div>
           `;
         }
