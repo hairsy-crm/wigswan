@@ -6,6 +6,40 @@
     { code: 'ko', label: '한국어', htmlLang: 'ko' }
   ];
 
+  const MARKET_CONTENT = {
+    zh: {
+      banner: [
+        {
+          title: '区域独家保护机制',
+          body: '严格执行“三公里商圈唯一”合伙人政策。一旦接入，系统将自动屏蔽周边同行的线索分配请求，确保您的商圈领地独占。'
+        },
+        {
+          title: 'POI 本地生活全自动化',
+          body: 'AI 矩阵工厂自动挂载门店 POI 坐标，视频发布即带团购/预约入口。实现从“刷到视频”到“到店核销”的最短商业路径。'
+        }
+      ],
+      dispatchTitle: '实时调度情报',
+      dispatchSubtitle: '全国门店实时获客反馈',
+      dispatchItems: [
+        '【上海】某知名沙龙：通过 AI 矩阵捕获线索，成功闭单定制发片，净利 ¥2800',
+        '【深圳】罗湖老店：90 天 LTV 激活老客，转化头皮养护年卡，业绩提升 45%',
+        '【成都】高新店：10 分钟前 AI 调度专家下店，协助完成高难接发单',
+        '【杭州】滨江工作室：抖音矩阵号今日新增精准咨询 12 条',
+        '【广州】天河店：首单假发购买客户，已自动通过电子档案转化二次护理'
+      ]
+    },
+    en: {
+      heroNote: 'Designed for US salon owners: compatible with diverse hair types, high-ticket consultations, and independent studio growth.'
+    },
+    ja: {
+      heroNote: 'グローバル品質基準（Global Quality Standard）に準拠。安心導入、標準運用、長期支援を重視したサロンDXプログラムです。'
+    },
+    ko: {
+      heroEyebrow: 'Aesthetic Intelligence Ecosystem',
+      heroNote: '2026 K-Beauty 트렌드 예측 알고리즘 탑재. 미학, 콘텐츠, 고객 경험을 연결하는 성장 시스템입니다.'
+    }
+  };
+
   const dict = {
     en: {
       'WIGSWAN 美业云链：以 AI 驱动的产业互联网引擎，重构全球美业价值链条。': 'WIGSWAN: An AI-driven ecosystem empowering beauty entrepreneurs to scale through high-ticket digital integration.',
@@ -438,172 +472,55 @@
     });
   }
 
-  function applyJapanRestructuring() {
-    if (lang !== 'ja') return;
-    const aggressiveNotes = document.querySelectorAll('.case-content p small');
-    aggressiveNotes.forEach(note => {
-      if (note.textContent.includes('60天极速回本')) {
-        note.style.display = 'none';
-      }
-    });
-    if (!document.querySelector('.trust-badge')) {
-      const heroCta = document.querySelector('.hero-cta');
-      if (heroCta) {
-        const badge = document.createElement('div');
-        badge.className = 'trust-badge';
-        badge.style.marginTop = '20px';
-        badge.style.fontSize = '12px';
-        badge.style.color = 'var(--accent-gold)';
-        badge.style.opacity = '0.8';
-        badge.textContent = '◈ グローバル品質基準（Global Quality Standard）準拠';
-        heroCta.appendChild(badge);
-      }
-    }
+  function setSlotVisibility(el, visible) {
+    if (!el) return;
+    el.hidden = !visible;
   }
 
-  function applyUSRestructuring() {
-    if (lang !== 'en') return;
-    const sectionHeader = document.querySelector('#problem .section-header h2');
-    if (sectionHeader) {
-      sectionHeader.textContent = 'The "Trading Time for Money" Trap';
+  function applyMarketContent() {
+    const content = MARKET_CONTENT[lang] || {};
+    const heroNote = document.querySelector('[data-market-slot="hero-note"]');
+    const heroEyebrow = document.querySelector('.hero-eyebrow');
+    const banner = document.querySelector('[data-market-slot="market-banner"]');
+    const dispatchFeed = document.querySelector('[data-market-slot="dispatch-feed"]');
+    const dispatchTitle = document.querySelector('[data-market-slot="dispatch-title"]');
+    const dispatchText = document.querySelector('[data-market-slot="dispatch-text"]');
+
+    if (heroEyebrow && content.heroEyebrow) {
+      heroEyebrow.textContent = content.heroEyebrow;
     }
-    if (!document.querySelector('.us-feature-callout')) {
-      const heroCopy = document.querySelector('.hero-copy');
-      if (heroCopy) {
-        const callout = document.createElement('p');
-        callout.className = 'us-feature-callout';
-        callout.style.background = 'rgba(197, 160, 89, 0.1)';
-        callout.style.padding = '10px 20px';
-        callout.style.borderRadius = '8px';
-        callout.style.borderLeft = '4px solid var(--accent-gold)';
-        callout.style.fontSize = '14px';
-        callout.style.marginTop = '20px';
-        callout.textContent = 'Designed for US Salon Owners: Compatible with all hair types & ethnicities.';
-        heroCopy.appendChild(callout);
+
+    if (heroNote) {
+      heroNote.textContent = content.heroNote || '';
+      setSlotVisibility(heroNote, Boolean(content.heroNote));
+    }
+
+    if (banner) {
+      banner.innerHTML = '';
+      if (content.banner && content.banner.length) {
+        content.banner.forEach((item) => {
+          const card = document.createElement('div');
+          card.className = 'market-banner-card';
+          const title = document.createElement('h4');
+          title.textContent = item.title;
+          const body = document.createElement('p');
+          body.textContent = item.body;
+          card.append(title, body);
+          banner.appendChild(card);
+        });
       }
+      setSlotVisibility(banner, Boolean(content.banner && content.banner.length));
     }
-  }
 
-  function applyKoreaRestructuring() {
-    if (lang !== 'ko') return;
-    const eyebrow = document.querySelector('.hero-eyebrow');
-    if (eyebrow) {
-      eyebrow.textContent = 'Aesthetic Intelligence Ecosystem';
-    }
-    if (!document.querySelector('.k-trend-badge')) {
-      const heroCta = document.querySelector('.hero-cta');
-      if (heroCta) {
-        const badge = document.createElement('div');
-        badge.className = 'k-trend-badge';
-        badge.style.marginTop = '20px';
-        badge.style.fontSize = '12px';
-        badge.style.color = '#ff6b6b';
-        badge.style.fontWeight = 'bold';
-        badge.textContent = '★ 2026 K-Beauty 트렌드 예측 알고리즘 탑재';
-        heroCta.appendChild(badge);
+    if (dispatchFeed && dispatchTitle && dispatchText) {
+      if (content.dispatchItems && content.dispatchItems.length) {
+        dispatchTitle.innerHTML = `<strong>${content.dispatchTitle || ''}</strong><small>${content.dispatchSubtitle || ''}</small>`;
+        dispatchText.textContent = `${content.dispatchItems.join('     |     ')}     |     ${content.dispatchItems.join('     |     ')}`;
+      } else {
+        dispatchTitle.textContent = '';
+        dispatchText.textContent = '';
       }
-    }
-  }
-
-  function applyChinaRestructuring() {
-    if (lang !== 'zh') return;
-
-    // 1. Inject Scarcity & POI Banner above Strategic Matrix
-    const matrixSection = document.querySelector('#matrix .shell');
-    if (matrixSection && !document.querySelector('.china-scarcity-banner')) {
-      const banner = document.createElement('div');
-      banner.className = 'china-scarcity-banner';
-      banner.innerHTML = `
-        <div class="banner-item">
-          <h4 style="color: var(--accent-gold); margin-bottom: 10px;">🛡 区域独家保护机制</h4>
-          <p style="font-size: 14px; opacity: 0.8;">严格执行“三公里商圈唯一”合伙人政策。一旦接入，系统将自动屏蔽周边同行的线索分配请求，确保您的商圈领地独占。</p>
-        </div>
-        <div class="banner-item">
-          <h4 style="color: var(--accent-gold); margin-bottom: 10px;">🔗 POI 本地生活全自动化</h4>
-          <p style="font-size: 14px; opacity: 0.8;">AI 矩阵工厂自动挂载门店 POI 坐标，视频发布即带团购/预约入口。实现从“刷到视频”到“到店核销”的最短商业路径。</p>
-        </div>
-      `;
-      matrixSection.insertBefore(banner, matrixSection.querySelector('.section-header').nextSibling);
-    }
-
-    // 2. Inject a "Live Dispatch Feed" above the ROI simulator
-    const roiSection = document.querySelector('#roi .shell');
-    if (roiSection && !document.querySelector('.live-dispatch-monitor')) {
-      const monitor = document.createElement('div');
-      monitor.className = 'live-dispatch-monitor';
-      const title = document.createElement('div');
-      title.className = 'monitor-title';
-      title.innerHTML = '<span style="color: var(--accent-gold); font-weight: bold;">● 实时调度情报</span> <span style="opacity: 0.6; font-size: 11px; margin-left: 10px;">全国门店实时获客反馈</span>';
-      monitor.appendChild(title);
-      const track = document.createElement('div');
-      track.className = 'dispatch-track';
-      const cases = [
-        '【上海】某知名沙龙：通过AI矩阵捕获线索，成功闭单定制发片，净利 ¥2800',
-        '【深圳】罗湖老店：90天LTV激活老客，转化头피养护年카드,业绩提升 45%',
-        '【成都】高新店：10分钟前 AI 调度专家下店，协助完成高难接发单',
-        '【杭州】滨江工作室：抖音矩阵号今日新增精准咨询 12 条',
-        '【广州】天河店：首单假发购买客户，已自动通过电子档案转化二次护理'
-      ];
-      track.innerHTML = `<div class="scrolling-text">${cases.join(' &nbsp;&nbsp;&nbsp;&nbsp; | &nbsp;&nbsp;&nbsp;&nbsp; ')}</div>`;
-      monitor.appendChild(track);
-      roiSection.insertBefore(monitor, roiSection.querySelector('.calc-grid'));
-      if (!document.getElementById('china-fx-style')) {
-        const style = document.createElement('style');
-        style.id = 'china-fx-style';
-        style.textContent = `
-          .china-scarcity-banner {
-            background: linear-gradient(135deg, rgba(197,160,89,0.2) 0%, rgba(16,28,45,0.8) 100%);
-            border: 1px solid var(--accent-gold);
-            border-radius: 16px;
-            padding: 25px;
-            margin-bottom: 40px;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
-          }
-          .live-dispatch-monitor {
-            background: rgba(197, 160, 89, 0.05);
-            border: 1px solid var(--glass-border);
-            border-radius: 12px;
-            padding: 15px;
-            margin-bottom: 30px;
-            overflow: hidden;
-            position: relative;
-            font-size: 13px;
-          }
-          .monitor-title { margin-bottom: 10px; }
-          @keyframes scroll-left {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
-          }
-          .scrolling-text {
-            display: inline-block;
-            white-space: nowrap;
-            animation: scroll-left 25s linear infinite;
-            color: var(--text-muted);
-          }
-          .live-dispatch-monitor::after {
-            content: "";
-            position: absolute;
-            top: 0; right: 0; bottom: 0; left: 0;
-            background: linear-gradient(90deg, rgba(16,28,45,1) 0%, transparent 5%, transparent 95%, rgba(16,28,45,1) 100%);
-            pointer-events: none;
-          }
-          @media (max-width: 768px) {
-            .china-scarcity-banner {
-              grid-template-columns: 1fr;
-              gap: 20px;
-              padding: 20px;
-            }
-            .live-dispatch-monitor {
-              padding: 10px;
-              font-size: 11px;
-            }
-            .monitor-title span:last-child { display: block; margin: 4px 0 0 0; }
-          }
-        `;
-        document.head.appendChild(style);
-      }
+      setSlotVisibility(dispatchFeed, Boolean(content.dispatchItems && content.dispatchItems.length));
     }
   }
 
@@ -625,10 +542,7 @@
     while (walker.nextNode()) nodes.push(walker.currentNode);
     nodes.forEach(translateNodeText);
     translateAttributes(document);
-    applyJapanRestructuring();
-    applyUSRestructuring();
-    applyKoreaRestructuring();
-    applyChinaRestructuring();
+    applyMarketContent();
     updateSwitcher();
   }
 
@@ -640,9 +554,56 @@
     window.location.href = url.toString();
   }
 
-  function ensureSwitcher() {
+  function ensureMobileNav() {
+    const header = document.querySelector('.site-header .header-inner');
     const nav = document.querySelector('.site-header .main-nav');
-    if (!nav || document.querySelector('.language-switcher')) return;
+    if (!header || !nav) return;
+
+    if (!nav.id) {
+      nav.id = 'mainNav';
+    }
+
+    let tools = header.querySelector('.header-tools');
+    if (!tools) {
+      tools = document.createElement('div');
+      tools.className = 'header-tools';
+      header.insertBefore(tools, nav);
+    }
+
+    if (!tools.querySelector('.nav-toggle')) {
+      const toggle = document.createElement('button');
+      toggle.type = 'button';
+      toggle.className = 'nav-toggle';
+      toggle.setAttribute('aria-controls', 'mainNav');
+      toggle.setAttribute('aria-expanded', 'false');
+      toggle.setAttribute('aria-label', 'Toggle navigation');
+      toggle.innerHTML = '<span></span><span></span><span></span>';
+      toggle.addEventListener('click', () => {
+        const isOpen = document.body.classList.toggle('nav-open');
+        toggle.setAttribute('aria-expanded', String(isOpen));
+      });
+      tools.appendChild(toggle);
+    }
+
+    nav.addEventListener('click', (event) => {
+      if (!event.target.closest('a')) return;
+      document.body.classList.remove('nav-open');
+      const toggle = tools.querySelector('.nav-toggle');
+      if (toggle) toggle.setAttribute('aria-expanded', 'false');
+    });
+  }
+
+  function ensureSwitcher() {
+    const header = document.querySelector('.site-header .header-inner');
+    const nav = document.querySelector('.site-header .main-nav');
+    if ((!header && !nav) || document.querySelector('.language-switcher')) return;
+
+    let tools = header && header.querySelector('.header-tools');
+    if (!tools && header) {
+      tools = document.createElement('div');
+      tools.className = 'header-tools';
+      header.insertBefore(tools, nav);
+    }
 
     const switcher = document.createElement('label');
     switcher.className = 'language-switcher';
@@ -658,62 +619,17 @@
     });
     select.addEventListener('change', (event) => setLang(event.target.value));
     switcher.appendChild(select);
-    nav.appendChild(switcher);
+    if (tools) {
+      tools.insertBefore(switcher, tools.firstChild);
+    } else {
+      nav.appendChild(switcher);
+    }
   }
 
   function updateSwitcher() {
     document.querySelectorAll('.language-switcher select').forEach((select) => {
       select.value = lang;
     });
-  }
-
-  function injectStyle() {
-    if (document.getElementById('wigswan-i18n-style')) return;
-    const style = document.createElement('style');
-    style.id = 'wigswan-i18n-style';
-    style.textContent = `
-      .language-switcher { display: inline-flex; align-items: center; margin-left: 24px; vertical-align: middle; flex: 0 0 auto; position: relative; }
-      .language-switcher select { appearance: none; min-width: 112px; border: 1px solid var(--glass-border); background: rgba(255,255,255,0.03); color: var(--text-muted); border-radius: 999px; padding: 7px 30px 7px 12px; font: inherit; font-size: 12px; font-weight: 700; cursor: pointer; outline: none; transition: var(--transition); }
-      .language-switcher::after { content: ""; position: absolute; right: 12px; width: 7px; height: 7px; border-right: 1px solid var(--accent-gold); border-bottom: 1px solid var(--accent-gold); transform: translateY(-2px) rotate(45deg); pointer-events: none; }
-      .language-switcher select:hover, .language-switcher select:focus { color: var(--accent-gold); border-color: var(--accent-gold); }
-      .language-switcher select option { color: #101c2d; background: #fff; }
-      .site-header .brand { flex: 0 0 auto; }
-      .site-header .main-nav { display: flex; align-items: center; justify-content: flex-end; flex-wrap: wrap; gap: 10px 22px; min-width: 0; }
-      .site-header .main-nav a { margin-left: 0; white-space: normal; overflow-wrap: anywhere; text-align: center; }
-      .is-localized, .is-localized * { overflow-wrap: anywhere; word-break: normal; }
-      .is-localized .hero h1, .is-localized .section-header h2, .is-localized h2, .is-localized h3 { letter-spacing: 0; hyphens: auto; }
-      .is-localized .hero h1 { font-size: clamp(32px, 5.2vw, 64px); max-width: 980px; }
-      .is-localized .hero-eyebrow { letter-spacing: 2px; }
-      .is-localized .btn { height: auto; min-height: 56px; white-space: normal; text-align: center; line-height: 1.25; padding-block: 12px; }
-      .is-localized .glass-card, .is-localized .pillar-item, .is-localized .case-content, .is-localized .flow-card, .is-localized .calc-box, .is-localized .input-field, .is-localized .input-group { min-width: 0; }
-      .is-localized table { table-layout: fixed; width: 100%; }
-      .is-localized th, .is-localized td { overflow-wrap: anywhere; word-break: normal; }
-      .is-localized .income-result strong { font-size: clamp(28px, 4vw, 48px); line-height: 1.15; }
-      .is-localized .case-card { grid-template-columns: minmax(0, 40%) minmax(0, 60%); }
-      .is-localized .case-card[style*="60% 40%"] { grid-template-columns: minmax(0, 60%) minmax(0, 40%) !important; }
-      @media (max-width: 1180px) {
-        .site-header .header-inner { height: auto; min-height: 80px; padding-top: 12px; padding-bottom: 12px; gap: 15px; }
-        .site-header .main-nav { gap: 8px 16px; }
-        .site-header .main-nav a { font-size: 12px; }
-        .language-switcher { margin-left: 0; }
-      }
-      @media (max-width: 960px) {
-        .language-switcher { margin: 12px auto 0; display: flex; justify-content: center; width: auto; }
-        .is-localized .hero h1 { font-size: clamp(28px, 8vw, 48px); }
-        .is-localized .section-header h2 { font-size: clamp(26px, 7vw, 40px); }
-        .is-localized .case-card, .is-localized .case-card[style*="60% 40%"] { grid-template-columns: 1fr !important; }
-      }
-      @media (max-width: 480px) {
-        .shell { padding: 0 15px; }
-        .hero h1 { font-size: 32px; line-height: 1.2; }
-        .section-header h2 { font-size: 26px; }
-        .main-nav { justify-content: center; width: 100%; gap: 12px; }
-        .language-switcher { margin-top: 10px; width: 100%; }
-        .language-switcher select { width: 100%; text-align: center; height: 38px; }
-        .nav-cta { margin-left: 0 !important; width: 100%; }
-      }
-    `;
-    document.head.appendChild(style);
   }
 
   window.WIGSWAN_I18N = {
@@ -723,7 +639,7 @@
   };
 
   document.addEventListener('DOMContentLoaded', () => {
-    injectStyle();
+    ensureMobileNav();
     ensureSwitcher();
     translatePage();
   });
