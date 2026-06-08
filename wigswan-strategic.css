@@ -60,6 +60,13 @@ body {
   padding: 0 40px;
 }
 
+@media (max-width: 768px) {
+  .shell { padding: 0 20px; }
+  .section { padding: 60px 0; }
+  .section-header { margin-bottom: 40px; }
+  .section-header h2 { font-size: 32px; }
+}
+
 /* --- Glassmorphism Components --- */
 .glass-card {
   background: var(--bg-card);
@@ -71,10 +78,8 @@ body {
   transition: var(--transition);
 }
 
-.glass-card:hover {
-  border-color: var(--accent-gold);
-  background: rgba(255, 255, 255, 0.05);
-  transform: translateY(-5px);
+@media (max-width: 768px) {
+  .glass-card { padding: 24px; border-radius: 16px; }
 }
 
 /* --- Navigation --- */
@@ -93,6 +98,51 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
+
+@media (max-width: 960px) {
+  .header-inner { height: auto; padding: 15px 0; flex-direction: column; gap: 15px; }
+  .main-nav { margin-top: 10px; display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; }
+  .main-nav a { margin-left: 0 !important; }
+}
+
+/* --- Case Cards --- */
+.case-card {
+  display: grid;
+  grid-template-columns: 40% 60%;
+  gap: 40px;
+  align-items: center;
+  margin-bottom: 40px;
+}
+
+.case-media img {
+  width: 100%;
+  border-radius: 16px;
+}
+
+@media (max-width: 860px) {
+  .case-card {
+    grid-template-columns: 1fr !important;
+    gap: 20px;
+  }
+  .case-media { order: -1; }
+}
+
+/* --- Table Responsiveness --- */
+.table-container {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin-top: 20px;
+}
+
+table {
+  min-width: 600px;
+}
+
+@media (max-width: 640px) {
+  .calc-box { padding: 20px; }
+  .income-result strong { font-size: 32px; }
 }
 
 .brand {
