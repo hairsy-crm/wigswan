@@ -987,6 +987,32 @@ table {
   font-weight: 800;
 }
 
+.locale-report {
+  display: none;
+}
+
+.locale-report-zh {
+  display: block;
+}
+
+body.lang-en .locale-report,
+body.lang-ja .locale-report,
+body.lang-ko .locale-report {
+  display: none;
+}
+
+body.lang-en .locale-report-en,
+body.lang-ja .locale-report-ja,
+body.lang-ko .locale-report-ko {
+  display: block;
+}
+
+body.lang-en .locale-report-zh,
+body.lang-ja .locale-report-zh,
+body.lang-ko .locale-report-zh {
+  display: none;
+}
+
 /* --- ROI Visualizer --- */
 .roi-visualizer {
   display: grid;

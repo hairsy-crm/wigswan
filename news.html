@@ -296,6 +296,32 @@
       color: var(--text-muted);
     }
 
+    .locale-report {
+      display: none;
+    }
+
+    .locale-report-zh {
+      display: block;
+    }
+
+    body.lang-en .locale-report,
+    body.lang-ja .locale-report,
+    body.lang-ko .locale-report {
+      display: none;
+    }
+
+    body.lang-en .locale-report-en,
+    body.lang-ja .locale-report-ja,
+    body.lang-ko .locale-report-ko {
+      display: block;
+    }
+
+    body.lang-en .locale-report-zh,
+    body.lang-ja .locale-report-zh,
+    body.lang-ko .locale-report-zh {
+      display: none;
+    }
+
     @media (max-width: 900px) {
       .report-hero {
         min-height: auto;
@@ -372,98 +398,92 @@
 
     <section class="section">
       <div class="shell">
-        <div class="report-toolbar">
-          <div>
-            <p class="hero-eyebrow">Featured Report</p>
-            <h2>精选行业研报</h2>
+        <div class="locale-report locale-report-zh">
+          <div class="report-toolbar">
+            <div><p class="hero-eyebrow">Featured Report</p><h2>中国市场研报</h2></div>
+            <div class="report-tags" aria-label="研报分类"><span class="report-tag active">全部</span><span class="report-tag">趋势判断</span><span class="report-tag">门店经营</span><span class="report-tag">客户运营</span></div>
           </div>
-          <div class="report-tags" aria-label="研报分类">
-            <span class="report-tag active">全部</span>
-            <span class="report-tag">趋势判断</span>
-            <span class="report-tag">门店经营</span>
-            <span class="report-tag">客户运营</span>
-            <span class="report-tag">数字化增长</span>
+          <article class="glass-card featured-report">
+            <div class="featured-copy">
+              <div class="report-meta"><span class="report-pill">2026 半年度观察</span><span>China Market</span></div>
+              <h3><a href="articles/customer-asset-growth-2026.html">从单次服务到长期客户资产：美业门店的下一轮增长分水岭</a></h3>
+              <p>传统门店过去依赖位置、手艺和熟客关系获取增长，但平台流量、同质化竞争与消费决策线上化正在改变经营逻辑。</p>
+              <ul class="report-points"><li>高价值服务项目会从“产品销售”转向“形象解决方案”</li><li>内容表达、咨询承接、服务复购将成为门店经营基础设施</li><li>数字化协同能力会决定区域门店能否复制增长模型</li></ul>
+            </div>
+            <div class="featured-visual" aria-label="中国门店行业研报视觉图"><div class="visual-stat"><span><strong>01</strong>消费决策线上化</span><span><strong>02</strong>门店服务高客单化</span><span><strong>03</strong>客户关系长期化</span></div></div>
+          </article>
+          <div class="report-toolbar"><div><p class="hero-eyebrow">Latest Releases</p><h2>最新发布</h2></div></div>
+          <div class="release-list">
+            <article class="release-row"><time datetime="2026-06">2026.06</time><div><h3><a href="articles/wig-consumption-image-management-2026.html">假发消费正在从“功能补救”进入“形象管理”阶段</a></h3><p>从消费动机、服务场景和门店承接方式三个维度，判断假发服务进入美业门店的机会窗口。</p></div><span class="status">已发布</span></article>
+            <article class="release-row"><time datetime="2026-06">2026.06</time><div><h3><a href="articles/community-salon-trust-service-2026.html">社区理发店为什么适合承接高信任服务项目</a></h3><p>分析熟客关系、服务频次与本地信任半径对高价值形象服务成交的影响。</p></div><span class="status">已发布</span></article>
+            <article class="release-row"><time datetime="2026-05">2026.05</time><div><h3><a href="articles/content-acquisition-service-proof-2026.html">内容获客不是拍视频，而是建立可被验证的服务能力</a></h3><p>讨论门店线上表达如何从曝光逻辑，转向案例沉淀、信任建立与咨询转化。</p></div><span class="status">已收录</span></article>
           </div>
         </div>
 
-        <article class="glass-card featured-report">
-          <div class="featured-copy">
-            <div class="report-meta">
-              <span class="report-pill">2026 半年度观察</span>
-              <span>Beauty Retail · Strategy</span>
+        <div class="locale-report locale-report-en">
+          <div class="report-toolbar">
+            <div><p class="hero-eyebrow">US Market Research</p><h2>Reports for US salon owners</h2></div>
+            <div class="report-tags" aria-label="Report categories"><span class="report-tag active">All</span><span class="report-tag">Consultation</span><span class="report-tag">Retention</span><span class="report-tag">Content</span></div>
+          </div>
+          <article class="glass-card featured-report">
+            <div class="featured-copy">
+              <div class="report-meta"><span class="report-pill">2026 US Outlook</span><span>High-ticket Services</span></div>
+              <h3><a href="articles/us-high-ticket-consultation-2026.html">Why high-ticket hair replacement starts with consultation design</a></h3>
+              <p>US clients expect privacy, proof, transparent service plans, and consistent follow-up before committing to hair replacement or image-management services.</p>
+              <ul class="report-points"><li>Private intake reduces friction for sensitive needs</li><li>Proof libraries replace generic promotional claims</li><li>Maintenance plans turn one-time sales into recurring relationships</li></ul>
             </div>
-            <h3><a href="articles/customer-asset-growth-2026.html">从单次服务到长期客户资产：美业门店的下一轮增长分水岭</a></h3>
-            <p>传统门店过去依赖位置、手艺和熟客关系获取增长，但平台流量、同质化竞争与消费决策线上化正在改变经营逻辑。未来更有竞争力的门店，将把“剪发、护理、假发、形象管理”整合为可持续运营的客户资产。</p>
-            <ul class="report-points">
-              <li>高价值服务项目会从“产品销售”转向“形象解决方案”</li>
-              <li>内容表达、咨询承接、服务复购将成为门店经营基础设施</li>
-              <li>数字化协同能力会决定区域门店能否复制增长模型</li>
-            </ul>
-          </div>
-          <div class="featured-visual" aria-label="门店行业研报视觉图">
-            <div class="visual-stat">
-              <span><strong>01</strong>消费决策线上化</span>
-              <span><strong>02</strong>门店服务高客单化</span>
-              <span><strong>03</strong>客户关系长期化</span>
-            </div>
-          </div>
-        </article>
-
-        <div class="report-toolbar">
-          <div>
-            <p class="hero-eyebrow">Research Columns</p>
-            <h2>研报栏目</h2>
-          </div>
-        </div>
-        <div class="topic-grid">
-          <article class="glass-card topic-card">
-            <div class="report-meta">Trend Watch</div>
-            <h3>行业趋势观察</h3>
-            <p>跟踪假发消费、美业连锁、形象管理与区域门店经营结构变化，沉淀可复用的趋势判断。</p>
+            <div class="featured-visual" aria-label="US salon market report visual"><div class="visual-stat"><span><strong>01</strong>Private intake</span><span><strong>02</strong>Proof-led trust</span><span><strong>03</strong>Care plans</span></div></div>
           </article>
-          <article class="glass-card topic-card">
-            <div class="report-meta">Store Growth</div>
-            <h3>门店增长模型</h3>
-            <p>围绕获客、转化、交付、复购与会员运营，分析传统门店如何升级为高价值服务节点。</p>
-          </article>
-          <article class="glass-card topic-card">
-            <div class="report-meta">Digital System</div>
-            <h3>数字化经营专题</h3>
-            <p>拆解内容系统、咨询承接、客户分层、数据协同与供应链支持如何形成长期竞争壁垒。</p>
-          </article>
+          <div class="report-toolbar"><div><p class="hero-eyebrow">Latest Releases</p><h2>Latest US reports</h2></div></div>
+          <div class="release-list">
+            <article class="release-row"><time datetime="2026-06">2026.06</time><div><h3><a href="articles/us-private-studio-retention-2026.html">Private studios and the retention advantage in replacement services</a></h3><p>Why appointment-led studios are well positioned for fitting, maintenance, and long-term care plans.</p></div><span class="status">Published</span></article>
+            <article class="release-row"><time datetime="2026-06">2026.06</time><div><h3><a href="articles/us-content-trust-engine-2026.html">Content is becoming the new trust engine for independent salons</a></h3><p>How case libraries, consultation explainers, and service proof support client decisions before booking.</p></div><span class="status">Published</span></article>
+            <article class="release-row"><time datetime="2026-05">2026.05</time><div><h3><a href="articles/us-high-ticket-consultation-2026.html">Why high-ticket hair replacement starts with consultation design</a></h3><p>A practical lens on privacy, proof, financing expectations, and service pathway design.</p></div><span class="status">Featured</span></article>
+          </div>
         </div>
 
-        <div class="report-toolbar">
-          <div>
-            <p class="hero-eyebrow">Latest Releases</p>
-            <h2>最新发布</h2>
+        <div class="locale-report locale-report-ja">
+          <div class="report-toolbar">
+            <div><p class="hero-eyebrow">Japan Market Research</p><h2>日本市場向けレポート</h2></div>
+            <div class="report-tags" aria-label="レポート分類"><span class="report-tag active">すべて</span><span class="report-tag">市場動向</span><span class="report-tag">個室相談</span><span class="report-tag">継続ケア</span></div>
+          </div>
+          <article class="glass-card featured-report">
+            <div class="featured-copy">
+              <div class="report-meta"><span class="report-pill">2026 日本市場</span><span>Hair Care Strategy</span></div>
+              <h3><a href="articles/jp-aging-hair-consultation-2026.html">高齢化社会で広がる「自然な髪」の相談ニーズ</a></h3>
+              <p>日本の美容室では、薄毛対策だけでなく、自然さ、清潔感、継続メンテナンスを求める相談が新しい接点になっています。</p>
+              <ul class="report-points"><li>自然な仕上がりが初回相談の重要条件になる</li><li>個室相談は心理的負担を下げる</li><li>アフターケアが長期的な信頼をつくる</li></ul>
+            </div>
+            <div class="featured-visual" aria-label="日本市場レポートビジュアル"><div class="visual-stat"><span><strong>01</strong>自然さ</span><span><strong>02</strong>個室相談</span><span><strong>03</strong>継続ケア</span></div></div>
+          </article>
+          <div class="report-toolbar"><div><p class="hero-eyebrow">Latest Releases</p><h2>最新レポート</h2></div></div>
+          <div class="release-list">
+            <article class="release-row"><time datetime="2026-06">2026.06</time><div><h3><a href="articles/jp-private-consultation-standard-2026.html">個室相談が高信頼サービスの標準になる理由</a></h3><p>プライバシーに配慮した導線が、初回相談と継続利用を支えます。</p></div><span class="status">公開中</span></article>
+            <article class="release-row"><time datetime="2026-06">2026.06</time><div><h3><a href="articles/jp-aftercare-retention-2026.html">アフターケアが美容室の継続収益をつくる</a></h3><p>調整、洗浄、スタイリング提案を長期関係に変える考え方。</p></div><span class="status">公開中</span></article>
+            <article class="release-row"><time datetime="2026-05">2026.05</time><div><h3><a href="articles/jp-aging-hair-consultation-2026.html">高齢化社会で広がる「自然な髪」の相談ニーズ</a></h3><p>自然さと日常性を求める日本市場の相談ニーズを整理します。</p></div><span class="status">注目</span></article>
           </div>
         </div>
-        <div class="release-list">
-          <article class="release-row">
-            <time datetime="2026-06">2026.06</time>
-            <div>
-              <h3><a href="articles/wig-consumption-image-management-2026.html">假发消费正在从“功能补救”进入“形象管理”阶段</a></h3>
-              <p>从消费动机、服务场景和门店承接方式三个维度，判断假发服务进入美业门店的机会窗口。</p>
+
+        <div class="locale-report locale-report-ko">
+          <div class="report-toolbar">
+            <div><p class="hero-eyebrow">Korea Market Research</p><h2>한국 시장 리포트</h2></div>
+            <div class="report-tags" aria-label="리포트 분류"><span class="report-tag active">전체</span><span class="report-tag">이미지 관리</span><span class="report-tag">콘텐츠 전환</span><span class="report-tag">반복 케어</span></div>
+          </div>
+          <article class="glass-card featured-report">
+            <div class="featured-copy">
+              <div class="report-meta"><span class="report-pill">2026 한국 시장</span><span>K-Beauty Strategy</span></div>
+              <h3><a href="articles/kr-image-management-hair-service-2026.html">K-뷰티 고객은 왜 이미지 관리형 헤어 서비스를 찾는가</a></h3>
+              <p>한국 시장에서는 자연스러운 변화, 콘텐츠 신뢰, 빠른 상담 응답이 고가 헤어 서비스의 전환율을 좌우합니다.</p>
+              <ul class="report-points"><li>헤어 서비스가 전체 이미지 관리로 확장됩니다</li><li>사례 콘텐츠가 방문 전 신뢰를 형성합니다</li><li>리터치와 반복 케어가 고객 생애가치를 높입니다</li></ul>
             </div>
-            <span class="status">已发布</span>
+            <div class="featured-visual" aria-label="한국 시장 리포트 비주얼"><div class="visual-stat"><span><strong>01</strong>이미지 관리</span><span><strong>02</strong>콘텐츠 신뢰</span><span><strong>03</strong>반복 케어</span></div></div>
           </article>
-          <article class="release-row">
-            <time datetime="2026-06">2026.06</time>
-            <div>
-              <h3><a href="articles/community-salon-trust-service-2026.html">社区理发店为什么适合承接高信任服务项目</a></h3>
-              <p>分析熟客关系、服务频次与本地信任半径对高价值形象服务成交的影响。</p>
-            </div>
-            <span class="status">已发布</span>
-          </article>
-          <article class="release-row">
-            <time datetime="2026-05">2026.05</time>
-            <div>
-              <h3><a href="articles/content-acquisition-service-proof-2026.html">内容获客不是拍视频，而是建立可被验证的服务能力</a></h3>
-              <p>讨论门店线上表达如何从曝光逻辑，转向案例沉淀、信任建立与咨询转化。</p>
-            </div>
-            <span class="status">已收录</span>
-          </article>
+          <div class="report-toolbar"><div><p class="hero-eyebrow">Latest Releases</p><h2>최신 리포트</h2></div></div>
+          <div class="release-list">
+            <article class="release-row"><time datetime="2026-06">2026.06</time><div><h3><a href="articles/kr-content-consultation-funnel-2026.html">콘텐츠에서 상담으로 이어지는 미용실 전환 구조</a></h3><p>전후 사례, 상담형 콘텐츠, 빠른 응답이 예약 전환을 만드는 구조.</p></div><span class="status">공개</span></article>
+            <article class="release-row"><time datetime="2026-06">2026.06</time><div><h3><a href="articles/kr-repeat-care-economics-2026.html">반복 케어가 고가 헤어 서비스 수익성을 높이는 방식</a></h3><p>관리 주기, 리터치, 멤버십 운영이 장기 수익성을 강화합니다.</p></div><span class="status">공개</span></article>
+            <article class="release-row"><time datetime="2026-05">2026.05</time><div><h3><a href="articles/kr-image-management-hair-service-2026.html">K-뷰티 고객은 왜 이미지 관리형 헤어 서비스를 찾는가</a></h3><p>이미지 관리형 헤어 서비스가 한국 고객 경험과 만나는 지점을 분석합니다.</p></div><span class="status">추천</span></article>
+          </div>
         </div>
 
         <div class="glass-card editor-note">
