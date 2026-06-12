@@ -3,44 +3,333 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="获取 WIGSWAN 美业云链最新增长动态、行业趋势与数字化经营技巧。">
-  <title>增长情报 | 商业洞察 - WIGSWAN</title>
+  <meta name="description" content="WIGSWAN 行业研报：不定期发布美业、假发、门店数字化与客户价值运营相关的行业分析、趋势观察和专题报告。">
+  <title>行业研报 | 趋势分析与专题报告 - WIGSWAN</title>
   <link rel="stylesheet" href="index.css">
   <style>
-    .news-grid {
+    .report-hero {
+      min-height: 520px;
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 30px;
-      margin-top: 40px;
+      align-items: end;
+      padding: 160px 0 70px;
+      position: relative;
+      overflow: hidden;
+      border-bottom: 1px solid var(--glass-border);
+      background:
+        linear-gradient(90deg, rgba(10, 15, 30, 0.96), rgba(10, 15, 30, 0.72) 52%, rgba(10, 15, 30, 0.88)),
+        url("assets/barbershop-quiet-cn.png") center / cover;
     }
-    .news-item {
+
+    .report-hero::after {
+      content: "";
+      position: absolute;
+      inset: auto 0 0;
+      height: 160px;
+      background: linear-gradient(180deg, transparent, var(--bg-deep));
+    }
+
+    .report-hero .shell {
+      position: relative;
+      z-index: 1;
+    }
+
+    .report-hero h1 {
+      max-width: 860px;
+      margin: 0 0 24px;
+      font-size: 64px;
+      line-height: 1.08;
+      font-weight: 900;
+    }
+
+    .report-hero p {
+      max-width: 720px;
+      color: var(--text-muted);
+      font-size: 18px;
+    }
+
+    .report-toolbar {
       display: flex;
-      flex-direction: column;
+      justify-content: space-between;
+      gap: 24px;
+      align-items: flex-end;
+      margin: 70px 0 28px;
     }
-    .news-item img {
-      width: 100%;
-      height: 240px;
-      object-fit: cover;
-      border-radius: 16px;
-      margin-bottom: 20px;
-      filter: grayscale(0.5) contrast(1.1);
-      transition: var(--transition);
+
+    .report-toolbar h2 {
+      margin: 0;
+      font-size: 36px;
+      line-height: 1.2;
     }
-    .news-item:hover img {
-      filter: grayscale(0) contrast(1);
+
+    .report-tags {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
     }
-    .news-meta {
+
+    .report-tag {
+      min-height: 34px;
+      display: inline-flex;
+      align-items: center;
+      border: 1px solid var(--glass-border);
+      border-radius: 999px;
+      padding: 0 14px;
+      color: var(--text-muted);
       font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      color: var(--accent-gold);
-      margin-bottom: 12px;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      background: rgba(255, 255, 255, 0.03);
     }
-    .news-item h3 {
-      font-size: 20px;
+
+    .report-tag.active {
+      color: #0a0f1e;
+      border-color: var(--accent-gold);
+      background: var(--accent-gold);
+    }
+
+    .featured-report {
+      display: grid;
+      grid-template-columns: 1.08fr 0.92fr;
+      gap: 36px;
+      align-items: stretch;
+    }
+
+    .featured-copy {
+      min-width: 0;
+    }
+
+    .report-meta {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      align-items: center;
+      color: var(--accent-gold);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 18px;
+    }
+
+    .report-pill {
+      border: 1px solid rgba(197, 160, 89, 0.45);
+      border-radius: 999px;
+      padding: 5px 10px;
+      background: rgba(197, 160, 89, 0.1);
+    }
+
+    .featured-copy h3 {
+      margin: 0 0 18px;
       color: #fff;
-      margin-bottom: 15px;
-      line-height: 1.4;
+      font-size: 34px;
+      line-height: 1.24;
+    }
+
+    .featured-copy p,
+    .report-card p,
+    .topic-card p,
+    .release-row p {
+      color: var(--text-muted);
+    }
+
+    .report-points {
+      display: grid;
+      gap: 12px;
+      margin: 28px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .report-points li {
+      min-height: 44px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border-top: 1px solid var(--glass-border);
+      color: #e2e8f0;
+      font-size: 14px;
+    }
+
+    .report-points li::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      flex: 0 0 auto;
+      border-radius: 50%;
+      background: var(--accent-gold);
+      box-shadow: 0 0 18px rgba(197, 160, 89, 0.6);
+    }
+
+    .featured-visual {
+      min-height: 420px;
+      position: relative;
+      overflow: hidden;
+      border-radius: 20px;
+      background:
+        linear-gradient(180deg, transparent, rgba(10, 15, 30, 0.94)),
+        url("assets/wig-store-busy-cn.png") center / cover;
+    }
+
+    .visual-stat {
+      position: absolute;
+      left: 24px;
+      right: 24px;
+      bottom: 24px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .visual-stat span {
+      display: block;
+      padding: 16px 12px;
+      border: 1px solid var(--glass-border);
+      border-radius: 8px;
+      background: rgba(10, 15, 30, 0.72);
+      backdrop-filter: blur(14px);
+      color: var(--text-muted);
+      font-size: 12px;
+    }
+
+    .visual-stat strong {
+      display: block;
+      margin-bottom: 4px;
+      color: var(--accent-gold);
+      font-size: 22px;
+      line-height: 1;
+    }
+
+    .report-grid,
+    .topic-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .report-card,
+    .topic-card {
+      border-radius: 8px;
+      padding: 28px;
+    }
+
+    .report-card h3,
+    .topic-card h3 {
+      margin: 0 0 14px;
+      color: #fff;
+      font-size: 20px;
+      line-height: 1.35;
+    }
+
+    .report-card .report-meta {
+      margin-bottom: 14px;
+    }
+
+    .release-list {
+      display: grid;
+      gap: 14px;
+    }
+
+    .release-row {
+      display: grid;
+      grid-template-columns: 150px 1fr 140px;
+      gap: 24px;
+      align-items: center;
+      padding: 24px 0;
+      border-bottom: 1px solid var(--glass-border);
+    }
+
+    .release-row time {
+      color: var(--accent-gold);
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+    }
+
+    .release-row h3 {
+      margin: 0 0 6px;
+      font-size: 19px;
+      line-height: 1.35;
+    }
+
+    .release-row .status {
+      justify-self: end;
+      border: 1px solid var(--glass-border);
+      border-radius: 999px;
+      padding: 7px 12px;
+      color: var(--text-muted);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .editor-note {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 28px;
+      align-items: center;
+      margin-top: 72px;
+      border-radius: 8px;
+      background:
+        linear-gradient(90deg, rgba(197, 160, 89, 0.16), rgba(255, 255, 255, 0.03)),
+        rgba(255, 255, 255, 0.03);
+    }
+
+    .editor-note h2 {
+      margin: 0 0 10px;
+      font-size: 28px;
+    }
+
+    .editor-note p {
+      margin: 0;
+      color: var(--text-muted);
+    }
+
+    @media (max-width: 900px) {
+      .report-hero {
+        min-height: auto;
+        padding: 92px 0 56px;
+      }
+
+      .report-hero h1 {
+        font-size: clamp(38px, 10vw, 54px);
+      }
+
+      .report-toolbar,
+      .editor-note {
+        display: block;
+      }
+
+      .report-tags {
+        justify-content: flex-start;
+        margin-top: 18px;
+      }
+
+      .featured-report,
+      .report-grid,
+      .topic-grid,
+      .release-row {
+        grid-template-columns: 1fr;
+      }
+
+      .featured-visual {
+        min-height: 340px;
+      }
+
+      .visual-stat {
+        grid-template-columns: 1fr;
+      }
+
+      .release-row {
+        gap: 8px;
+      }
+
+      .release-row .status {
+        justify-self: start;
+      }
+
+      .editor-note .btn {
+        margin-top: 24px;
+      }
     }
   </style>
 </head>
@@ -49,52 +338,137 @@
     <div class="shell header-inner">
       <a class="brand" href="index.html">
         <span class="brand-mark">S</span>
-        <strong>WIGSWAN<br><small>GROWTH INTEL</small></strong>
+        <strong>WIGSWAN<br><small>INDUSTRY REPORTS</small></strong>
       </a>
       <nav class="main-nav">
         <a href="index.html">首页</a>
         <a href="meiye-yunlian.html">增长中枢</a>
         <a href="success-cases.html">全球案例</a>
-        <a href="#" class="active">增长情报</a>
+        <a href="#" class="active">行业研报</a>
       </nav>
     </div>
   </header>
 
-  <main style="padding: 140px 0 80px;">
-    <div class="shell">
-      <div class="section-header">
-        <p class="hero-eyebrow">Strategic Insights</p>
-        <h2>全球增长情报站</h2>
-        <p>我们持续监测全球美业数字化趋势，为您输出具备实战价值的商业洞察。</p>
+  <main>
+    <section class="report-hero">
+      <div class="shell">
+        <p class="hero-eyebrow">Industry Research Desk</p>
+        <h1>面向美业经营者的行业研报与增长分析</h1>
+        <p>这里将不定期发布 WIGSWAN 对美业、假发消费、门店数字化、内容获客与客户价值运营的观察。内容以趋势判断、经营框架和专题报告为主，帮助合作伙伴更早看见行业变化。</p>
       </div>
+    </section>
 
-      <div class="news-grid">
-        <!-- Intel 1 -->
-        <article class="glass-card news-item">
-          <img src="assets/service-provider-cn.png" alt="数字化工具">
-          <div class="news-meta">Macro Trend · 2026.06</div>
-          <h3>从“理发店”到“形象资产管理中心”：行业转型的奇点已至</h3>
-          <p style="color: var(--text-muted);">深度解析为什么单一的剪发业务将逐渐丧失竞争力，而长期客户价值运营将成为未来的核心盈利引擎。</p>
+    <section class="section">
+      <div class="shell">
+        <div class="report-toolbar">
+          <div>
+            <p class="hero-eyebrow">Featured Report</p>
+            <h2>精选行业研报</h2>
+          </div>
+          <div class="report-tags" aria-label="研报分类">
+            <span class="report-tag active">全部</span>
+            <span class="report-tag">趋势判断</span>
+            <span class="report-tag">门店经营</span>
+            <span class="report-tag">客户运营</span>
+            <span class="report-tag">数字化增长</span>
+          </div>
+        </div>
+
+        <article class="glass-card featured-report">
+          <div class="featured-copy">
+            <div class="report-meta">
+              <span class="report-pill">2026 半年度观察</span>
+              <span>Beauty Retail · Strategy</span>
+            </div>
+            <h3>从单次服务到长期客户资产：美业门店的下一轮增长分水岭</h3>
+            <p>传统门店过去依赖位置、手艺和熟客关系获取增长，但平台流量、同质化竞争与消费决策线上化正在改变经营逻辑。未来更有竞争力的门店，将把“剪发、护理、假发、形象管理”整合为可持续运营的客户资产。</p>
+            <ul class="report-points">
+              <li>高价值服务项目会从“产品销售”转向“形象解决方案”</li>
+              <li>内容表达、咨询承接、服务复购将成为门店经营基础设施</li>
+              <li>数字化协同能力会决定区域门店能否复制增长模型</li>
+            </ul>
+          </div>
+          <div class="featured-visual" aria-label="门店行业研报视觉图">
+            <div class="visual-stat">
+              <span><strong>01</strong>消费决策线上化</span>
+              <span><strong>02</strong>门店服务高客单化</span>
+              <span><strong>03</strong>客户关系长期化</span>
+            </div>
+          </div>
         </article>
 
-        <!-- Intel 2 -->
-        <article class="glass-card news-item">
-          <img src="assets/wig-store-busy-cn.png" alt="AI获客">
-          <div class="news-meta">Scaling Tactics · 2026.05</div>
-          <h3>数字化内容系统：如何让门店服务能力被更多目标客户看见</h3>
-          <p style="color: var(--text-muted);">解析 WIGSWAN 2.0 如何帮助门店建立持续、稳定、可信的线上表达体系。</p>
-        </article>
-      </div>
+        <div class="report-toolbar">
+          <div>
+            <p class="hero-eyebrow">Research Columns</p>
+            <h2>研报栏目</h2>
+          </div>
+        </div>
+        <div class="topic-grid">
+          <article class="glass-card topic-card">
+            <div class="report-meta">Trend Watch</div>
+            <h3>行业趋势观察</h3>
+            <p>跟踪假发消费、美业连锁、形象管理与区域门店经营结构变化，沉淀可复用的趋势判断。</p>
+          </article>
+          <article class="glass-card topic-card">
+            <div class="report-meta">Store Growth</div>
+            <h3>门店增长模型</h3>
+            <p>围绕获客、转化、交付、复购与会员运营，分析传统门店如何升级为高价值服务节点。</p>
+          </article>
+          <article class="glass-card topic-card">
+            <div class="report-meta">Digital System</div>
+            <h3>数字化经营专题</h3>
+            <p>拆解内容系统、咨询承接、客户分层、数据协同与供应链支持如何形成长期竞争壁垒。</p>
+          </article>
+        </div>
 
-      <div style="margin-top: 60px; text-align: center;">
-         <a href="join/" class="btn ghost">订阅深度行业报告 (PDF)</a>
+        <div class="report-toolbar">
+          <div>
+            <p class="hero-eyebrow">Latest Releases</p>
+            <h2>最新发布</h2>
+          </div>
+        </div>
+        <div class="release-list">
+          <article class="release-row">
+            <time datetime="2026-06">2026.06</time>
+            <div>
+              <h3>假发消费正在从“功能补救”进入“形象管理”阶段</h3>
+              <p>从消费动机、服务场景和门店承接方式三个维度，判断假发服务进入美业门店的机会窗口。</p>
+            </div>
+            <span class="status">专题筹备中</span>
+          </article>
+          <article class="release-row">
+            <time datetime="2026-06">2026.06</time>
+            <div>
+              <h3>社区理发店为什么适合承接高信任服务项目</h3>
+              <p>分析熟客关系、服务频次与本地信任半径对高价值形象服务成交的影响。</p>
+            </div>
+            <span class="status">即将发布</span>
+          </article>
+          <article class="release-row">
+            <time datetime="2026-05">2026.05</time>
+            <div>
+              <h3>内容获客不是拍视频，而是建立可被验证的服务能力</h3>
+              <p>讨论门店线上表达如何从曝光逻辑，转向案例沉淀、信任建立与咨询转化。</p>
+            </div>
+            <span class="status">已收录</span>
+          </article>
+        </div>
+
+        <div class="glass-card editor-note">
+          <div>
+            <p class="hero-eyebrow">Publishing Plan</p>
+            <h2>后续将持续更新行业分析与深度报告</h2>
+            <p>每篇报告可以发布为文章、PDF 或案例型长文。若需要获取完整报告、合作门店数据观察或专题解读，可提交合作申请。</p>
+          </div>
+          <a href="join/" class="btn primary">申请获取深度报告</a>
+        </div>
       </div>
-    </div>
+    </section>
   </main>
 
   <footer class="site-footer">
     <div class="shell footer-inner">
-      <p>© 2026 WIGSWAN. 赋能手艺人，重构美业链.</p>
+      <p>© 2026 WIGSWAN. 持续发布美业增长洞察.</p>
     </div>
   </footer>
   <script src="i18n.js"></script>
