@@ -234,6 +234,7 @@ table {
   gap: 12px;
   flex: 0 0 auto;
   min-width: 0;
+  order: 1;
 }
 
 .brand-mark {
@@ -277,6 +278,7 @@ table {
   justify-content: flex-end;
   flex: 1 1 auto;
   min-width: 0;
+  order: 2;
 }
 
 /* --- Hero Section --- */
@@ -612,6 +614,7 @@ table {
   align-items: center;
   gap: 12px;
   flex: 0 0 auto;
+  order: 3;
 }
 
 .nav-toggle {
@@ -784,36 +787,32 @@ table {
 }
 
 body.is-localized .site-header .header-inner {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto;
-  grid-template-areas:
-    "brand spacer tools"
-    "nav nav nav";
+  display: flex;
   height: auto;
   min-height: 90px;
-  padding: 12px 0 10px;
-  row-gap: 8px;
+  padding: 10px 0;
+  gap: 18px;
   align-items: center;
 }
 
 body.is-localized .site-header .brand {
-  grid-area: brand;
+  flex: 0 0 auto;
 }
 
 body.is-localized .site-header .header-tools {
-  grid-area: tools;
-  justify-self: end;
+  flex: 0 0 auto;
   margin-left: 0;
 }
 
 body.is-localized .site-header .main-nav {
-  grid-area: nav;
-  width: 100%;
+  width: auto;
+  flex: 1 1 auto;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
-  gap: 6px 30px;
+  gap: 8px 24px;
+  min-width: 0;
 }
 
 body.is-localized .site-header .main-nav a {
@@ -825,10 +824,10 @@ body.is-localized .site-header .main-nav a {
   overflow-wrap: anywhere;
   text-align: center;
   line-height: 1.25;
-  font-size: 12px;
-  letter-spacing: 0.7px;
-  max-width: 150px;
-  min-height: 30px;
+  font-size: 11.5px;
+  letter-spacing: 0.55px;
+  max-width: 132px;
+  min-height: 22px;
   padding: 0;
   border: 0;
   border-radius: 0;
@@ -836,41 +835,37 @@ body.is-localized .site-header .main-nav a {
 }
 
 body.is-localized .hero {
-  padding-top: 116px;
+  padding-top: 90px;
 }
 
 @media (max-width: 1180px) {
   .site-header .header-inner {
-    display: grid;
-    grid-template-columns: auto minmax(0, 1fr) auto;
-    grid-template-areas:
-      "brand spacer tools"
-      "nav nav nav";
+    display: flex;
     height: auto;
     min-height: 90px;
-    padding: 12px 0 10px;
-    row-gap: 8px;
+    padding: 10px 0;
+    gap: 18px;
     align-items: center;
   }
 
   .site-header .brand {
-    grid-area: brand;
+    flex: 0 0 auto;
   }
 
   .site-header .header-tools {
-    grid-area: tools;
-    justify-self: end;
+    flex: 0 0 auto;
     margin-left: 0;
   }
 
   .site-header .main-nav {
-    grid-area: nav;
-    width: 100%;
+    width: auto;
+    flex: 1 1 auto;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-wrap: wrap;
-    gap: 6px 30px;
+    gap: 8px 24px;
+    min-width: 0;
   }
 
   .site-header .main-nav a {
@@ -882,10 +877,10 @@ body.is-localized .hero {
     overflow-wrap: anywhere;
     text-align: center;
     line-height: 1.25;
-    font-size: 12px;
-    letter-spacing: 0.7px;
-    max-width: 150px;
-    min-height: 30px;
+    font-size: 11.5px;
+    letter-spacing: 0.55px;
+    max-width: 132px;
+    min-height: 22px;
     padding: 0;
     border: 0;
     border-radius: 0;
@@ -1253,10 +1248,12 @@ body.lang-ko .locale-report-zh {
   .brand {
     width: auto;
     min-width: 0;
+    order: 1;
   }
 
   .header-tools {
     margin-left: auto;
+    order: 2;
   }
 
   .nav-toggle {
@@ -1267,6 +1264,7 @@ body.lang-ko .locale-report-zh {
     width: 100%;
     margin-top: 0;
     display: none;
+    order: 3;
     flex-direction: column;
     align-items: stretch;
     gap: 8px;
