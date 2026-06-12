@@ -572,7 +572,7 @@ table {
 
 .language-switcher select {
   appearance: none;
-  min-width: 112px;
+  min-width: 128px;
   border: 1px solid var(--glass-border);
   background: rgba(255,255,255,0.03);
   color: var(--text-muted);
@@ -1469,8 +1469,8 @@ body.lang-ko .locale-report-zh {
   }
 
   .language-switcher select {
-    min-width: 96px;
-    max-width: 112px;
+    min-width: 118px;
+    max-width: 132px;
   }
 
   .hero {

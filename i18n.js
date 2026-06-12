@@ -1,9 +1,9 @@
 (function () {
   const LANGS = [
-    { code: 'zh', label: '中文', htmlLang: 'zh-CN' },
-    { code: 'en', label: 'EN', htmlLang: 'en' },
-    { code: 'ja', label: '日本語', htmlLang: 'ja' },
-    { code: 'ko', label: '한국어', htmlLang: 'ko' }
+    { code: 'zh', label: '🇨🇳 中文', htmlLang: 'zh-CN' },
+    { code: 'en', label: '🇺🇸 EN', htmlLang: 'en' },
+    { code: 'ja', label: '🇯🇵 日本語', htmlLang: 'ja' },
+    { code: 'ko', label: '🇰🇷 한국어', htmlLang: 'ko' }
   ];
 
   const MARKET_CONTENT = {

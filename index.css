@@ -282,7 +282,7 @@ body {
 
 .language-switcher select {
   appearance: none;
-  min-width: 112px;
+  min-width: 128px;
   border: 1px solid var(--glass-border);
   background: rgba(255,255,255,0.03);
   color: var(--text-muted);
@@ -843,7 +843,7 @@ body.is-localized .site-header .main-nav a.btn.primary.nav-cta:hover {
   }
 
   .language-switcher select {
-    min-width: 96px;
-    max-width: 112px;
+    min-width: 118px;
+    max-width: 132px;
   }
 }
