@@ -165,6 +165,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 20px;
 }
 
 @media (max-width: 960px) {
@@ -231,6 +232,8 @@ table {
   display: flex;
   align-items: center;
   gap: 12px;
+  flex: 0 0 auto;
+  min-width: 0;
 }
 
 .brand-mark {
@@ -266,6 +269,14 @@ table {
 
 .main-nav a:hover, .main-nav a.active {
   color: var(--accent-gold);
+}
+
+.site-header .main-nav {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex: 1 1 auto;
+  min-width: 0;
 }
 
 /* --- Hero Section --- */
@@ -600,6 +611,7 @@ table {
   display: inline-flex;
   align-items: center;
   gap: 12px;
+  flex: 0 0 auto;
 }
 
 .nav-toggle {
@@ -769,6 +781,82 @@ table {
 .is-localized .income-result strong {
   font-size: clamp(28px, 4vw, 48px);
   line-height: 1.15;
+}
+
+body.is-localized .site-header .header-inner {
+  height: auto;
+  min-height: 90px;
+  padding: 14px 0 12px;
+  flex-wrap: wrap;
+  row-gap: 12px;
+}
+
+body.is-localized .site-header .main-nav {
+  order: 3;
+  width: 100%;
+  flex: 0 0 100%;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px 14px;
+}
+
+body.is-localized .site-header .main-nav a {
+  margin-left: 0;
+  max-width: 220px;
+  min-height: 34px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: normal;
+  text-align: center;
+  line-height: 1.2;
+  font-size: 12px;
+  letter-spacing: 0.4px;
+}
+
+body.is-localized .header-tools {
+  margin-left: auto;
+}
+
+body.is-localized .hero {
+  padding-top: 132px;
+}
+
+@media (max-width: 1180px) {
+  .site-header .header-inner {
+    height: auto;
+    min-height: 90px;
+    padding: 14px 0 12px;
+    flex-wrap: wrap;
+    row-gap: 12px;
+  }
+
+  .site-header .main-nav {
+    order: 3;
+    width: 100%;
+    flex: 0 0 100%;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px 14px;
+  }
+
+  .site-header .main-nav a {
+    margin-left: 0;
+    max-width: 220px;
+    min-height: 34px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    white-space: normal;
+    text-align: center;
+    line-height: 1.2;
+    font-size: 12px;
+    letter-spacing: 0.4px;
+  }
+
+  .header-tools {
+    margin-left: auto;
+  }
 }
 
 /* --- Strategic Sections --- */
@@ -1139,6 +1227,10 @@ body.lang-ko .locale-report-zh {
     overflow: visible;
   }
 
+  body.is-localized .site-header .main-nav {
+    display: none;
+  }
+
   .site-header .main-nav a,
   .site-header .main-nav a:not(.nav-cta):not([href="#hero"]) {
     display: inline-flex;
@@ -1155,6 +1247,10 @@ body.lang-ko .locale-report-zh {
   }
 
   .nav-open .site-header .main-nav {
+    display: flex;
+  }
+
+  body.is-localized.nav-open .site-header .main-nav {
     display: flex;
   }
 
