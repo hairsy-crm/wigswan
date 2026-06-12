@@ -711,6 +711,8 @@ body.is-localized .site-header .main-nav a.btn.primary.nav-cta:hover {
     display: inline-flex;
     justify-content: center;
     width: 100%;
+    max-width: none;
+    min-height: 42px;
     margin-left: 0 !important;
     white-space: normal;
     font-size: 12px;

@@ -1315,6 +1315,8 @@ body.lang-ko .locale-report-zh {
     display: inline-flex;
     justify-content: center;
     width: 100%;
+    max-width: none;
+    min-height: 42px;
     margin-left: 0 !important;
     white-space: normal;
     font-size: 12px;
@@ -1335,6 +1337,7 @@ body.lang-ko .locale-report-zh {
 
   .site-header .nav-cta {
     width: 100%;
+    max-width: none;
     height: auto;
     min-height: 42px;
     margin-top: 0;

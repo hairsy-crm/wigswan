@@ -24,6 +24,31 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 5000);
   }
 
+  // --- Hero Background Video Compatibility ---
+  const heroVideo = document.querySelector('.hero-video-bg');
+  if (heroVideo) {
+    heroVideo.muted = true;
+    heroVideo.defaultMuted = true;
+    heroVideo.playsInline = true;
+    heroVideo.setAttribute('muted', '');
+    heroVideo.setAttribute('playsinline', '');
+    heroVideo.setAttribute('webkit-playsinline', '');
+    heroVideo.setAttribute('x5-playsinline', '');
+
+    const tryPlayHeroVideo = () => {
+      const playPromise = heroVideo.play();
+      if (playPromise && typeof playPromise.catch === 'function') {
+        playPromise.catch(() => {
+          heroVideo.classList.add('video-fallback-visible');
+        });
+      }
+    };
+
+    tryPlayHeroVideo();
+    document.addEventListener('WeixinJSBridgeReady', tryPlayHeroVideo, false);
+    document.addEventListener('touchstart', tryPlayHeroVideo, { once: true, passive: true });
+  }
+
   // --- Navigation Highlighting ---
   const sections = document.querySelectorAll('section');
   const navLinks = document.querySelectorAll('.main-nav a');
