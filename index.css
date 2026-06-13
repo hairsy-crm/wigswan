@@ -679,11 +679,13 @@ body.is-localized .site-header .main-nav a.btn.primary.nav-cta:hover {
   .brand {
     width: auto;
     min-width: 0;
+    flex: 1 1 auto;
     order: 1;
   }
 
   .header-tools {
     margin-left: auto;
+    flex: 0 0 auto;
     order: 2;
   }
 
@@ -835,15 +837,29 @@ body.is-localized .site-header .main-nav a.btn.primary.nav-cta:hover {
   }
 
   .header-inner {
-    gap: 10px;
+    gap: 8px;
+  }
+
+  .header-tools {
+    gap: 8px;
   }
 
   .brand strong {
-    font-size: 15px;
+    font-size: 14px;
+  }
+
+  .brand small {
+    display: none;
+  }
+
+  .brand-mark {
+    font-size: 28px;
   }
 
   .language-switcher select {
-    min-width: 118px;
-    max-width: 132px;
+    min-width: 92px;
+    max-width: 104px;
+    padding: 7px 26px 7px 9px;
+    font-size: 11px;
   }
 }
