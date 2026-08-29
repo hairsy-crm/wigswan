@@ -1,5 +1,5 @@
 (() => {
-  const SOURCING_INBOX = 'sourcing@wigswan.com';
+  const SOURCING_INBOX = '48076124@qq.com';
   const form = document.getElementById('sourcingForm');
   const result = document.getElementById('requestResult');
   const preview = document.getElementById('briefPreview');
