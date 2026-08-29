@@ -113,7 +113,9 @@
 .result-actions .btn { min-height: 52px; border: 0; font-size: 14px; }
 .result-actions .btn.ghost { border: 1px solid var(--glass-border); background: transparent; }
 .text-button { border: 0; background: none; color: var(--text-muted); font: inherit; font-size: 13px; text-decoration: underline; cursor: pointer; padding: 12px; }
-.copy-status { min-height: 22px; color: var(--accent-gold); font-size: 12px; margin-top: 10px; }
+.submission-status { min-height: 22px; color: var(--accent-gold); font-size: 12px; margin-top: 10px; }
+.submission-status.is-error { color: #fca5a5; }
+.result-actions .btn:disabled { cursor: wait; opacity: .65; box-shadow: none; }
 
 .sourcing-page .site-footer { border-top: 1px solid var(--glass-border); }
 .sourcing-page .footer-brand small { color: var(--text-muted); }

@@ -137,8 +137,8 @@
         <div class="request-intro">
           <p class="section-kicker">Sourcing request</p>
           <h2>Tell us what you need to buy.</h2>
-          <p>Complete the essentials. We will turn them into an email-ready sourcing brief—no account or dashboard required.</p>
-          <div class="privacy-note"><strong>Lightweight by design</strong><span>Your information stays in this browser until you choose to open your email app or copy the brief.</span></div>
+          <p>Complete the essentials. We will turn them into a clear sourcing brief—no account or dashboard required.</p>
+          <div class="privacy-note"><strong>Lightweight by design</strong><span>After your review, information is sent through FormSubmit to WIGSWAN. The provider may retain submissions for up to 30 days.</span></div>
         </div>
 
         <div class="request-panel">
@@ -155,7 +155,7 @@
               <label class="full-field">What do you need?<textarea name="details" rows="5" required placeholder="Product, hair type, length, color, base or cap, target price, packaging, timeline…"></textarea></label>
             </div>
             <button class="btn primary submit-request" type="submit">Prepare my sourcing request</button>
-            <p class="form-help">This prepares an email for you to review and send. It does not submit data to a server.</p>
+            <p class="form-help">Nothing is sent until you review the sourcing brief and select “Send to WIGSWAN”.</p>
           </form>
 
           <div class="request-result" id="requestResult" hidden>
@@ -163,11 +163,11 @@
             <h3>Review it, then send it to WIGSWAN.</h3>
             <pre id="briefPreview"></pre>
             <div class="result-actions">
-              <a class="btn primary" id="emailRequest" href="#">Open email</a>
+              <button class="btn primary" id="sendRequest" type="button">Send to WIGSWAN</button>
               <button class="btn ghost" id="copyBrief" type="button">Copy brief</button>
               <button class="text-button" id="editRequest" type="button">Edit request</button>
             </div>
-            <p class="copy-status" id="copyStatus" aria-live="polite"></p>
+            <p class="submission-status" id="submissionStatus" aria-live="polite"></p>
           </div>
         </div>
       </div>
