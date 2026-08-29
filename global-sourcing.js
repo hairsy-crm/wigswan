@@ -11,6 +11,8 @@
   const buyerType = document.getElementById('buyerType');
   const navToggle = document.querySelector('.sourcing-nav-toggle');
   const nav = document.getElementById('sourcingNav');
+  const i18n = window.WIGSWANSourcingI18n;
+  const t = (key) => i18n?.t(key) || key;
 
   let currentBrief = '';
   let currentRequest = null;
@@ -18,13 +20,13 @@
   const closeNavigation = () => {
     document.body.classList.remove('sourcing-nav-open');
     navToggle?.setAttribute('aria-expanded', 'false');
-    navToggle?.setAttribute('aria-label', 'Open navigation');
+    navToggle?.setAttribute('aria-label', t('Open navigation'));
   };
 
   navToggle?.addEventListener('click', () => {
     const isOpen = document.body.classList.toggle('sourcing-nav-open');
     navToggle.setAttribute('aria-expanded', String(isOpen));
-    navToggle.setAttribute('aria-label', isOpen ? 'Close navigation' : 'Open navigation');
+    navToggle.setAttribute('aria-label', t(isOpen ? 'Close navigation' : 'Open navigation'));
   });
 
   nav?.querySelectorAll('a').forEach((link) => link.addEventListener('click', closeNavigation));
@@ -40,33 +42,29 @@
   const clean = (value) => String(value || '').trim();
 
   const createBrief = (data) => [
-    'WIGSWAN GLOBAL SOURCING REQUEST',
+    t('WIGSWAN GLOBAL SOURCING REQUEST'),
     '',
-    `Buyer type: ${clean(data.get('buyerType'))}`,
-    `Company / brand: ${clean(data.get('company'))}`,
-    `Country / market: ${clean(data.get('market'))}`,
-    `Contact: ${clean(data.get('contactName'))}`,
-    `Email: ${clean(data.get('email'))}`,
-    `Product category: ${clean(data.get('category'))}`,
-    `Estimated first order: ${clean(data.get('orderSize'))}`,
-    `Reference link: ${clean(data.get('reference')) || 'Not provided'}`,
+    `${t('Buyer type')}: ${t(clean(data.get('buyerType')))}`,
+    `${t('Company / brand')}: ${clean(data.get('company'))}`,
+    `${t('Country / market')}: ${clean(data.get('market'))}`,
+    `${t('Contact')}: ${clean(data.get('contactName'))}`,
+    `${t('Email')}: ${clean(data.get('email'))}`,
+    `${t('Product category')}: ${t(clean(data.get('category')))}`,
+    `${t('Estimated first order')}: ${t(clean(data.get('orderSize')))}`,
+    `${t('Reference link')}: ${clean(data.get('reference')) || t('Not provided')}`,
     '',
-    'Requirement:',
+    t('Requirement:'),
     clean(data.get('details')),
     '',
-    'Please reply with the next questions and a suitable sourcing path.'
+    t('Please reply with the next questions and a suitable sourcing path.')
   ].join('\n');
 
-  form?.addEventListener('submit', (event) => {
-    event.preventDefault();
-    if (!form.reportValidity()) return;
-
-    const data = new FormData(form);
+  const buildRequest = (data) => {
     currentBrief = createBrief(data);
     currentRequest = {
-      _subject: `WIGSWAN sourcing request — ${clean(data.get('company'))} — ${clean(data.get('category'))}`,
+      _subject: `${t('WIGSWAN sourcing request')} — ${clean(data.get('company'))} — ${t(clean(data.get('category')))}`,
       _template: 'table',
-      _url: 'https://wigswan.com/global-sourcing.html',
+      _url: `https://wigswan.com/global-sourcing.html?lang=${i18n?.getLang() || 'en'}`,
       email: clean(data.get('email')),
       buyer_type: clean(data.get('buyerType')),
       company_or_brand: clean(data.get('company')),
@@ -76,10 +74,19 @@
       estimated_first_order: clean(data.get('orderSize')),
       reference_link: clean(data.get('reference')) || 'Not provided',
       requirement: clean(data.get('details')),
+      language: i18n?.getLang() || 'en',
       sourcing_brief: currentBrief,
       _honey: ''
     };
     preview.textContent = currentBrief;
+  };
+
+  form?.addEventListener('submit', (event) => {
+    event.preventDefault();
+    if (!form.reportValidity()) return;
+
+    const data = new FormData(form);
+    buildRequest(data);
     form.hidden = true;
     result.hidden = false;
     submissionStatus.classList.remove('is-error');
@@ -91,9 +98,9 @@
     if (!currentRequest) return;
 
     sendButton.disabled = true;
-    sendButton.textContent = 'Sending…';
+    sendButton.textContent = t('Sending…');
     submissionStatus.classList.remove('is-error');
-    submissionStatus.textContent = 'Sending your request…';
+    submissionStatus.textContent = t('Sending your request…');
 
     try {
       const response = await fetch(FORM_ENDPOINT, {
@@ -109,14 +116,14 @@
         throw new Error('Form delivery failed');
       }
 
-      sendButton.textContent = 'Request sent';
-      submissionStatus.textContent = 'Thank you. Your sourcing request has been sent to WIGSWAN.';
+      sendButton.textContent = t('Request sent');
+      submissionStatus.textContent = t('Thank you. Your sourcing request has been sent to WIGSWAN.');
       editButton.hidden = true;
     } catch (error) {
       sendButton.disabled = false;
-      sendButton.textContent = 'Try sending again';
+      sendButton.textContent = t('Try sending again');
       submissionStatus.classList.add('is-error');
-      submissionStatus.textContent = 'We could not send the request. Please copy the brief and email it to 48076124@qq.com.';
+      submissionStatus.textContent = t('We could not send the request. Please copy the brief and email it to 48076124@qq.com.');
     }
   });
 
@@ -124,7 +131,7 @@
     try {
       await navigator.clipboard.writeText(currentBrief);
       submissionStatus.classList.remove('is-error');
-      submissionStatus.textContent = 'Brief copied. You can paste it into your preferred email or messaging app.';
+      submissionStatus.textContent = t('Brief copied. You can paste it into your preferred email or messaging app.');
     } catch (error) {
       const range = document.createRange();
       range.selectNodeContents(preview);
@@ -132,7 +139,7 @@
       selection.removeAllRanges();
       selection.addRange(range);
       submissionStatus.classList.remove('is-error');
-      submissionStatus.textContent = 'The brief is selected. Press Ctrl+C or Command+C to copy it.';
+      submissionStatus.textContent = t('The brief is selected. Press Ctrl+C or Command+C to copy it.');
     }
   });
 
@@ -142,5 +149,10 @@
     submissionStatus.classList.remove('is-error');
     submissionStatus.textContent = '';
     form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+
+  window.addEventListener('sourcing:languagechange', () => {
+    closeNavigation();
+    if (currentRequest) buildRequest(new FormData(form));
   });
 })();

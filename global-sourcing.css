@@ -8,6 +8,8 @@
 .sourcing-page .site-header { position: sticky; }
 .sourcing-header .main-nav a { margin-left: 28px; }
 .sourcing-header .nav-cta { min-height: 44px; padding: 0 20px; color: #0a0f1e; }
+.sourcing-header .sourcing-tools { margin-left: 2px; }
+.sourcing-header .language-switcher { margin-left: 10px; }
 
 .sourcing-nav-toggle {
   display: none;
@@ -131,6 +133,9 @@
 @media (max-width: 760px) {
   .shell { padding: 0 20px; }
   .sourcing-header .header-inner { height: 72px; padding: 0 20px; }
+  .sourcing-header .sourcing-tools { order: 2; }
+  .sourcing-header .language-switcher { margin-left: 0; }
+  .sourcing-header .language-switcher select { min-width: 108px; }
   .sourcing-nav-toggle { display: flex; order: 3; }
   .sourcing-header .main-nav { display: none; position: absolute; top: 72px; left: 0; right: 0; padding: 18px 20px 24px; background: rgba(10,15,30,.98); border-bottom: 1px solid var(--glass-border); flex-direction: column; align-items: stretch; }
   .sourcing-nav-open .sourcing-header .main-nav { display: flex; }
