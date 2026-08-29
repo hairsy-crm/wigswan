@@ -577,6 +577,9 @@
     while (walker.nextNode()) nodes.push(walker.currentNode);
     nodes.forEach(translateNodeText);
     translateAttributes(document);
+    document.querySelectorAll('a[href^="global-sourcing.html"]').forEach((link) => {
+      link.setAttribute('href', `global-sourcing.html?lang=${lang}`);
+    });
     applyMarketContent();
     updateSwitcher();
   }
